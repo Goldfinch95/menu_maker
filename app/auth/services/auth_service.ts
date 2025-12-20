@@ -2,6 +2,7 @@
 
 import { authResponse } from "../types/auth_response";
 import { formState } from "../types/form_state";
+import { handleLoginResponse } from "./storage_service";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -21,7 +22,9 @@ export const authService = async (data: formState): Promise<authResponse> => {
         throw new Error ("Email o Contraseña Erronea");
         //toast.error
     }
-    return response.json();
+    const responseData = await response.json();
+    await handleLoginResponse(responseData);
+    return responseData
   } catch (error) {
     console.error("Error al autenticar usuario:", error);
     throw error;
