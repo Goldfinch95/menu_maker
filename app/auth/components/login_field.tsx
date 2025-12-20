@@ -1,29 +1,24 @@
+// campos del login
 "use client";
 
 import { Button } from "@/common/components/atoms/button";
+import Errors from "./errors_msg";
 import { Eye, EyeOff } from "lucide-react";
 import {
   Field,
   FieldSet,
   FieldGroup,
   FieldLabel,
-  FieldError,
 } from "@/common/components/molecules/field";
+import { handleTogglePassword } from "../hooks/handlers";
 import { Input } from "@/common/components/atoms/input";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { formState } from "../types/form_state";
-import { handleLoginSubmit, handleTogglePassword } from "../hooks/handlers";
 import { loginForm } from "../hooks/login_form";
-import { Controller } from "react-hook-form";
-import Errors from "./errors_msg";
-import { authService } from "../services/auth_service";
+import { useState } from "react";
 
 export const LoginField = () => {
   //const [form, setForm] = useState<formState>({ email: "", password: "" });
-  const { register, handleSubmit, errors, onSubmit , isSubmitting } = loginForm();
+  const { register, handleSubmit, errors, onSubmit, isSubmitting } =
+    loginForm();
   const [showPassword, setShowPassword] = useState(false);
 
   return (

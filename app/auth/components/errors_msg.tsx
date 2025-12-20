@@ -1,8 +1,7 @@
-//componente de la imagen de error
+// alerta de los errores
+import { Alert, AlertDescription } from '@/common/components/atoms/alert';
 import { FieldErrors } from 'react-hook-form';
 import { formState } from '../types/form_state';
-import { Alert, AlertDescription } from '@/common/components/atoms/alert';
-
 interface ErrorsProps {
   errors: FieldErrors<formState>;
 }

@@ -4,11 +4,6 @@ import { LoginCard } from "./components/login_card";
 
 
 const login = () => {
-  //tarea:
-    /*
-    1.agregar validaciones
-    2.agregar toast
-    */
   return (
     <div className="w-full h-screen sm:h-auto sm:max-w-md">
       <LoginCard />
