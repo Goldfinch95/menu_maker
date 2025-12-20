@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/common/components/atoms/button";
 import { Eye, EyeOff } from "lucide-react";
 import {
@@ -5,33 +7,42 @@ import {
   FieldSet,
   FieldGroup,
   FieldLabel,
+  FieldError,
 } from "@/common/components/molecules/field";
-import { formState } from "../types/form_state";
-import {
-  handleChange,
-  handleSubmit,
-  handleTogglePassword,
-} from "../hooks/handlers";
 import { Input } from "@/common/components/atoms/input";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { formState } from "../types/form_state";
+import { handleLoginSubmit, handleTogglePassword } from "../hooks/handlers";
+import { loginForm } from "../hooks/login_form";
+import { Controller } from "react-hook-form";
+import Errors from "./errors_msg";
+import { authService } from "../services/auth_service";
 
 export const LoginField = () => {
-  const [form, setForm] = useState<formState>({ email: "", password: "" });
+  //const [form, setForm] = useState<formState>({ email: "", password: "" });
+  const { register, handleSubmit, errors, onSubmit , isSubmitting } = loginForm();
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <FieldSet>
         <FieldGroup>
+          <Errors errors={errors} />
+          {/* aqui deberian ir los errores */}
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input
-              value={form.email}
-              onChange={(e) => handleChange(e, setForm)}
+              {...register("email")}
               id="email"
               type="email"
+              aria-invalid={!!errors.email}
+              //onChange={(e) => handleChange(e, setForm)}
             />
           </Field>
+
           <Field>
             <div className="flex items-center justify-between">
               <FieldLabel htmlFor="password">Contraseña</FieldLabel>
@@ -41,10 +52,11 @@ export const LoginField = () => {
             </div>
             <div className="relative">
               <Input
-                value={form.password}
-                onChange={(e) => handleChange(e, setForm)}
+                {...register("password")}
+                //onChange={(e) => handleChange(e, setForm)}
                 id="password"
                 type={showPassword ? "text" : "password"}
+                aria-invalid={!!errors.password}
               />
               <Button
                 onClick={() => handleTogglePassword(setShowPassword)}
@@ -62,10 +74,11 @@ export const LoginField = () => {
           <Field>
             <Button
               className="w-full py-4 rounded-lg text-base bg-linear-to-r from-orange-400 to-orange-500 text-white font-semibold shadow-sm hover:shadow-md active:scale-[0.98] transition-transform"
-              onClick={(e) => handleSubmit(e, form)}
+              //onClick={(e) => handleSubmit(e, form)}
               type="submit"
+              disabled={isSubmitting}
             >
-              Iniciar Sesión
+              {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
             </Button>
           </Field>
         </FieldGroup>
