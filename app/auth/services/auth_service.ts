@@ -3,6 +3,7 @@
 import { authResponse } from "../types/auth_response";
 import { formState } from "../types/form_state";
 import { handleLoginResponse } from "./storage_service";
+import { toast } from "sonner";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -19,8 +20,12 @@ export const authService = async (data: formState): Promise<authResponse> => {
         }),
     });
     if(!response.ok){
-        throw new Error ("Email o Contraseña Erronea");
-        //toast.error
+      if(response.status === 401){
+        throw new Error("Email o contraseña incorrectos");
+      }
+      else {
+        throw new Error("Error al iniciar sesión");
+      }  
     }
     const responseData = await response.json();
     await handleLoginResponse(responseData);

@@ -2,6 +2,7 @@
 
 import { authService } from "../services/auth_service";
 import { formState } from "../types/form_state";
+import { toast } from "sonner";
 
 //valores del input
 export const handleChange = (
@@ -34,7 +35,11 @@ export const handleSubmit = async (
     //console.log ("login exitoso")
     //redirigir a otra pagina
   } catch (error) {
-    console.log("no se logro hacer la peticion a la api", error);
+    console.error("Error en la autenticación:", error);
+    
+    if (error instanceof Error) {
+      toast.error("El Email o Contraseña que ingresaste es incorrecto");
+    } 
+    
   }
-  //recibir respuesta
 };

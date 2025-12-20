@@ -36,7 +36,7 @@ export const LoginField = () => {
             <div className="flex items-center justify-between">
               <FieldLabel htmlFor="password">Contraseña</FieldLabel>
               <FieldLabel className="bg-transparent text-orange-500 font-semibold p-0">
-                <a href="">¿Olvidaste tu contraseña?</a>
+                <a href="/forgot_password">¿Olvidaste tu contraseña?</a>
               </FieldLabel>
             </div>
             <div className="relative">
@@ -44,7 +44,7 @@ export const LoginField = () => {
                 value={form.password}
                 onChange={(e) => handleChange(e, setForm)}
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
               />
               <Button
                 onClick={() => handleTogglePassword(setShowPassword)}

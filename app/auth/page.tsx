@@ -1,8 +1,6 @@
 //pagina de login : renderiza el login
 "use client"
-
 import { LoginCard } from "./components/login_card";
-
 
 
 const login = () => {
@@ -12,7 +10,7 @@ const login = () => {
     2.agregar toast
     */
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full h-screen sm:h-auto sm:max-w-md">
       <LoginCard />
     </div>
   );
