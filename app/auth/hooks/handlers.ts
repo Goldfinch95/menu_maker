@@ -13,11 +13,13 @@ export const handleTogglePassword = (
 
 //peticion de logeo
 export const handleLoginSubmit = async (
-  formData: formState
+  formData: formState,
+  router: any
 ) => {
   try {
     await authService(formData);
     //console.log ("login exitoso")
+    router.push("/home");
     //redirigir a otra pagina
   } catch (error) {
     console.error("Error en la autenticación:", error);
