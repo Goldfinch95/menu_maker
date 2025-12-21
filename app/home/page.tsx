@@ -1,5 +1,5 @@
-import React from "react";
-
+//pagina de renderizado de los menues
+import {Navbar} from "./components/Navbar"
 import Image from 'next/image';
 
 /*
