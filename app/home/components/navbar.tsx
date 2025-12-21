@@ -1,24 +1,18 @@
 // navbar de home
-import React from 'react';
+"use client"
 import {
  Menubar,
-  MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
   MenubarTrigger,
 } from "@/common/components/organism/menubar"
 import { UtensilsCrossed, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import { handleLogout } from "../services/log_out_service";
 
 export const Navbar = () => {
+   
     return (
         <Menubar className='w-full justify-between'>
       <MenubarMenu>
@@ -42,7 +36,7 @@ export const Navbar = () => {
         <MenubarTrigger>Titulo</MenubarTrigger>
       </MenubarMenu>
       <MenubarMenu>
-        <MenubarTrigger>
+        <MenubarTrigger onClick={handleLogout}>
             <LogOut className="w-6 h-6 text-slate-700" />
         </MenubarTrigger>
       </MenubarMenu>
