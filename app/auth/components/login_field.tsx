@@ -16,7 +16,6 @@ import { loginForm } from "../hooks/login_form";
 import { useState } from "react";
 
 export const LoginField = () => {
-  //const [form, setForm] = useState<formState>({ email: "", password: "" });
   const { register, handleSubmit, errors, onSubmit, isSubmitting } =
     loginForm();
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +25,6 @@ export const LoginField = () => {
       <FieldSet>
         <FieldGroup>
           <Errors errors={errors} />
-          {/* aqui deberian ir los errores */}
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input
@@ -34,7 +32,6 @@ export const LoginField = () => {
               id="email"
               type="email"
               aria-invalid={!!errors.email}
-              //onChange={(e) => handleChange(e, setForm)}
             />
           </Field>
 
@@ -48,7 +45,6 @@ export const LoginField = () => {
             <div className="relative">
               <Input
                 {...register("password")}
-                //onChange={(e) => handleChange(e, setForm)}
                 id="password"
                 type={showPassword ? "text" : "password"}
                 aria-invalid={!!errors.password}
@@ -69,7 +65,6 @@ export const LoginField = () => {
           <Field>
             <Button
               className="w-full py-4 rounded-lg text-base bg-linear-to-r from-orange-400 to-orange-500 text-white font-semibold shadow-sm hover:shadow-md active:scale-[0.98] transition-transform"
-              //onClick={(e) => handleSubmit(e, form)}
               type="submit"
               disabled={isSubmitting}
             >
