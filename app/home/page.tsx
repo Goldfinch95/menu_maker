@@ -1,5 +1,5 @@
 //pagina de renderizado de los menues
-import {Navbar} from "./components/Navbar"
+import {Navbar} from "../home/components/Navbar"
 import Image from 'next/image';
 
 /*
