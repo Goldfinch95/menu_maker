@@ -18,7 +18,7 @@ export const handlePasswordSubmit = async (
 ) => {
   try {
     //esperar a naza
-    //await userChangePasswordService(formData);
+    //await userCreatePasswordService(formData);
 
     // sucess: info
     toast.info("Se Actualizo su Contraseña")
