@@ -15,12 +15,12 @@ export const MenuList = () => {
         <Card
           key={menu.id}
           onClick={() => handleMenuClick(menu.id, menu.title, router)}
-          className="p-0 border-0 bg-transparent cursor-pointer group"
+          className="p-0 border-0 cursor-pointer group rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
         >
           <div
             className="
- relative h-40 lg:h-56 rounded-3xl p-6 flex flex-col items-center justify-between shadow-lg hover:shadow-2xl transition-all duration-300
-"
+              relative h-40 lg:h-56 p-6 flex flex-col items-center justify-between
+            "
             style={{
               backgroundImage: `linear-gradient(135deg, ${menu.color?.primary}, ${menu.color?.secondary})`,
             }}
