@@ -1,13 +1,8 @@
 //pagina de renderizado de los menues
 "use client";
 import { CreateMenuButton } from "./components/Create_Menu_Button";
-import { Navbar } from "./components/Navbar";
-import Image from "next/image";
-import { useState, useEffect } from "react";
+import { Navbar } from "./components/navbar";
 import { Manrope } from "next/font/google";
-
-import { Menu } from "./types/menu";
-import { getAllMenus } from "./services/menu_service";
 import { MenuList } from "./components/Menu_List";
 import Faq from "./components/Faq";
 
