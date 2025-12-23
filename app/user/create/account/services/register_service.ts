@@ -32,27 +32,28 @@ export const registerUserAction = async (data: formUser): Promise<User> => {
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Error de respuesta:", errorText); // Muestra el error completo
-    let errorMessage = "No se pudo registrar el usuario";
+  const errorText = await response.text();
+  console.error("Error de respuesta:", errorText); // Registra el error completo
 
-    try {
-      const errorJson = JSON.parse(errorText);
-      errorMessage = errorJson.message || errorMessage;
-    } catch {
-      // Si no es JSON, usar el texto directamente o el mensaje por defecto
-    }
-
-    if (response.status === 409) {
-      throw new Error("El email ya está registrado");
-    } else if (response.status === 500) {
-      throw new Error("Error del servidor. Intenta nuevamente");
-    } else if (response.status === 401) {
-      throw new Error("No autorizado");
-    } else {
-      throw new Error(errorMessage);
-    }
+  let errorMessage = "No se pudo registrar el usuario";
+  try {
+    const errorJson = JSON.parse(errorText);
+    errorMessage = errorJson.message || errorMessage;
+  } catch {
+    // Si no es JSON, usa el texto directamente o el mensaje por defecto
   }
+
+  // Manejo específico de errores
+  if (response.status === 409) {
+    throw new Error("El email ya está registrado");
+  } else if (response.status === 500) {
+    throw new Error("Error del servidor. Intenta nuevamente");
+  } else if (response.status === 401) {
+    throw new Error("No autorizado");
+  } else {
+    throw new Error(errorMessage);
+  }
+}
 
   return await response.json();
 };
