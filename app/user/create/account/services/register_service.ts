@@ -16,7 +16,7 @@ export const registerUserAction = async (data: formUser): Promise<User> => {
     throw new Error("No se encontró el token de autenticación");
   }
 
-  const response = await fetch(`${BASE_URL}/users/`, {
+  const response = await fetch(`${BASE_URL}/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -32,10 +32,9 @@ export const registerUserAction = async (data: formUser): Promise<User> => {
   });
 
   if (!response.ok) {
-    
     const errorText = await response.text();
-  console.error("Error de respuesta:", errorText); // Muestra el error completo
-  let errorMessage = "No se pudo registrar el usuario";
+    console.error("Error de respuesta:", errorText); // Muestra el error completo
+    let errorMessage = "No se pudo registrar el usuario";
 
     try {
       const errorJson = JSON.parse(errorText);
