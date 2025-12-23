@@ -9,6 +9,11 @@ export const userChangePasswordService = async (
   data: passwordType,
   token: string
 ): Promise<{ message: string }> => {
+  console.log("reset payload", {
+  token,
+  password: data.password,
+  confirmationPassword: data.password,
+});
   const response = await fetch(`${BASE_URL}/users/restore-password`, {
     method: "POST",
     headers: {
