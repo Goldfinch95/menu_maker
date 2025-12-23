@@ -1,4 +1,4 @@
-"use client"
+/*"use client"
 import { Button } from "@/common/components/atoms/button";
 import { useState } from "react";
 import { getMenuQr } from "./services/qr_service";
@@ -40,7 +40,7 @@ const page = () => {
   return (
     <div className="min-h-screen w-full flex flex-col">
       
-       {/*boton para enviar peticion de qr */}
+       {/*boton para enviar peticion de qr 
       <button
         onClick={handleGetQr}
         disabled={loading}
@@ -48,11 +48,11 @@ const page = () => {
       >
         {loading ? "Cargando..." : "Obtener QR"}
       </button>
-      {/* mostrar qr */}
+      {/* mostrar qr 
       {qrUrl && (
         <div className="border rounded p-4 bg-white">
           <img src={qrUrl} alt="QR del menú" className="w-64 h-64" />
-         {/* mostrar URL del blob */}
+         {/* mostrar URL del blob 
           <div className="text-sm text-gray-600 break-all max-w-md text-center">
             <p className="font-semibold mb-1">URL del menú:</p>
             <a 
@@ -70,4 +70,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default page;*/
