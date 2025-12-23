@@ -8,14 +8,14 @@ import Image from "next/image";
 import { QrCode, Edit, ImageIcon } from "lucide-react";
 import { Button } from "@/common/components/atoms/button";
 import { InfoDialog } from "./Info_Dialog";
-import { DialogTrigger } from "@/common/components/organism/dialog"; // Asegúrate de importar el diálogo correctamente
+import { DialogTrigger } from "@/common/components/organism/dialog";
 
 export const InfoCard = () => {
   return (
-        <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-md w-full max-w-sm md:max-w-2xl">
+    <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-md w-full max-w-sm md:max-w-2xl">
       <div className="flex flex-col items-center text-center p-8 md:p-16 space-y-4 md:space-y-6">
         <ImageIcon className="w-12 h-12 md:w-20 md:h-20 text-slate-300" />
-        
+
         <h3 className="text-base md:text-xl font-semibold text-slate-800">
           Sin información
         </h3>
