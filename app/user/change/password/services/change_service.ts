@@ -5,7 +5,7 @@ import { passwordType } from "../types/password";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export const userChangePasswordService = async (data: passwordType): Promise <{ message: string }> => {
+export const userChangePasswordService = async (data: passwordType, token: string): Promise <{ message: string }> => {
     try {
         const response = await fetch(`${BASE_URL}/users/restore-password`, {
             method: "POST",
@@ -14,7 +14,7 @@ export const userChangePasswordService = async (data: passwordType): Promise <{ 
             },
             body: JSON.stringify({
                 password: data.password,
-                //token
+                token: token
             }),
         });
         if(!response.ok){

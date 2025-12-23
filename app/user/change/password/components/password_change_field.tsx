@@ -13,10 +13,13 @@ import { handleTogglePassword } from "../hooks/handlers";
 import { Input } from "@/common/components/atoms/input";
 import { passwordForm } from "../hooks/password_form";
 import { useState } from "react";
+import { useRouter } from 'next/router';
 
 export const PasswordField = () => {
+  const router = useRouter();
+  const token = router.query.token as string;
   const { register, handleSubmit, errors, onSubmit, isSubmitting } =
-    passwordForm();
+    passwordForm(token);
   const [showPassword, setShowPassword] = useState(false);
   const [showControlPassword, setControlShowPassword] = useState(false);
   return (

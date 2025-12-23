@@ -2,9 +2,11 @@
 "use client"
 
 import { PasswordChangeCard } from './components/password_change_card';
-
+import { useRouter } from 'next/router';
 
 const page = () => {
+    const router = useRouter();
+  const token = router.query.token as string;
     /*
     RECORDATORIO:
     Tenes comentado
