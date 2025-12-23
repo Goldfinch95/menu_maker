@@ -15,7 +15,7 @@ export const userChangePasswordService = async (data: passwordType, token: strin
             },
             body: JSON.stringify({
                 password: data.password,
-                token: token
+                //token: token
             }),
         });
         if(!response.ok){
