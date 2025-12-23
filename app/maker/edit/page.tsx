@@ -71,3 +71,14 @@ const page = () => {
 };
 
 export default page;*/
+
+const page = () => {
+
+  return(
+    <div>
+      working
+    </div>
+  )
+}
+
+export default page;
