@@ -1,11 +1,59 @@
-import { Button } from '@/common/components/atoms/button';
-import React from 'react';
+import React, { ReactNode } from "react"
+import { Button } from "@/common/components/atoms/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+  DialogFooter,
+  DialogTitle,
+  DialogClose,
+} from "@/common/components/organism/dialog";
 
-export const InfoDialog = () => {
-    return (
-        <Button>
-            click
-        </Button>
-    );
+import { Label } from "@/common/components/atoms/label";
+import { Input } from "@/common/components/atoms/input";
+import { X } from "lucide-react";
+
+interface InfoDialogProps {
+  children: ReactNode;
+}
+
+export const InfoDialog = ({ children }: InfoDialogProps) => {
+  return (
+    <Dialog>
+      {/* Esto muestra el botón que abre el diálogo */}
+      {children}
+
+      <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <div className="relative flex items-center justify-center">
+            <DialogTitle className="text-xl font-semibold text-black">
+              Información del Menú
+            </DialogTitle>
+            <DialogClose className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-white/70">
+              <X className="h-5 w-5 text-orange-400" />
+            </DialogClose>
+          </div>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+
+        {/* Aquí agregas el contenido que necesites */}
+        <div className="space-y-5 py-4">
+          <div className="flex flex-col space-y-2">
+            <Label className="text-slate-700 text-sm font-semibold">
+              Nombre del Menú
+            </Label>
+            <Input placeholder="Escribe el nombre del menú" />
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button className="bg-orange-500 hover:bg-orange-600">
+            Guardar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 };
-
