@@ -2,7 +2,7 @@
 "use client"
 
 import { PasswordCreateCard } from './components/Password_Create_Card';
-
+import { Suspense } from 'react';
 
 const page = () => {
     /*
@@ -16,7 +16,9 @@ const page = () => {
     */
     return (
         <div className='w-full h-screen sm:h-auto sm:max-w-md'>
+            <Suspense fallback={<div>Cargando...</div>}>
             <PasswordCreateCard />
+            </Suspense>
         </div>
     );
 };
