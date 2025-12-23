@@ -13,10 +13,13 @@ import { handleTogglePassword } from "../hooks/handlers";
 import { Input } from "@/common/components/atoms/input";
 import { passwordForm } from "../hooks/password_form";
 import { useState } from "react";
+import { useSearchParams } from 'next/navigation';
 
 export const PasswordField = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token') as string;
   const { register, handleSubmit, errors, onSubmit, isSubmitting } =
-    passwordForm();
+    passwordForm(token);
   const [showPassword, setShowPassword] = useState(false);
   const [showControlPassword, setControlShowPassword] = useState(false);
   return (

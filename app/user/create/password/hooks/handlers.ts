@@ -1,7 +1,7 @@
 // controladores del envio de contraseñas
-//import { passwordType } from "../types/password";
+import { passwordType } from "../types/password";
 import { toast } from "sonner";
-//import { userService } from "../services/user_service";
+import { userCreatePasswordService } from "../services/create_service";
 
 
 // visualizacion de la contraseña (ojo)
@@ -13,12 +13,13 @@ export const handleTogglePassword = (
 
 //peticion de recuperar contraseña
 export const handlePasswordSubmit = async (
-  //formData: passwordType,
-  router: any
+  formData: passwordType,
+  router: any,
+  token: string
 ) => {
   try {
     //esperar a naza
-    //await userCreatePasswordService(formData);
+    await userCreatePasswordService(formData, token);
 
     // sucess: info
     toast.info("Se Actualizo su Contraseña")
