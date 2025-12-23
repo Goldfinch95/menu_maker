@@ -18,6 +18,7 @@ export const handlePasswordSubmit = async (
   token: string,
 ) => {
   try {
+    console.log(token)
     //esperar a naza
     await userChangePasswordService(formData, token);
 
