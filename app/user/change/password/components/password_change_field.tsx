@@ -1,5 +1,6 @@
 // campos de cambio de contraseña
 "use client";
+
 import { Button } from "@/common/components/atoms/button";
 import Errors from "./errors_msg";
 import { Eye, EyeOff } from "lucide-react";
@@ -13,11 +14,11 @@ import { handleTogglePassword } from "../hooks/handlers";
 import { Input } from "@/common/components/atoms/input";
 import { passwordForm } from "../hooks/password_form";
 import { useState } from "react";
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 
 export const PasswordField = () => {
-  const router = useRouter();
-  const token = router.query.token as string;
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token') as string;
   const { register, handleSubmit, errors, onSubmit, isSubmitting } =
     passwordForm(token);
   const [showPassword, setShowPassword] = useState(false);
