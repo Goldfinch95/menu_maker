@@ -7,7 +7,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const userChangePasswordService = async (data: passwordType, token: string): Promise <{ message: string }> => {
     try {
-        const response = await fetch(`${BASE_URL}/auth/reset-password`, {
+        const response = await fetch(`${BASE_URL}/users/restore-password`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
