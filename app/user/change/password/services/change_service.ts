@@ -11,6 +11,7 @@ export const userChangePasswordService = async (data: passwordType, token: strin
             method: "POST",
             headers: {
                 "Content-type": "application/json",
+                "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({
                 password: data.password,
