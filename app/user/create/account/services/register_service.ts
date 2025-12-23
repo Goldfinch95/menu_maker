@@ -32,8 +32,10 @@ export const registerUserAction = async (data: formUser): Promise<User> => {
   });
 
   if (!response.ok) {
+    
     const errorText = await response.text();
-    let errorMessage = "No se pudo registrar el usuario";
+  console.error("Error de respuesta:", errorText); // Muestra el error completo
+  let errorMessage = "No se pudo registrar el usuario";
 
     try {
       const errorJson = JSON.parse(errorText);
