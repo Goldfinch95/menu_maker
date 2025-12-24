@@ -1,84 +1,29 @@
-/*"use client"
-import { Button } from "@/common/components/atoms/button";
-import { useState } from "react";
-import { getMenuQr } from "./services/qr_service";
-import { useSearchParams } from "next/navigation";
+"use client";
 
-const page = () => {
-  const searchParams = useSearchParams();
-  const menuId = searchParams.get("id");
+import { Navbar } from "./components/navbar";
+import { InfoCard } from "./components/Info_Card";
+import { Suspense } from "react";
 
-  const [qrUrl, setQrUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // Construir la URL pública del menú
-  const menuPublicUrl = menuId 
-    ? `https://template-menu-self.vercel.app/menu?id=${menuId}` 
-    : null;
-
-  const handleGetQr = async () => {
-     if (!menuId) {
-      setError("No se encontró el ID del menú");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const qrBlob = await getMenuQr(Number(menuId));
-      const url = URL.createObjectURL(qrBlob);
-      setQrUrl(url);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al obtener QR");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const editPage = () => {
   return (
     <div className="min-h-screen w-full flex flex-col">
-      
-       {/*boton para enviar peticion de qr 
-      <button
-        onClick={handleGetQr}
-        disabled={loading}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
-      >
-        {loading ? "Cargando..." : "Obtener QR"}
-      </button>
-      {/* mostrar qr 
-      {qrUrl && (
-        <div className="border rounded p-4 bg-white">
-          <img src={qrUrl} alt="QR del menú" className="w-64 h-64" />
-         {/* mostrar URL del blob 
-          <div className="text-sm text-gray-600 break-all max-w-md text-center">
-            <p className="font-semibold mb-1">URL del menú:</p>
-            <a 
-              href={menuPublicUrl || "#"} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-gray-100 p-2 rounded block text-blue-600 hover:underline"
-            >
-              {menuPublicUrl}
-            </a>
-          </div>
-        </div>
-      )}
+      <Navbar />
+      <div className="flex flex-col justify-center items-center py-8 grow">
+        <Suspense
+          fallback={
+            <div className="w-full max-w-sm mx-auto p-8 text-center">
+              <div className="animate-pulse">
+                <div className="h-48 bg-gray-200 rounded-2xl mb-4"></div>
+                <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto"></div>
+              </div>
+            </div>
+          }
+        >
+          <InfoCard />
+        </Suspense>
+      </div>
     </div>
   );
 };
 
-export default page;*/
-
-const page = () => {
-
-  return(
-    <div>
-      working
-    </div>
-  )
-}
-
-export default page;
+export default editPage;
