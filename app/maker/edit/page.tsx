@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getMenuId } from "./services/menu";
 import { useFetchMenu } from "./hooks/use_fetch_menu";
+import { Navbar } from "./components/navbar";
+import { InfoCard } from "./components/Info_Card";
 /*import { Button } from "@/common/components/atoms/button";
 import { useState } from "react";
 import { getMenuQr } from "./services/qr_service";
@@ -77,17 +79,17 @@ const page = () => {
 export default page;*/
 
 const page = () => {
-  const searchParams = useSearchParams();
-  const menuId = searchParams.get("id");
-
-  const { menuData } = useFetchMenu(menuId);
-
   
-
   return (
-    <div>
-       <div>{menuData?.title}</div>
-        <div>{menuData?.pos}</div>
+    <div className="min-h-screen w-full flex flex-col">
+      <Navbar />
+      <div className="flex flex-col justify-center items-center py-8 grow">
+        {/* info card */}
+        <InfoCard />
+        {/* info cat */}
+        {/* delete */}
+        
+      </div>
     </div>
   );
 };

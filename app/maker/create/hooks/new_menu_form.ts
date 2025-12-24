@@ -30,10 +30,15 @@ export const newMenuForm = () => {
   
   const onSubmit = async (formData: NewMenuFormData) => {
     const values = getValues();
-    const dataToSubmit = {
-      ...formData,
+    const dataToSubmit: newMenu = {
+      title: formData.title,
+      pos: formData.pos || "", // Asegurar que pos nunca sea undefined
       logo: values.logo?.[0] || null,
       backgroundImage: values.backgroundImage?.[0] || null,
+      color: {
+        primary: formData.color?.primary || "#D4D4D4",
+        secondary: formData.color?.secondary || "#262626",
+      },
     };
     
     await handleNewMenuSubmit(dataToSubmit, router);
