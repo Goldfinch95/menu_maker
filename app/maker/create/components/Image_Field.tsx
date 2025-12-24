@@ -1,48 +1,18 @@
 // ImageFields.tsx
 "use client";
 import { Input } from "@/common/components/atoms/input";
-import {
-  Field,
-  FieldLabel,
-} from "@/common/components/molecules/field";
-import { useState } from "react";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
-
+import { Field, FieldLabel } from "@/common/components/molecules/field";
+import { UseFormRegister } from "react-hook-form";
+import { useImagePreview } from "../hooks/image_preview_handlers";
 
 interface ImageFieldsProps {
   register: UseFormRegister<any>;
-  errors: FieldErrors<any>;
+  
 }
 
-export const ImageFields = ({ register, errors }: ImageFieldsProps) => {
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [bgPreview, setBgPreview] = useState<string | null>(null);
-
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setLogoPreview(null);
-    }
-  };
-
-  const handleBgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBgPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setBgPreview(null);
-    }
-  };
+export const ImageFields = ({ register }: ImageFieldsProps) => {
+  const { logoPreview, bgPreview, handleLogoChange, handleBgChange } =
+    useImagePreview();
 
   return (
     <>
@@ -50,12 +20,12 @@ export const ImageFields = ({ register, errors }: ImageFieldsProps) => {
         <FieldLabel htmlFor="logo">Logo</FieldLabel>
         <Input
           {...register("logo", {
-            onChange: handleLogoChange
+            onChange: handleLogoChange,
           })}
           id="logo"
           type="file"
           accept="image/*"
-          aria-invalid={!!errors.logo}
+          
         />
         {logoPreview && (
           <div className="mt-2">
@@ -72,12 +42,12 @@ export const ImageFields = ({ register, errors }: ImageFieldsProps) => {
         <FieldLabel htmlFor="backgroundImage">Imagen de Fondo</FieldLabel>
         <Input
           {...register("backgroundImage", {
-            onChange: handleBgChange
+            onChange: handleBgChange,
           })}
           id="backgroundImage"
           type="file"
           accept="image/*"
-          aria-invalid={!!errors.backgroundImage}
+          
         />
         {bgPreview && (
           <div className="mt-2">

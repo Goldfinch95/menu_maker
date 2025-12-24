@@ -12,8 +12,8 @@ export const handleNewMenuSubmit = async (
   router: any
 ) => {
   try {
-    console.log("📋 Datos del formulario:");
-    console.log(formData)
+    //console.log("📋 Datos del formulario:");
+    //console.log(formData)
     await createMenuService(formData);
     // sucess: info
     toast.info("Se ha creado un nuevo Menu")

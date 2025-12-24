@@ -3,7 +3,7 @@ import { newMenu } from "../types/new_menu";
 import { handleNewMenuSubmit } from "./new_menu_submit";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { validations } from "../utils/validate_form";
+import { validations, NewMenuFormData } from "../utils/validate_form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const newMenuForm = () => {
@@ -14,7 +14,7 @@ export const newMenuForm = () => {
     control,
     formState: { errors, isSubmitting },
     getValues,
-  } = useForm({
+  } = useForm<NewMenuFormData>({
     resolver: zodResolver(validations),
     defaultValues: {
       title: "",
@@ -28,7 +28,7 @@ export const newMenuForm = () => {
     },
   });
   
-  const onSubmit = async (formData: newMenu) => {
+  const onSubmit = async (formData: NewMenuFormData) => {
     const values = getValues();
     const dataToSubmit = {
       ...formData,
