@@ -1,8 +1,8 @@
-"use client";
+
 import { Navbar } from "./components/navbar";
 import { InfoCard } from "./components/Info_Card";
 
-const page = () => {
+const editPage = () => {
   
   return (
     <div className="min-h-screen w-full flex flex-col">
@@ -18,4 +18,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default editPage;
