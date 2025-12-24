@@ -1,14 +1,12 @@
-import React from "react";
+//tarjeta de creacion de menu
+import { Button } from "@/common/components/atoms/button";
 import {
   Card,
-  CardHeader,
-  CardContent,
 } from "@/common/components/organism/card";
-import Image from "next/image";
-import { QrCode, Edit, ImageIcon } from "lucide-react";
-import { Button } from "@/common/components/atoms/button";
-import { InfoDialog } from "./Info_Dialog";
 import { DialogTrigger } from "@/common/components/organism/dialog";
+import {  Edit, ImageIcon } from "lucide-react";
+import { InfoDialog } from "./Info_Dialog";
+
 
 export const InfoCard = () => {
   return (

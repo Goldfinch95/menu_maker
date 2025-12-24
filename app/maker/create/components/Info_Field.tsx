@@ -1,8 +1,7 @@
 // InfoField.tsx
 "use client";
-import { useState } from "react";
 import { Button } from "@/common/components/atoms/button";
-import { newMenuForm } from "../hooks/new_menu_form";
+import { Controller } from "react-hook-form";
 import Errors from "./errors_msg";
 import {
   Field,
@@ -10,9 +9,11 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/common/components/molecules/field";
-import { Input } from "@/common/components/atoms/input";
 import { HexColorPicker } from "react-colorful";
-import { Controller } from "react-hook-form";
+import { Input } from "@/common/components/atoms/input";
+import { newMenuForm } from "../hooks/new_menu_form";
+import { useState } from "react";
+import { ImageFields } from "./Image_Field";
 
 type ActiveColorField = "primary" | "secondary";
 
@@ -76,7 +77,9 @@ export const InfoField = () => {
               aria-invalid={!!errors.pos}
             />
           </Field>
-
+          {/* desde aqui comienzo a separar */}
+          <ImageFields register={register} errors={errors} />
+          {/*hasta aqui debo separar */}
           {/* UN SOLO Color Picker que se vincula dinámicamente */}
           <Field>
             <FieldLabel>Selector de colores</FieldLabel>
@@ -115,7 +118,7 @@ export const InfoField = () => {
                 <div className="flex items-center gap-2">
                   <div
                     onClick={() => setActiveColorField("primary")}
-                    className={`w-12 h-12 rounded-lg border-2 shadow-sm flex-shrink-0 cursor-pointer transition-all hover:scale-105 ${
+                    className={`w-12 h-12 rounded-lg border-2 shadow-sm shrink-0 cursor-pointer transition-all hover:scale-105 ${
                       activeColorField === "primary"
                         ? "border-orange-500 ring-2 ring-orange-300"
                         : "border-gray-300"
@@ -161,7 +164,7 @@ export const InfoField = () => {
                 <div className="flex items-center gap-2">
                   <div
                     onClick={() => setActiveColorField("secondary")}
-                    className={`w-12 h-12 rounded-lg border-2 shadow-sm flex-shrink-0 cursor-pointer transition-all hover:scale-105 ${
+                    className={`w-12 h-12 rounded-lg border-2 shadow-sm shrink-0 cursor-pointer transition-all hover:scale-105 ${
                       activeColorField === "secondary"
                         ? "border-orange-500 ring-2 ring-orange-300"
                         : "border-gray-300"
@@ -197,49 +200,7 @@ export const InfoField = () => {
             )}
           </Field>
 
-          <Field>
-            <FieldLabel htmlFor="logo">Logo</FieldLabel>
-            <Input
-              {...register("logo", {
-                onChange: handleLogoChange
-              })}
-              id="logo"
-              type="file"
-              accept="image/*"
-              aria-invalid={!!errors.logo}
-            />
-            {logoPreview && (
-              <div className="mt-2">
-                <img
-                  src={logoPreview}
-                  alt="Preview del logo"
-                  className="h-20 w-20 object-cover rounded-lg border"
-                />
-              </div>
-            )}
-          </Field>
-
-          <Field>
-            <FieldLabel htmlFor="backgroundImage">Imagen de Fondo</FieldLabel>
-            <Input
-              {...register("backgroundImage", {
-                onChange: handleBgChange
-              })}
-              id="backgroundImage"
-              type="file"
-              accept="image/*"
-              aria-invalid={!!errors.backgroundImage}
-            />
-            {bgPreview && (
-              <div className="mt-2">
-                <img
-                  src={bgPreview}
-                  alt="Preview del fondo"
-                  className="h-32 w-full object-cover rounded-lg border"
-                />
-              </div>
-            )}
-          </Field>
+          
 
           <Field>
             <Button

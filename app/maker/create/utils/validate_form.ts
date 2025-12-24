@@ -1,4 +1,3 @@
-//validaciones del formulario con zod
 import * as z from "zod";
 
 // Validación personalizada para archivos
@@ -21,12 +20,12 @@ export const fileValidation = z
     return ACCEPTED_IMAGE_TYPES.includes(files[0]?.type);
   }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
 
-  // Validación para colores hexadecimales
+// Validación para colores hexadecimales
 const hexColorValidation = z
   .string()
   .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Debe ser un color hexadecimal válido (ej: #FF5733)");
 
-//validacion para el titulo y la ubicacion
+//validación para el título y la ubicación
 export const validations = z.object({
   title: z
     .string()
@@ -35,11 +34,12 @@ export const validations = z.object({
   pos: z
     .string()
     .min(3, "La ubicación debe tener al menos 3 caracteres")
-    .max(200, "La ubicación no puede exceder 200 caracteres"),
-  logo: fileValidation.optional(),
-  backgroundImage: fileValidation.optional(),
+    .optional()
+    .refine((val) => val === undefined || val === "" || val.length >= 3, "La ubicación debe tener al menos 3 caracteres cuando se ingrese"),
+  logo: fileValidation.optional(), // Hacer opcional
+  backgroundImage: fileValidation.optional(), // Hacer opcional
   color: z.object({
-    primary: hexColorValidation,
-    secondary: hexColorValidation,
-  }),
+    primary: hexColorValidation.optional(), // Hacer opcional
+    secondary: hexColorValidation.optional(), // Hacer opcional
+  }).optional(), // Hacer opcional
 });

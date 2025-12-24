@@ -1,24 +1,16 @@
-import React, { ReactNode } from "react"
-import { Button } from "@/common/components/atoms/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTrigger,
-  DialogFooter,
   DialogTitle,
   DialogClose,
 } from "@/common/components/organism/dialog";
-
-import { Label } from "@/common/components/atoms/label";
-import { Input } from "@/common/components/atoms/input";
-import { X } from "lucide-react";
+import { InfoDialogProps } from "../types/info_dialog_props";
 import { InfoField } from "./Info_Field";
+//import { ReactNode } from "react";
+import { X } from "lucide-react";
 
-interface InfoDialogProps {
-  children: ReactNode;
-}
 
 export const InfoDialog = ({ children }: InfoDialogProps) => {
   return (
