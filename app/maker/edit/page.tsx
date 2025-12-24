@@ -1,12 +1,16 @@
-/*"use client"
-import { Button } from "@/common/components/atoms/button";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { getMenuId } from "./services/menu";
+import { useFetchMenu } from "./hooks/use_fetch_menu";
+/*import { Button } from "@/common/components/atoms/button";
 import { useState } from "react";
 import { getMenuQr } from "./services/qr_service";
-import { useSearchParams } from "next/navigation";
+
 
 const page = () => {
-  const searchParams = useSearchParams();
-  const menuId = searchParams.get("id");
+  
 
   const [qrUrl, setQrUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -73,12 +77,19 @@ const page = () => {
 export default page;*/
 
 const page = () => {
+  const searchParams = useSearchParams();
+  const menuId = searchParams.get("id");
 
-  return(
+  const { menuData } = useFetchMenu(menuId);
+
+  
+
+  return (
     <div>
-      working
+       <div>{menuData?.title}</div>
+        <div>{menuData?.pos}</div>
     </div>
-  )
-}
+  );
+};
 
 export default page;
