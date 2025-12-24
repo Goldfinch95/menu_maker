@@ -40,20 +40,6 @@ export const InfoDialog = ({ children }: InfoDialogProps) => {
         {/*aqui va el field */}
         <InfoField />
         {/* Aquí agregas el contenido que necesites */}
-        <div className="space-y-5 py-4">
-          <div className="flex flex-col space-y-2">
-            <Label className="text-slate-700 text-sm font-semibold">
-              Nombre del Menú
-            </Label>
-            <Input placeholder="Escribe el nombre del menú" />
-          </div>
-        </div>
-
-        <DialogFooter>
-          <Button className="bg-orange-500 hover:bg-orange-600">
-            Guardar
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
