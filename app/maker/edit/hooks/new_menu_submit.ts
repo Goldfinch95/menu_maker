@@ -1,7 +1,7 @@
 // controladores del envio de email
 import { newMenu } from "../types/new_menu";
 import { toast } from "sonner";
-//import { createMenuService } from "../services/new_menu_service";
+import { updateMenuService } from "../services/update_menu_service";
 
 
 
@@ -14,7 +14,9 @@ export const handleNewMenuSubmit = async (
   try {
     console.log("📋 Datos del formulario:");
     console.log(formData)
-    //await createMenuService(formData);
+    const newForm = await updateMenuService(formData, formData.id);
+    console.log("📋 Datos del formulario:");
+    console.log(newForm)
     // sucess: info
     toast.info("Se ha creado un nuevo Menu")
     //redirigir a home

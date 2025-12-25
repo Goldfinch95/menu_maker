@@ -55,7 +55,7 @@ export const InfoField = ({ menuData }: InfoFieldProps) => {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Creando Menu..." : "Crear Menu"}
+              {isSubmitting ? "Actualizando Menu..." : "Actualizar Menu"}
             </Button>
           </Field>
         </FieldGroup>

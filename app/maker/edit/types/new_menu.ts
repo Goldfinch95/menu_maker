@@ -1,4 +1,5 @@
 export interface newMenu {
+  id: number;
   backgroundImage: File | null;
   color: {
     primary: string;

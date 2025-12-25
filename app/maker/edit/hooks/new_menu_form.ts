@@ -18,6 +18,7 @@ export const newMenuForm = (menuData: Menu | null = null) => {
   } = useForm<NewMenuFormData>({
     resolver: zodResolver(validations),
     defaultValues: {
+      
       title: menuData?.title || "",
       pos: menuData?.pos || "",
       logo: menuData?.logo || undefined,
@@ -38,9 +39,9 @@ export const newMenuForm = (menuData: Menu | null = null) => {
     const values = getValues();
 
     const dataToUpdate: newMenu = {
+    id: menuData.id, // ⬅️ AGREGAR ESTO
     title: formData.title,
     pos: formData.pos || "",
-    // Si no se sube un nuevo archivo, mantener el existente
     logo: values.logo?.[0] || menuData.logo,
     backgroundImage: values.backgroundImage?.[0] || menuData.backgroundImage,
     color: {
