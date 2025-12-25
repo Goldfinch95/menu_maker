@@ -19,7 +19,7 @@ const page = () => {
   return (
     <div className="min-h-screen w-full flex flex-col">
       <Navbar />
-      <div className="flex flex-col justify-center items-center py-8 flex-grow">
+      <div className="flex flex-col justify-center items-center py-8 grow">
         <div className="w-full max-w-7xl mx-auto px-4">
           <div className="mb-6 flex justify-center lg:justify-start">
             <CreateMenuButton />
