@@ -1,12 +1,12 @@
 "use client"
 import  { useEffect, useState } from 'react';
 import { getPublicMenu } from './services/public_menu_services';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 import { Menu } from './types/menu';
 
 const menuPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  const searchParams = useSearchParams();
+   const id = searchParams.get('id');
   const [menu, setMenu] = useState<Menu | null>(null);
 
 
