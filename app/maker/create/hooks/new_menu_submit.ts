@@ -16,7 +16,7 @@ export const handleNewMenuSubmit = async (
     //console.log(formData)
     await createMenuService(formData);
     // sucess: info
-    toast.info("Se ha creado un nuevo Menu")
+    toast.success("Se ha creado un nuevo Menu")
     //redirigir a home
     router.push("/home");
   } catch (error) {

@@ -34,7 +34,7 @@ export const ImageFields = ({ register }: ImageFieldsProps) => {
             className={cn(
               "w-32 h-32 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden cursor-pointer transition-all hover:bg-slate-200",
               logoPreview
-                ? "border-4 border-slate-200"
+                ? "border-none"
                 : "border-2 border-dashed border-slate-300"
             )}
           >

@@ -34,8 +34,17 @@ export const fileValidation = z
 const hexColorValidation = z
   .string()
   .refine(
-    (val) => !val || val === "" || /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(val),
-    { message: "Debe ser un color hexadecimal válido (ej: #FF5733)" }
+    (val) => {
+      // Permitir vacío
+      if (!val || val === "") return true;
+      
+      // Permitir solo "#" (se normalizará después)
+      if (val === "#") return true;
+      
+      // Validar formato hexadecimal: SOLO 6 caracteres después del #
+      return /^#[A-Fa-f0-9]{6}$/.test(val);
+    },
+    { message: "Ingrese un color válido" }
   );
 
 /**
