@@ -20,7 +20,7 @@ export const Navbar = () => {
       </MenubarMenu>
       <div className="flex-1 flex justify-center">
         <MenubarMenu>
-          <MenubarTrigger>Crear Menu</MenubarTrigger>
+          <div className="font-medium">Crear Menu</div>
         </MenubarMenu>
       </div>
     </Menubar>
