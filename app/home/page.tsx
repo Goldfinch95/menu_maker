@@ -26,7 +26,7 @@ const page = () => {
           </div>
           <MenuList />
         </div>
-        <div className="mt-auto">
+        <div className="mt-auto pt-8">
           <Faq />
         </div>
       </div>
