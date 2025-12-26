@@ -13,6 +13,8 @@ import { useFetchMenu } from "../hooks/use_fetch_menu";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useQrHandler } from "../hooks/use_qr_handler";
+import { DialogTrigger } from "@/common/components/organism/dialog";
+import { InfoDialog } from "./Info_Dialog";
 
 export const InfoCard = () => {
   const searchParams = useSearchParams();
@@ -70,16 +72,20 @@ export const InfoCard = () => {
         <div className="flex align-center justify-center gap-6 pt-8">
           <div className="flex flex-row items-center justify-center gap-4 w-1/2">
             {/* este boton debe abrir el dialogo de editar menu */}
+            <InfoDialog menuData={menuData} >
+          <DialogTrigger asChild>
             <Button className="w-full h-25 bg-orange-500 text-white rounded-xl flex flex-col items-center justify-center shadow-lg hover:shadow-2xl transition duration-300">
               <Edit className="w-8! h-8!" />
               <span className="text-sm mt-2">Editar</span>
             </Button>
+          </DialogTrigger>
+        </InfoDialog>
             <Button
               onClick={handleGenerateQr}
               disabled={isGenerating}
               className="w-full h-25 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl flex flex-col items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <QrCode className="w-8 h-8" />
+              <QrCode className="w-8! h-8!" />
               <span className="text-sm mt-2">
                 {isGenerating ? 'Generando...' : 'Generar QR'}
               </span>

@@ -7,7 +7,7 @@ import { validations } from "../utils/validate_form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 
-export const passwordForm = () => {
+export const passwordForm = (token: string) => {
   const router = useRouter();
   const {
     register,
@@ -17,8 +17,8 @@ export const passwordForm = () => {
     resolver: zodResolver(validations),
     defaultValues: { password: "", control_password: "" },
   });
-  const onSubmit = async (/*form: passwordType*/) => {
-    await handlePasswordSubmit(/*form,*/ router);
+  const onSubmit = async (form: passwordType) => {
+    await handlePasswordSubmit(form, router, token);
   };
   return { register, handleSubmit, errors, onSubmit, isSubmitting };
 };

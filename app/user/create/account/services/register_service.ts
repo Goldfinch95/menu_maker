@@ -1,4 +1,3 @@
-//llamado a la api de crear cuenta
 "use server";
 
 import { cookies } from "next/headers";
@@ -16,42 +15,83 @@ export const registerUserAction = async (data: formUser): Promise<User> => {
     throw new Error("No se encontró el token de autenticación");
   }
 
-  const response = await fetch(`${BASE_URL}/users/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`,
-    },
-    body: JSON.stringify({
-      name: data.name,
-      lastName: data.last_name,
-      email: data.email,
-      cel: data.cel,
-      roleId: data.role_id,
-    }),
-  });
+  try {
+    const response = await fetch(`${BASE_URL}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({
+        name: data.name,
+        lastName: data.last_name,
+        email: data.email,
+        cel: data.cel,
+        roleId: data.role_id,
+      }),
+    });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    let errorMessage = "No se pudo registrar el usuario";
+    // Log en el servidor (aparecerá en tu terminal)
+    console.log("📡 Response Status:", response.status);
+    console.log("📡 Response OK:", response.ok);
 
-    try {
-      const errorJson = JSON.parse(errorText);
-      errorMessage = errorJson.message || errorMessage;
-    } catch {
-      // Si no es JSON, usar el texto directamente o el mensaje por defecto
-    }
+    if (!response.ok) {
+      const errorText = await response.text();
+      
+      // Estos logs aparecen en la TERMINAL del servidor
+      console.log("❌ Error Status:", response.status);
+      console.log("❌ Error Text:", errorText);
 
-    if (response.status === 409) {
-      throw new Error("El email ya está registrado");
-    } else if (response.status === 500) {
-      throw new Error("Error del servidor. Intenta nuevamente");
-    } else if (response.status === 401) {
-      throw new Error("No autorizado");
-    } else {
+      let errorMessage = "No se pudo registrar el usuario";
+      let errorData = null;
+
+      try {
+        errorData = JSON.parse(errorText);
+        errorMessage = errorData.message || errorMessage;
+        console.log("❌ Error Data:", errorData);
+      } catch (parseError) {
+        console.log("⚠️ No se pudo parsear JSON:", parseError);
+        errorMessage = errorText || errorMessage;
+      }
+
+      // Detectar email duplicado
+      const isDuplicateEmail = 
+        response.status === 409 ||
+        (response.status === 500 && (
+          errorMessage.toLowerCase().includes("email") ||
+          errorMessage.toLowerCase().includes("duplicate") ||
+          errorMessage.toLowerCase().includes("already exists") ||
+          errorMessage.toLowerCase().includes("ya existe") ||
+          errorMessage.toLowerCase().includes("unique constraint")
+        ));
+
+      if (isDuplicateEmail) {
+        console.log("🔴 Email duplicado detectado");
+        throw new Error("El email ya está registrado. Por favor usa otro email.");
+      }
+
+      if (response.status === 401) {
+        throw new Error("No autorizado. Por favor inicia sesión nuevamente.");
+      }
+
+      if (response.status === 500) {
+        throw new Error("Error del servidor. Intenta nuevamente más tarde.");
+      }
+
+      if (response.status === 400) {
+        throw new Error(errorMessage || "Datos inválidos");
+      }
+
       throw new Error(errorMessage);
     }
-  }
 
-  return await response.json();
+    const result = await response.json();
+    console.log("✅ Usuario creado exitosamente");
+    return result;
+
+  } catch (error) {
+    // Log del error completo en el servidor
+    console.error("🚨 Error completo:", error);
+    throw error;
+  }
 };
