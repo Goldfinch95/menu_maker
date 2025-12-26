@@ -45,7 +45,7 @@ export const InfoField = ({ menuData }: InfoFieldProps) => {
               aria-invalid={!!errors.pos}
             />
           </Field>
-          <ImageFields menuData={menuData} register={register}  />
+          <ImageFields menuData={menuData ? { logo: menuData.logo, backgroundImage: menuData.backgroundImage } : undefined}  register={register}  />
           {/* separar color picker */}
           <ColorPickerFields control={control}  />
           {/*hasta aqui */}

@@ -18,11 +18,23 @@ const ACCEPTED_IMAGE_TYPES = [
 export const fileValidation = z
   .any()
   .refine((files) => {
-    if (!files || files.length === 0) return true;
+    // Si es undefined, null o string (URL existente), es válido
+    if (!files || typeof files === 'string') return true;
+    
+    // Si es FileList vacío, es válido
+    if (files.length === 0) return true;
+    
+    // Si es FileList con archivo, validar tamaño
     return files[0]?.size <= MAX_FILE_SIZE;
   }, "El archivo debe ser menor a 4MB")
   .refine((files) => {
-    if (!files || files.length === 0) return true;
+    // Si es undefined, null o string (URL existente), es válido
+    if (!files || typeof files === 'string') return true;
+    
+    // Si es FileList vacío, es válido
+    if (files.length === 0) return true;
+    
+    // Si es FileList con archivo, validar tipo
     return ACCEPTED_IMAGE_TYPES.includes(files[0]?.type);
   }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
 
