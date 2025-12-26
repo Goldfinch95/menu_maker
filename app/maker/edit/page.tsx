@@ -3,6 +3,7 @@
 import { Navbar } from "./components/navbar";
 import { InfoCard } from "./components/Info_Card";
 import { Suspense } from "react";
+import {DeleteButton} from "./components/Delete_Button";
 
 const editPage = () => {
   return (
@@ -20,6 +21,8 @@ const editPage = () => {
           }
         >
           <InfoCard />
+          {/* boton de borrar menu */}
+          <DeleteButton />
         </Suspense>
       </div>
     </div>
