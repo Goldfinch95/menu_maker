@@ -69,23 +69,50 @@ export const ColorPickerFields = ({ control }: ColorPickerFieldsProps) => {
                 title="Click para editar este color"
               />
               <Input
-                id="colorPrimary"
-                type="text"
-                value={field.value || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value === "" || value.startsWith("#")) {
-                    field.onChange(value);
-                  }
-                }}
-                onFocus={() => setActiveColorField("primary")}
-                placeholder="#D4D4D4"
-                className={`font-mono uppercase ${
-                  activeColorField === "primary"
-                    ? "ring-2 ring-orange-500 border-orange-500"
-                    : ""
-                }`}
-              />
+          id="colorPrimary"
+          type="text"
+          value={field.value || ""}
+          onChange={(e) => {
+            const value = e.target.value;
+            // Si intenta borrar el #, lo restauramos
+            if (!value.startsWith("#")) {
+              field.onChange("#" + value.replace(/^#+/, ""));
+            } else {
+              field.onChange(value);
+            }
+          }}
+          onKeyDown={(e) => {
+            const input = e.currentTarget;
+            const cursorPosition = input.selectionStart || 0;
+            
+            // Prevenir borrar el # al inicio
+            if (
+              (e.key === "Backspace" && cursorPosition === 1) ||
+              (e.key === "Delete" && cursorPosition === 0)
+            ) {
+              e.preventDefault();
+            }
+          }}
+          onFocus={(e) => {
+            setActiveColorField("primary");
+            // Si el campo está vacío, agregar #
+            if (!field.value) {
+              field.onChange("#");
+            }
+            // Mover el cursor después del #
+            setTimeout(() => {
+              if (e.target.selectionStart === 0) {
+                e.target.setSelectionRange(1, 1);
+              }
+            }, 0);
+          }}
+          placeholder="#D4D4D4"
+          className={`font-mono uppercase ${
+            activeColorField === "primary"
+              ? "ring-2 ring-orange-500 border-orange-500"
+              : ""
+          }`}
+        />
             </div>
           )}
         />
@@ -110,23 +137,50 @@ export const ColorPickerFields = ({ control }: ColorPickerFieldsProps) => {
                 title="Click para editar este color"
               />
               <Input
-                id="colorSecondary"
-                type="text"
-                value={field.value || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value === "" || value.startsWith("#")) {
-                    field.onChange(value);
-                  }
-                }}
-                onFocus={() => setActiveColorField("secondary")}
-                placeholder="#262626"
-                className={`font-mono uppercase ${
-                  activeColorField === "secondary"
-                    ? "ring-2 ring-orange-500 border-orange-500"
-                    : ""
-                }`}
-              />
+          id="colorSecondary"
+          type="text"
+          value={field.value || ""}
+          onChange={(e) => {
+            const value = e.target.value;
+            // Si intenta borrar el #, lo restauramos
+            if (!value.startsWith("#")) {
+              field.onChange("#" + value.replace(/^#+/, ""));
+            } else {
+              field.onChange(value);
+            }
+          }}
+          onKeyDown={(e) => {
+            const input = e.currentTarget;
+            const cursorPosition = input.selectionStart || 0;
+            
+            // Prevenir borrar el # al inicio
+            if (
+              (e.key === "Backspace" && cursorPosition === 1) ||
+              (e.key === "Delete" && cursorPosition === 0)
+            ) {
+              e.preventDefault();
+            }
+          }}
+          onFocus={(e) => {
+            setActiveColorField("secondary");
+            // Si el campo está vacío, agregar #
+            if (!field.value) {
+              field.onChange("#");
+            }
+            // Mover el cursor después del #
+            setTimeout(() => {
+              if (e.target.selectionStart === 0) {
+                e.target.setSelectionRange(1, 1);
+              }
+            }, 0);
+          }}
+          placeholder="#262626"
+          className={`font-mono uppercase ${
+            activeColorField === "secondary"
+              ? "ring-2 ring-orange-500 border-orange-500"
+              : ""
+          }`}
+        />
             </div>
           )}
         />

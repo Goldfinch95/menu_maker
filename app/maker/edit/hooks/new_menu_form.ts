@@ -42,11 +42,15 @@ export const newMenuForm = (menuData: Menu | null = null) => {
     id: menuData.id, // ⬅️ AGREGAR ESTO
     title: formData.title,
     pos: formData.pos || "",
-    logo: values.logo?.[0] || menuData.logo,
-    backgroundImage: values.backgroundImage?.[0] || menuData.backgroundImage,
+    logo: values.logo?.[0] || null,
+    backgroundImage: values.backgroundImage?.[0] || null,
     color: {
-      primary: formData.color?.primary || menuData.color?.primary || "#D4D4D4",
-      secondary: formData.color?.secondary || menuData.color?.secondary || "#262626",
+      primary: formData.color?.primary && formData.color.primary !== "#" 
+        ? formData.color.primary 
+        : "#D4D4D4",
+      secondary: formData.color?.secondary && formData.color.secondary !== "#"
+        ? formData.color.secondary 
+        : "#262626",
     },
   };
     
@@ -55,3 +59,4 @@ export const newMenuForm = (menuData: Menu | null = null) => {
   
   return { register, handleSubmit, errors, control, onSubmit, isSubmitting };
 };
+

@@ -22,7 +22,7 @@ export const InfoDialog = ({ menuData, children }: InfoDialogProps) => {
         <DialogHeader>
           <div className="relative flex items-center justify-center">
             <DialogTitle className="text-xl font-semibold text-black">
-              Crear Menú
+              Editar Menú
             </DialogTitle>
             <DialogClose className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-white/70">
               <X className="h-5 w-5 text-orange-400" />

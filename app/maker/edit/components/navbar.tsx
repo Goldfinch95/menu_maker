@@ -20,7 +20,7 @@ export const Navbar = () => {
       </MenubarMenu>
 
       <MenubarMenu>
-        <MenubarTrigger>Editar Menu</MenubarTrigger>
+        <div className="font-medium">Editar Menu</div>
       </MenubarMenu>
 
       <MenubarMenu>
