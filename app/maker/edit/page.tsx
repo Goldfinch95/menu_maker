@@ -1,9 +1,10 @@
 "use client";
 
 import { Navbar } from "./components/navbar";
-import { InfoCard } from "./components/Info_Card";
+import { InfoCard } from "./components/info_card/Info_Card";
 import { Suspense } from "react";
 import {DeleteButton} from "./components/Delete_Button";
+import { MenuCard } from "./components/menu_card/Menu_Card";
 
 const editPage = () => {
   return (
@@ -21,7 +22,7 @@ const editPage = () => {
           }
         >
           <InfoCard />
-          {/* boton de borrar menu */}
+          <MenuCard />
           <DeleteButton />
         </Suspense>
       </div>

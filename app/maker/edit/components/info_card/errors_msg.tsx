@@ -1,9 +1,9 @@
 // alerta de los errores
 import { Alert, AlertDescription } from "@/common/components/atoms/alert";
-import { NewMenuFormData } from "../utils/validate_form";
+import { NewMenuFormData } from "../../utils/validate_form";
 import { FieldErrors } from "react-hook-form";
-import { getErrorMessages } from "../hooks/error_msg";
-import { useScrollToError } from "../hooks/use_to_scroll_error";
+import { getErrorMessages } from "../../hooks/error_msg";
+import { useScrollToError } from "../../hooks/use_to_scroll_error";
 
 interface ErrorsProps {
   errors: FieldErrors<NewMenuFormData>;

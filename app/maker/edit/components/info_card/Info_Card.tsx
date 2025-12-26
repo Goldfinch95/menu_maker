@@ -9,10 +9,10 @@ import {
 } from "@/common/components/organism/card";
 
 import { Edit, BookImage, QrCode } from "lucide-react";
-import { useFetchMenu } from "../hooks/use_fetch_menu";
+import { useFetchMenu } from "../../hooks/use_fetch_menu";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { useQrHandler } from "../hooks/use_qr_handler";
+import { useQrHandler } from "../../hooks/use_qr_handler";
 import { DialogTrigger } from "@/common/components/organism/dialog";
 import { InfoDialog } from "./Info_Dialog";
 

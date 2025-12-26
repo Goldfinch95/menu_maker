@@ -3,7 +3,7 @@
 import { Input } from "@/common/components/atoms/input";
 import { Field, FieldLabel } from "@/common/components/molecules/field";
 import { UseFormRegister } from "react-hook-form";
-import { useImagePreview } from "../hooks/image_preview_handlers";
+import { useImagePreview } from "../../hooks/image_preview_handlers";
 import { Label } from "@/common/components/atoms/label";
 import { cn } from "@/lib/utils";
 import { Upload } from "lucide-react";

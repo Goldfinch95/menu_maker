@@ -16,7 +16,7 @@ export const DeleteButton = () => {
   const { deleteMenu, isDeleting } = useDeleteMenu(router);
 
   return (
-    <Button onClick={() => deleteMenu(Number(menuId))} disabled={isDeleting}>
+    <Button onClick={() => deleteMenu(Number(menuId))} disabled={isDeleting} className="w-full py-8 mt-8 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-red-500/25 max-w-sm mx-auto">
       {isDeleting ? "Borrando..." : "Borrar"}
     </Button>
   );

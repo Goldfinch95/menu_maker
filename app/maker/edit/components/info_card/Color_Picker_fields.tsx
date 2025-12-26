@@ -7,7 +7,7 @@ import {
 } from "@/common/components/molecules/field";
 import { HexColorPicker } from "react-colorful";
 import { Input } from "@/common/components/atoms/input";
-import { useColorPicker } from "../hooks/use_color_picker";
+import { useColorPicker } from "../../hooks/use_color_picker";
 
 interface ColorPickerFieldsProps {
   control: Control<any>;

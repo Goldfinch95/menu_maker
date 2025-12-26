@@ -9,7 +9,7 @@ import {
   FieldLabel,
 } from "@/common/components/molecules/field";
 import { Input } from "@/common/components/atoms/input";
-import { newMenuForm } from "../hooks/new_menu_form";
+import { newMenuForm } from "../../hooks/new_menu_form";
 import { ImageFields } from "./Image_Field";
 import { ColorPickerFields } from "./Color_Picker_fields";
 import { Menu } from "@/app/home/types/menu";
