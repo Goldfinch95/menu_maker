@@ -9,11 +9,15 @@ import { cn } from "@/lib/utils";
 import { Upload } from "lucide-react";
 interface ImageFieldsProps {
   register: UseFormRegister<any>;
+  menuData?: {
+    logo?: string;
+    backgroundImage?: string;
+  };
 }
 
-export const ImageFields = ({ register }: ImageFieldsProps) => {
+export const ImageFields = ({ register, menuData }: ImageFieldsProps) => {
   const { logoPreview, bgPreview, handleLogoChange, handleBgChange } =
-    useImagePreview();
+    useImagePreview(menuData?.logo, menuData?.backgroundImage);
 
   return (
     <>
