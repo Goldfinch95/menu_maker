@@ -9,18 +9,17 @@ import {
 } from "@/common/components/organism/card";
 
 import { Edit, BookImage, QrCode } from "lucide-react";
-import { useFetchMenu } from "../../hooks/use_fetch_menu";
-import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useQrHandler } from "../../hooks/use_qr_handler";
 import { DialogTrigger } from "@/common/components/organism/dialog";
 import { InfoDialog } from "./Info_Dialog";
+import { Menu } from "@/app/home/types/menu";
+interface MenuCardProps {
+  menuData: Menu; 
+}
 
-export const InfoCard = () => {
-  const searchParams = useSearchParams();
-  const menuId = searchParams.get("id");
-
-  const { menuData } = useFetchMenu(menuId);
+export const InfoCard = ({ menuData }: MenuCardProps) => {
+  
 
   // Usar el hook directamente aquí
   const { handleGenerateQr, isGenerating } = useQrHandler({

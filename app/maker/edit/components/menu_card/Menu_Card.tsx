@@ -4,10 +4,21 @@ import { Plus } from "lucide-react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { NewCategoryDialog } from "./New_Category_Dialog";
 import { useSearchParams } from "next/navigation";
+import { Menu } from "@/app/home/types/menu";
 
-export const MenuCard = () => {
 
 
+interface MenuCardProps {
+  menuData?: Menu; 
+}
+
+export const MenuCard = ({ menuData }: MenuCardProps) => {
+  if (!menuData) {
+    return null; // O un skeleton/loader
+  }
+
+console.log('menuData.categories:', menuData?.categories);
+  
   return (
     <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-md p-6 w-full max-w-sm mx-auto">
       <div className="mb-4">
@@ -16,7 +27,7 @@ export const MenuCard = () => {
             Menú
           </p>
           <div className="shrink-0">
-            <NewCategoryDialog >
+            <NewCategoryDialog menuId={menuData.id}>
               <DialogTrigger asChild>
                 <Button
                   size="icon"

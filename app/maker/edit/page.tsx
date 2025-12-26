@@ -5,8 +5,18 @@ import { InfoCard } from "./components/info_card/Info_Card";
 import { Suspense } from "react";
 import {DeleteButton} from "./components/Delete_Button";
 import { MenuCard } from "./components/menu_card/Menu_Card";
+import { useSearchParams } from "next/navigation";
+import { useFetchMenu } from "./hooks/use_fetch_menu";
+
 
 const editPage = () => {
+
+  const searchParams = useSearchParams();
+    const menuId = searchParams.get("id");
+  
+    const { menuData } = useFetchMenu(menuId);
+  
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       <Navbar />
@@ -21,8 +31,8 @@ const editPage = () => {
             </div>
           }
         >
-          <InfoCard />
-          <MenuCard />
+          <InfoCard menuData={menuData}/>
+          <MenuCard menuData={menuData}/>
           <DeleteButton />
         </Suspense>
       </div>

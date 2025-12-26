@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,24 +8,18 @@ import {
   DialogDescription,
 } from "@/common/components/organism/dialog";
 import { X } from "lucide-react";
-import {
-  Field,
-  FieldSet,
-  FieldGroup,
-  FieldLabel,
-} from "@/common/components/molecules/field";
-import { Input } from "@/common/components/atoms/input";
-import { Button } from "@/common/components/atoms/button";
 import { NewCategoryField } from "./New_Category_Field";
 
 export interface InfoDialogProps {
+  menuId: number;
   children: ReactNode;
 }
 
-export const NewCategoryDialog = ({ children }: InfoDialogProps) => {
+export const NewCategoryDialog = ({ children, menuId }: InfoDialogProps) => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
-      {/* Esto muestra el botón que abre el diálogo */}
+    <Dialog open={open} onOpenChange={setOpen}>
       {children}
       <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto [&>button]:hidden">
         <DialogHeader>
@@ -39,10 +33,7 @@ export const NewCategoryDialog = ({ children }: InfoDialogProps) => {
           </div>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        {/*aqui va el field */}
-        <NewCategoryField />
-        {/*<InfoField  menuData={menuData} />*/}
-        {/* Aquí agregas el contenido que necesites */}
+        <NewCategoryField menuId={menuId} onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
