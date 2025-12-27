@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   categoryValidations,
-  NewCategoryFormData,
+  CategoryFormData,
 } from "../utils/validate_category_form";
 import { newCategorySubmit } from "./new_category_submit";
 import { newCategory } from "../types/new_category";
@@ -18,14 +18,14 @@ export const newCategoryForm = ({ menuId, onSuccess }: UseNewCategoryFormProps) 
     handleSubmit,
     formState: { errors, isSubmitting },
     getValues,
-  } = useForm<NewCategoryFormData>({
+  } = useForm<CategoryFormData>({
     resolver: zodResolver(categoryValidations),
     defaultValues: {
       title: "",
     },
   });
 
-  const onSubmit = async (formData: NewCategoryFormData) => {
+  const onSubmit = async (formData: CategoryFormData) => {
     const dataToSubmit: newCategory = {
       title: formData.title,
     };

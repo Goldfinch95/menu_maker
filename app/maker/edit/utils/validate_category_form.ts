@@ -9,4 +9,4 @@ export const categoryValidations = z.object({
     .trim(),
 });
 
-export type NewCategoryFormData = z.infer<typeof categoryValidations>;
+export type CategoryFormData = z.infer<typeof categoryValidations>;

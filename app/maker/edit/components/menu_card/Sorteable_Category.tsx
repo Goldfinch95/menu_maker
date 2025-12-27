@@ -12,18 +12,15 @@ import {
 import { Button } from "@/common/components/atoms/button";
 import { cn } from "@/lib/utils";
 import { Categories } from "@/app/home/types/menu";
-import { useCategoryEdit } from "../../hooks/use_category_edit";
 import { CategoryTitle } from "./Category_Title";
-//import { CategoryDeleteDialog } from "./CategoryDeleteDialog";
-//import { ItemList } from "@/menu/items/components/ItemList";
-//import { useItemDragDrop } from "@/menu/items/hooks/useItemDragDrop";
-//import { useItemOperations } from "@/menu/items/hooks/useItemOperations";
+//import { CategoryDeleteDialog } from "./Category_Delete_Dialog";
+import { useEditCategoryForm } from "../../hooks/use_edit_category_form";
+// import { ItemList } from "@/menu/items/components/ItemList";
 
 interface SortableCategoryProps {
   category: Categories;
   expandedCategoryId: number | null;
   setExpandedCategoryId: (id: number | null) => void;
-  onSaveTitle: (id: number, title: string) => Promise<void>;
   onDelete: () => void;
   onCategoryChange: () => Promise<void>;
   sensors: any;
@@ -33,7 +30,6 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
   category,
   expandedCategoryId,
   setExpandedCategoryId,
-  onSaveTitle,
   onDelete,
   onCategoryChange,
   sensors,
@@ -47,20 +43,21 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
     isDragging,
   } = useSortable({ id: category.id });
 
+  // ========== HOOK DE EDICIÓN CON VALIDACIONES ==========
   const {
-    localTitle,
-    setLocalTitle,
+    register,
+    handleSubmit,
+    errors,
+    onSubmit,
+    isSubmitting,
     showSaveButton,
     handleFocus,
     handleBlur,
-  } = useCategoryEdit(category.id, category.title);
-
-  {/*const { localItems, handleDragEnd: handleItemDragEnd } = useItemDragDrop(
-    category.items || [],
-    onCategoryChange
-  );
-
-  const { deleteItem, deletingItemId } = useItemOperations(onCategoryChange);*/}
+  } = useEditCategoryForm({
+    categoryId: category.id,
+    initialTitle: category.title,
+    onSuccess: onCategoryChange,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -78,58 +75,61 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
           setExpandedCategoryId(isExpanded ? null : category.id)
         }
       >
-        <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-lg shadow-sm">
-          <div
-            {...attributes}
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing touch-none mr-2 text-slate-400 hover:text-slate-600 transition-colors"
-          >
-            <GripVertical className="w-5 h-5" />
+        {/* ========== FORM WRAPPER ========== */}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-lg shadow-sm">
+            {/* Drag Handle */}
+            <div
+              {...attributes}
+              {...listeners}
+              className="cursor-grab active:cursor-grabbing touch-none mr-2 text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <GripVertical className="w-5 h-5" />
+            </div>
+
+            {/* ========== TÍTULO EDITABLE CON VALIDACIONES ========== */}
+            <CategoryTitle
+              register={register}
+              errors={errors}
+              showSaveButton={showSaveButton}
+              onSave={handleSubmit(onSubmit)}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              isSubmitting={isSubmitting}
+            />
+
+            {/* Botones de acción */}
+            <div className="flex space-x-2">
+              {/*<CategoryDeleteDialog onDelete={onDelete} />*/}
+
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "h-8 w-8 p-0 rounded-lg transition-all duration-200",
+                    isExpanded
+                      ? "bg-orange-50 text-orange-500 shadow-sm"
+                      : "text-slate-500 hover:bg-slate-100"
+                  )}
+                >
+                  {isExpanded ? (
+                    <ChevronUp className="w-4 h-4" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4" />
+                  )}
+                </Button>
+              </CollapsibleTrigger>
+            </div>
           </div>
+        </form>
 
-          <CategoryTitle
-            title={localTitle}
-            onChange={setLocalTitle}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            showSaveButton={showSaveButton}
-            onSave={() => onSaveTitle(category.id, localTitle)}
-          />
-
-          <div className="flex space-x-2">
-            {/*<CategoryDeleteDialog onDelete={onDelete} />*/}
-
-            <CollapsibleTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(
-                  "h-8 w-8 p-0 rounded-lg transition-all duration-200",
-                  isExpanded
-                    ? "bg-orange-50 text-orange-500 shadow-sm"
-                    : "text-slate-500 hover:bg-slate-100"
-                )}
-              >
-                {isExpanded ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </Button>
-            </CollapsibleTrigger>
-          </div>
-        </div>
-
+        {/* Contenido desplegable (Items) */}
         <CollapsibleContent>
-          {/*<ItemList
-            items={localItems}
-            categoryId={category.id}
-            sensors={sensors}
-            onItemSaved={onCategoryChange}
-            onDelete={deleteItem}
-            deletingItemId={deletingItemId}
-            onDragEnd={handleItemDragEnd}
-          />*/}
+          {/* <ItemList ... /> */}
+          <div className="p-4 text-sm text-slate-500">
+            Items de la categoría aquí...
+          </div>
         </CollapsibleContent>
       </Collapsible>
     </div>
