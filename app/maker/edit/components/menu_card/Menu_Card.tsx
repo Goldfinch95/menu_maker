@@ -3,13 +3,11 @@ import { Button } from "@/common/components/atoms/button";
 import { Plus } from "lucide-react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { NewCategoryDialog } from "./New_Category_Dialog";
-import { useSearchParams } from "next/navigation";
 import { Menu } from "@/app/home/types/menu";
-
-
+import CategoryList from "./Category_List";
 
 interface MenuCardProps {
-  menuData?: Menu; 
+  menuData?: Menu;
 }
 
 export const MenuCard = ({ menuData }: MenuCardProps) => {
@@ -17,8 +15,8 @@ export const MenuCard = ({ menuData }: MenuCardProps) => {
     return null; // O un skeleton/loader
   }
 
-console.log('menuData.categories:', menuData?.categories);
-  
+  console.log("menuData.categories:", menuData?.categories);
+
   return (
     <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-md p-6 w-full max-w-sm mx-auto">
       <div className="mb-4">
@@ -41,22 +39,7 @@ console.log('menuData.categories:', menuData?.categories);
         </div>
 
         <div className="space-y-3 mt-4">
-          {/*{categories && categories.length > 0 ? (
-              <CategoryList
-                categories={categories}
-                expandedCategoryId={expandedCategoryId}
-                setExpandedCategoryId={setExpandedCategoryId}
-                sensors={sensors}
-                onDragEnd={handleDragEnd}
-                onSaveTitle={updateTitle}
-                onDelete={deleteCategory}
-                onCategoryChange={onCategoryChange}
-              />
-            ) : !loading ? (
-              <p className="text-sm text-slate-400 italic mt-6">
-                No hay categorías creadas aún.
-              </p>
-            ) : null}*/}
+          <CategoryList categories={menuData.categories} />
         </div>
       </div>
     </Card>
