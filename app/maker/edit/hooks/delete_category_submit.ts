@@ -15,7 +15,7 @@ export const deleteCategorySubmit = async ({
     await deleteCategoryService(categoryId);
     toast.success("Categoría eliminada con éxito");
     //recargar pagina
-
+window.location.reload();
     if (onSuccess) {
       await onSuccess();
     }
