@@ -3,19 +3,34 @@
 import { Navbar } from "./components/navbar";
 import { InfoCard } from "./components/info_card/Info_Card";
 import { Suspense } from "react";
-import {DeleteButton} from "./components/Delete_Button";
+import { DeleteButton } from "./components/Delete_Button";
 import { MenuCard } from "./components/menu_card/Menu_Card";
 import { useSearchParams } from "next/navigation";
 import { useFetchMenu } from "./hooks/use_fetch_menu";
 
-
-const editPage = () => {
-
+const EditPage = () => {
   const searchParams = useSearchParams();
-    const menuId = searchParams.get("id");
-  
-    const { menuData } = useFetchMenu(menuId);
-  
+  const menuId = searchParams.get("id");
+
+  const { menuData } = useFetchMenu(menuId);
+
+  // Mostrar loading mientras se cargan los datos
+  if (!menuData) {
+    return (
+      <div className="min-h-screen w-full flex flex-col">
+        <Navbar />
+        <div className="flex flex-col justify-center items-center py-8 grow">
+          <div className="w-full max-w-sm mx-auto p-8 text-center">
+            <div className="animate-pulse space-y-4">
+              <div className="h-48 bg-gray-200 rounded-2xl"></div>
+              <div className="h-48 bg-gray-200 rounded-2xl"></div>
+              <div className="h-16 bg-gray-200 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full flex flex-col">
@@ -31,8 +46,8 @@ const editPage = () => {
             </div>
           }
         >
-          <InfoCard menuData={menuData}/>
-          <MenuCard menuData={menuData}/>
+          <InfoCard menuData={menuData} />
+          <MenuCard menuData={menuData} />
           <DeleteButton />
         </Suspense>
       </div>
@@ -40,4 +55,4 @@ const editPage = () => {
   );
 };
 
-export default editPage;
+export default EditPage;
