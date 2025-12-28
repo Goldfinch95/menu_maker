@@ -21,7 +21,7 @@ interface SortableCategoryProps {
   category: Categories;
   expandedCategoryId: number | null;
   setExpandedCategoryId: (id: number | null) => void;
-  onDelete: () => void;
+  //onDelete: () => void;
   onCategoryChange: () => Promise<void>;
   sensors: any;
 }
@@ -30,7 +30,7 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
   category,
   expandedCategoryId,
   setExpandedCategoryId,
-  onDelete,
+  //onDelete,
   onCategoryChange,
   sensors,
 }) => {
