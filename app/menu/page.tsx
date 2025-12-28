@@ -4,6 +4,7 @@ import { getPublicMenu } from './services/public_menu_services';
 import { useSearchParams } from 'next/navigation';
 import { Menu } from './types/menu';
 import { Suspense } from 'react';
+import { MenuNavbar } from './components/Menu_Navbar';
 
 function MenuPageContent() {
   const searchParams = useSearchParams();
@@ -41,7 +42,8 @@ function MenuPageContent() {
   if (!menu) return <div>No se encontró el menú</div>;
 
   return (
-    <div>
+    <div className='min-h-screen w-full flex flex-col'>
+      <MenuNavbar primaryColor={menu.color?.primary} menuId={menu.id} />
       <div>Título: {menu.title}</div>
       <div>Pos: {menu.pos}</div>
     </div>
