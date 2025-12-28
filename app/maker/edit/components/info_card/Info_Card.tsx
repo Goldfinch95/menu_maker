@@ -15,11 +15,11 @@ import { DialogTrigger } from "@/common/components/organism/dialog";
 import { InfoDialog } from "./Info_Dialog";
 import { Menu } from "@/app/home/types/menu";
 interface MenuCardProps {
-  menuData: Menu; 
+  menuData:  Menu | null; 
 }
 
 export const InfoCard = ({ menuData }: MenuCardProps) => {
-  
+  if (!menuData) return null;
 
   // Usar el hook directamente aquí
   const { handleGenerateQr, isGenerating } = useQrHandler({
