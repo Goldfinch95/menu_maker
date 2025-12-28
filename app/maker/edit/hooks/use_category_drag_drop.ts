@@ -3,6 +3,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 import { Categories } from "@/app/home/types/menu";
 import { calculateNewPosition } from "../utils/positioning";
 import { toast } from "sonner";
+import { editCategory } from "../services/edit_category_service";
 
 export const useCategoryDragDrop = (
   categories: Categories[],
@@ -24,18 +25,11 @@ export const useCategoryDragDrop = (
       const newPosition = calculateNewPosition(categories, oldIndex, newIndex);
 
       try {
-        // Llamar a tu API para actualizar la posición
-        const response = await fetch(`/api/categories/${movedCategory.id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ position: newPosition }),
-        });
-
-        if (!response.ok) throw new Error("Error al actualizar");
-
+        await editCategory({ newPosition }, movedCategory.id);
         await onCategoryChange();
+        toast.success("Orden actualizado correctamente");
       } catch (error) {
-        console.error("❌ Error al actualizar el orden de categoría", error);
+        console.error("Error al actualizar el orden de categoría", error);
         setCategories(categories); // Revertir
         toast.error("Error al actualizar el orden");
       }

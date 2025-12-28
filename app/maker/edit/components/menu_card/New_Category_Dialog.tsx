@@ -13,10 +13,18 @@ import { NewCategoryField } from "./New_Category_Field";
 export interface InfoDialogProps {
   menuId: number;
   children: ReactNode;
+  onSuccess?: () => void;
 }
 
-export const NewCategoryDialog = ({ children, menuId }: InfoDialogProps) => {
+export const NewCategoryDialog = ({ children, menuId, onSuccess }: InfoDialogProps) => {
   const [open, setOpen] = useState(false);
+
+  const handleSuccess = () => {
+    setOpen(false);
+    if (onSuccess) {
+      onSuccess();
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -33,7 +41,7 @@ export const NewCategoryDialog = ({ children, menuId }: InfoDialogProps) => {
           </div>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <NewCategoryField menuId={menuId} onSuccess={() => setOpen(false)} />
+        <NewCategoryField menuId={menuId} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
   );

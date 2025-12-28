@@ -1,3 +1,5 @@
+"use client";
+
 import { Card } from "@/common/components/organism/card";
 import { Button } from "@/common/components/atoms/button";
 import { Plus } from "lucide-react";
@@ -5,17 +7,40 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { NewCategoryDialog } from "./New_Category_Dialog";
 import { Menu } from "@/app/home/types/menu";
 import CategoryList from "./Category_List";
+import { useState, useEffect, useCallback } from "react";
+import { getMenuId } from "../../services/menu";
 
 interface MenuCardProps {
-  menuData?: Menu;
+  menuData: Menu;
 }
 
-export const MenuCard = ({ menuData }: MenuCardProps) => {
-  if (!menuData) {
-    return null; // O un skeleton/loader
-  }
+export const MenuCard = ({ menuData: initialMenuData }: MenuCardProps) => {
+  const [menuData, setMenuData] = useState<Menu>(initialMenuData);
+  const [isRefetching, setIsRefetching] = useState(false);
 
-  console.log("menuData.categories:", menuData?.categories);
+  const refetchMenu = useCallback(async () => {
+    if (!initialMenuData?.id) return;
+    
+    setIsRefetching(true);
+    try {
+      const updatedMenu = await getMenuId(initialMenuData.id);
+      setMenuData(updatedMenu);
+    } catch (error) {
+      console.error("Error al refrescar menú:", error);
+    } finally {
+      setIsRefetching(false);
+    }
+  }, [initialMenuData?.id]);
+
+  useEffect(() => {
+    if (initialMenuData) {
+      setMenuData(initialMenuData);
+    }
+  }, [initialMenuData]);
+
+  if (!menuData) {
+    return null;
+  }
 
   return (
     <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-md p-6 w-full max-w-sm mx-auto">
@@ -25,7 +50,7 @@ export const MenuCard = ({ menuData }: MenuCardProps) => {
             Menú
           </p>
           <div className="shrink-0">
-            <NewCategoryDialog menuId={menuData.id}>
+            <NewCategoryDialog menuId={menuData.id} onSuccess={refetchMenu}>
               <DialogTrigger asChild>
                 <Button
                   size="icon"
@@ -39,7 +64,16 @@ export const MenuCard = ({ menuData }: MenuCardProps) => {
         </div>
 
         <div className="space-y-3 mt-4">
-          <CategoryList categories={menuData.categories} />
+          {isRefetching ? (
+            <div className="flex justify-center items-center py-4">
+              <div className="h-6 w-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <CategoryList 
+              categories={menuData.categories} 
+              onMenuUpdate={refetchMenu}
+            />
+          )}
         </div>
       </div>
     </Card>

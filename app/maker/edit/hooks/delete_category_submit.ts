@@ -11,15 +11,17 @@ export const deleteCategorySubmit = async ({
   onSuccess,
 }: DeleteCategoryParams) => {
   try {
-    // ⚠️ DESCOMENTAR CUANDO TENGAS EL SERVICE
     await deleteCategoryService(categoryId);
-    toast.success("Categoría eliminada con éxito");
-    //recargar pagina
-window.location.reload();
+    
+    toast.success("Categoría eliminada exitosamente");
+    
+    // Llamar al callback para refrescar solo el componente
     if (onSuccess) {
       await onSuccess();
     }
+    
   } catch (error) {
-    toast.error("no se pudo eliminar la Categoría");
+    console.error("Error al eliminar categoría:", error);
+    toast.error("No se pudo eliminar la categoría");
   }
 };

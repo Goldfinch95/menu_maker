@@ -2,11 +2,14 @@
 
 import { cookies } from "next/headers";
 
-import { newCategory } from "../types/new_category";
-
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export async function editCategory(data: newCategory, id: string | number) {
+interface EditCategoryData {
+  title?: string;
+  newPosition?: number;
+}
+
+export async function editCategory(data: EditCategoryData, id: string | number) {
   const cookiesStore = await cookies();
   const tokenCookie = cookiesStore.get("token");
   const subdomainCookie = cookiesStore.get("subdomain");
@@ -24,17 +27,13 @@ export async function editCategory(data: newCategory, id: string | number) {
       Authorization: `Bearer ${authToken}`,
       "x-tenant-subdomain": tenant || "",
     },
-    body: JSON.stringify({
-                menuId: id,
-                title: data.title,            
-            }),
+    body: JSON.stringify(data),
   });
 
   if (!response.ok) {
-    throw new Error(`Error al borrar menu: ${response.status}`);
+    throw new Error(`Error al actualizar categoría: ${response.status}`);
   }
 
-  // Manejar respuestas vacías (204 No Content o body vacío)
   const contentType = response.headers.get("content-type");
   
   if (response.status !== 204 && contentType?.includes("application/json")) {

@@ -1,3 +1,4 @@
 export interface newCategory {
-  title: string;
+  title?: string;
+  newPosition?: number;
 }

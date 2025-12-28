@@ -8,31 +8,24 @@ import { useDragAndDrop } from "../../hooks/use_drag_and_drop";
 import { useCategoryDragDrop } from "../../hooks/use_category_drag_drop";
 import { SortableCategory } from "./Sorteable_Category";
 
-
 interface CategoryListProps {
   categories: Categories[];
-  onMenuUpdate?: () => Promise<void>;
+  onMenuUpdate: () => Promise<void>;
 }
 
 const CategoryList = ({ categories: initialCategories, onMenuUpdate }: CategoryListProps) => {
-  
-  
   const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(null);
   const [categories, setCategories] = useState<Categories[]>([]);
 
   // Sensores para drag & drop
   const sensors = useDragAndDrop();
 
-  // Callback de refresco (si no existe, usar función vacía)
-  const refetchMenu = onMenuUpdate || (async () => {});
-
   // Hooks personalizados
   const { handleDragEnd } = useCategoryDragDrop(
     categories,
     setCategories,
-    refetchMenu
+    onMenuUpdate
   );
-
 
   // Sincronizar categorías con las props
   useEffect(() => {
@@ -66,9 +59,7 @@ const CategoryList = ({ categories: initialCategories, onMenuUpdate }: CategoryL
               category={category}
               expandedCategoryId={expandedCategoryId}
               setExpandedCategoryId={setExpandedCategoryId}
-              //onSaveTitle={updateTitle}
-              //onDelete={() => deleteCategory(category.id)}
-              onCategoryChange={refetchMenu}
+              onCategoryChange={onMenuUpdate}
               sensors={sensors}
             />
           ))}
