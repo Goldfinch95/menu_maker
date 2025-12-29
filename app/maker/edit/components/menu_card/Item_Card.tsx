@@ -32,11 +32,6 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           <p className="font-medium text-slate-700 text-sm truncate">
             {item.title || "Nuevo plato"}
           </p>
-          {item.description && (
-            <p className="text-xs text-slate-500 truncate mt-0.5">
-              {item.description}
-            </p>
-          )}
         </div>
 
         {/* Precio */}

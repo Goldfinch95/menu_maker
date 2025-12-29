@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -36,12 +36,22 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
   open: controlledOpen,
   onOpenChange,
 }) => {
-  const [internalOpen, setInternalOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = React.useState(false);
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
   const setOpen = isControlled ? onOpenChange! : setInternalOpen;
 
   const isEditMode = !!item;
+
+  // Log cuando cambia el estado del dialog
+  useEffect(() => {
+    console.log(`🪟 [ItemDialog] Dialog ${open ? 'ABIERTO' : 'CERRADO'}:`, {
+      mode: isEditMode ? "EDICIÓN" : "CREACIÓN",
+      itemId: item?.id,
+      categoryId,
+      isControlled,
+    });
+  }, [open, isEditMode, item?.id, categoryId, isControlled]);
 
   const {
     register,
@@ -56,9 +66,15 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
     item,
     categoryId,
     onSubmit: async (formData) => {
-      await onSubmit(formData);
-      setOpen(false);
-      reset();
+      console.log("💾 [ItemDialog] Ejecutando onSubmit del dialog");
+      try {
+        await onSubmit(formData);
+        console.log("✅ [ItemDialog] Submit exitoso, cerrando dialog");
+        setOpen(false);
+        reset();
+      } catch (error) {
+        console.error("❌ [ItemDialog] Error en submit:", error);
+      }
     },
   });
 
@@ -138,7 +154,7 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
                   type="number"
                   step="0.01"
                   min="0"
-                  {...register("price")}
+                  {...register("price", { valueAsNumber: true })}
                   placeholder="0.00"
                   className="w-full pl-7"
                 />
@@ -195,7 +211,10 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
             <Button
               type="button"
               variant="outline"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                console.log("❌ [ItemDialog] Cancelando, cerrando dialog");
+                setOpen(false);
+              }}
               disabled={isSubmitting}
               className="flex-1"
             >

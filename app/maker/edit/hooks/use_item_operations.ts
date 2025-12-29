@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { deleteItemService } from "../services/delete_item_service";
-import { createItemService } from "../services/create_item_service";
-import { editItemService } from "../services/edit_item_service";
+import { deleteItemSubmit } from "./delete_item_submit";
+import { createItemSubmit } from "./create_item_submit";
+import { editItemSubmit } from "./edit_item_submit";
 
 interface UseItemOperationsProps {
   onItemChange: () => Promise<void>;
@@ -14,12 +14,17 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
 
   // ========== ELIMINAR ITEM ==========
   const deleteItem = async (itemId: number) => {
+    console.log("🗑️ [useItemOperations] Iniciando eliminación de item:", itemId);
     setDeletingItemId(itemId);
     
     try {
-      await deleteItemService({ itemId, onSuccess: onItemChange });
+      await deleteItemSubmit({
+        itemId,
+        onSuccess: onItemChange,
+      });
+      console.log("✅ [useItemOperations] Item eliminado exitosamente");
     } catch (error) {
-      console.error("Error en deleteItem:", error);
+      console.error("❌ [useItemOperations] Error al eliminar item:", error);
     } finally {
       setDeletingItemId(null);
     }
@@ -27,12 +32,24 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
 
   // ========== CREAR ITEM ==========
   const createItem = async (formData: FormData, categoryId: number) => {
+    console.log("➕ [useItemOperations] Iniciando creación de item");
+    console.log("📋 CategoryId:", categoryId);
+    console.log("📋 FormData entries:");
+    for (const [key, value] of formData.entries()) {
+      console.log(`  ${key}:`, value instanceof File ? `File(${value.name})` : value);
+    }
+    
     setCreatingItem(true);
     
     try {
-      await createItemService({ formData, categoryId, onSuccess: onItemChange });
+      await createItemSubmit({
+        formData,
+        categoryId,
+        onSuccess: onItemChange,
+      });
+      console.log("✅ [useItemOperations] Item creado exitosamente");
     } catch (error) {
-      console.error("Error en createItem:", error);
+      console.error("❌ [useItemOperations] Error al crear item:", error);
       throw error;
     } finally {
       setCreatingItem(false);
@@ -41,12 +58,23 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
 
   // ========== EDITAR ITEM ==========
   const editItem = async (itemId: number, formData: FormData) => {
+    console.log("✏️ [useItemOperations] Iniciando edición de item:", itemId);
+    console.log("📋 FormData entries:");
+    for (const [key, value] of formData.entries()) {
+      console.log(`  ${key}:`, value instanceof File ? `File(${value.name})` : value);
+    }
+    
     setEditingItemId(itemId);
     
     try {
-      await editItemService({ itemId, formData, onSuccess: onItemChange });
+      await editItemSubmit({
+        itemId,
+        formData,
+        onSuccess: onItemChange,
+      });
+      console.log("✅ [useItemOperations] Item editado exitosamente");
     } catch (error) {
-      console.error("Error en editItem:", error);
+      console.error("❌ [useItemOperations] Error al editar item:", error);
       throw error;
     } finally {
       setEditingItemId(null);

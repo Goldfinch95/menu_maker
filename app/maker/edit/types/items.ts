@@ -26,7 +26,9 @@ export interface NewItem {
   title: string;
   description?: string;
   price?: number;
+  images?: ImageItems[];
   categoryId: number;
+  active: boolean;
 }
 
 export interface UpdateItemPosition {

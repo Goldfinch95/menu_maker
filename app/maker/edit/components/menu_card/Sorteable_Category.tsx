@@ -10,11 +10,6 @@ import { Button } from "@/common/components/atoms/button";
 import { useEditCategoryForm } from "../../hooks/use_edit_category_form";
 import { useDeleteCategory } from "../../hooks/use_delete_category";
 import { ItemList } from "./Item_List";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@/common/components/atoms/collapsible";
 
 interface SortableCategoryProps {
   category: Categories;
@@ -153,16 +148,16 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
         </div>
       </form>
 
-      {/* Contenido desplegable */}
+      {/* Contenido desplegable - Renderizado condicional simple */}
       {isExpanded && (
-        <CollapsibleContent>
+        <div className="mt-2">
           <ItemList
             items={category.items || []}
             categoryId={category.id}
             sensors={sensors}
             onItemChange={onCategoryChange}
           />
-        </CollapsibleContent>
+        </div>
       )}
     </div>
   );
