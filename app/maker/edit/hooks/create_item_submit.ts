@@ -15,12 +15,12 @@ export const createItemSubmit = async ({
   onSuccess,
 }: CreateItemParams) => {
   try {
-    
     // Extraer datos del FormData
     const title = formData.get("title") as string;
     const description = formData.get("description") as string | null;
     const priceStr = formData.get("price") as string | null;
     const imageFile = formData.get("image") as File | null;
+
     // PASO 1: Crear el item sin imagen
     const newItem: NewItem = {
       categoryId,
@@ -30,39 +30,46 @@ export const createItemSubmit = async ({
       active: true,
     };
 
-   
     const createdItem = await createItemService(newItem);
 
-    //paso 2: controlar el id del item
-    console.log(createdItem.categoryId)
 
     // PASO 2: Si hay imagen, subirla
-    if (imageFile && imageFile instanceof File && imageFile.size > 0) {
-      console.log("🖼️ [createItemSubmit] Subiendo imagen...");
-      
+    // ✅ Verificar propiedades en lugar de instanceof
+    const isValidFile =
+      imageFile &&
+      typeof imageFile === "object" &&
+      "name" in imageFile &&
+      "size" in imageFile &&
+      imageFile.size > 0;
+
+    if (isValidFile) {
       try {
+
+        // ✅ NUEVO FORMATO: Array de imágenes con fileField
         const uploadedImage = await updateImage({
           itemId: createdItem.id,
-          imageFile: imageFile,
+          images: [
+            {
+              fileField: "image", // Nombre del campo del FormData
+              file: imageFile as File,
+            },
+          ],
         });
-        
-        console.log("✅ [createItemSubmit] Imagen subida exitosamente:", uploadedImage);
-        
+
         // Actualizar el item con la imagen
         createdItem.images = [uploadedImage];
-        
       } catch (imageError) {
-        console.error("⚠️ [createItemSubmit] Error al subir imagen:", imageError);
-        
-        // El item ya fue creado, solo falló la imagen
+        console.error(
+          "⚠️ [createItemSubmit] Error al subir imagen:",
+          imageError
+        );
+
         toast.warning(
           "Plato creado exitosamente, pero hubo un error al subir la imagen. Puedes editarlo para agregar la imagen más tarde."
         );
-        
-        // No lanzamos el error para no bloquear el éxito parcial
       }
     } else {
-      console.log("ℹ️ [createItemSubmit] No hay imagen para subir");
+      console.log("ℹ️ [createItemSubmit] No hay imagen válida para subir");
     }
 
     // PASO 3: Notificar éxito
@@ -73,11 +80,13 @@ export const createItemSubmit = async ({
       console.log("🔄 [createItemSubmit] Ejecutando onSuccess callback");
       await onSuccess();
     }
-    
+
     return createdItem;
   } catch (error) {
     console.error("❌ [createItemSubmit] Error:", error);
-    toast.error(error instanceof Error ? error.message : "No se pudo crear el plato");
+    toast.error(
+      error instanceof Error ? error.message : "No se pudo crear el plato"
+    );
     throw error;
   }
 };

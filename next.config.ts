@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['ih1.redbubble.net', 'images.unsplash.com'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -10,6 +9,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  
+  // @ts-expect-error - serverActions existe pero no está en los tipos
+  serverActions: {
+    bodySizeLimit: '5mb',
+  },
+  
   async rewrites() {
     return [
       {

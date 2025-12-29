@@ -1,53 +1,78 @@
-'use server';
+'use client'; // Indicar que este código es del lado del cliente
 
-import { cookies } from "next/headers";
+import { useEffect, useState } from "react";
+import Cookie from "js-cookie"; // Librería para manejar cookies en el cliente
 import { ImageItems } from "../types/items";
+
+interface ImageUpload {
+  fileField: string;
+  file: File;
+}
+
+interface UpdateImageParams {
+  itemId: number;
+  images: ImageUpload[];
+}
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-interface UploadImageParams {
-  itemId: number;
-  imageFile: File;
-}
+export async function updateImage({
+  itemId,
+  images,
+}: UpdateImageParams): Promise<ImageItems> {
+  const authToken = Cookie.get("token"); // Obtener el token de las cookies
+  const tenant = Cookie.get("subdomain"); // Obtener el subdominio de las cookies
 
-export async function updateImage({ itemId, imageFile }: UploadImageParams): Promise<ImageItems> {
-  const cookiesStore = await cookies();
-  const tokenCookie = cookiesStore.get("token");
-  const subdomainCookie = cookiesStore.get("subdomain");
-  const authToken = tokenCookie?.value;
-  const tenant = subdomainCookie?.value;
-
-  if (!authToken) {
-    throw new Error("No autenticado");
+  if (!authToken || !tenant) {
+    throw new Error("No se encontraron las cookies necesarias para la autenticación.");
   }
-  // Construir FormData con la imagen
-  const formData = new FormData();
-  formData.append("image", imageFile, imageFile.name);
 
-  // La URL correcta según tu backend: /api/images/:id
-  const response = await fetch(`${BASE_URL}/api/images/${itemId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`,
-      "x-tenant-subdomain": tenant || "",
-    },
-    body: formData, // Solo envías { url?: string, active?: boolean }
+  console.log("📤 [updateImage] Iniciando actualización de imágenes");
+  console.log("  itemId:", itemId);
+  console.log("  número de imágenes:", images.length);
+
+  const formData = new FormData();
+
+  // Agregar cada imagen al FormData
+  images.forEach((imageUpload) => {
+    formData.append(
+      "images",
+      JSON.stringify({
+        fileField: imageUpload.fileField,
+      })
+    );
+    formData.append(imageUpload.fileField, imageUpload.file, imageUpload.file.name);
   });
 
+  console.log("📦 Contenido del FormData:");
+  formData.forEach((value, key) => {
+    if (value instanceof File) {
+      console.log(`Campo: ${key}, Archivo: ${value.name}`);
+    } else {
+      console.log(`Campo: ${key}, Valor: ${value}`);
+    }
+  });
+
+  // Llamar al endpoint PUT con los headers de autorización
+  const response = await fetch(`${BASE_URL}/images/items/${itemId}`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `Bearer ${authToken}`,
+      "x-tenant-subdomain": tenant || "",
+    },
+    body: formData, // Enviar FormData sin Content-Type
+  });
+
+  console.log("📡 [updateImage] Respuesta de la API:", response.status);
+
   if (!response.ok) {
-    const errorText = await response.text();
-    console.error("❌ [uploadImage] Error response:", errorText);
-    throw new Error(`Error al subir imagen: ${response.status} - ${errorText}`);
+    const errorData = await response.json().catch(() => ({}));
+    console.error("❌ Error en la respuesta de la API:", errorData);
+    throw new Error(errorData.error || `Error al subir imagen: ${response.status}`);
   }
 
-  const contentType = response.headers.get("content-type");
-  
-  if (contentType?.includes("application/json")) {
-    const data = await response.json();
-    console.log("✅ [uploadImage] Imagen subida exitosamente:", data);
-    return data.image || data; // Ajusta según la estructura de tu API
-  }
+  const data = await response.json();
+  console.log("✅ Imagen subida correctamente:", data);
 
-  throw new Error("Respuesta del servidor no es JSON");
+  return data;
 }

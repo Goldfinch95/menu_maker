@@ -3,17 +3,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { itemValidations, ItemFormData } from "../utils/validate_item_form";
 import { useState } from "react";
 import { Items } from "@/app/home/types/menu";
+import { toast } from "sonner";
 
 interface UseItemFormProps {
   item?: Items;
   categoryId: number;
-  onSubmit: (formData: FormData) => Promise<void>;
+  onSubmit: (formData: FormData) => Promise<{ success: boolean; error?: string; imageError?: boolean; message?: string }>;
+  onSuccess?: () => void;
 }
+
+const IS_DEV = process.env.NODE_ENV === 'development';
 
 export const useItemForm = ({
   item,
   categoryId,
   onSubmit,
+  onSuccess,
 }: UseItemFormProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(
     item?.images?.[0]?.url || null
@@ -45,84 +50,87 @@ export const useItemForm = ({
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log("🔍 [handleImageChange] Archivo seleccionado:", file);
+    
+    
     
     if (file) {
-      console.log("✅ [handleImageChange] Guardando archivo:", {
-        name: file.name,
-        size: file.size,
-        type: file.type,
-      });
-      
       // ✅ Guardar en react-hook-form
       setValue("image", file, { shouldValidate: true });
       
+      if (IS_DEV) {
+        console.log("✅ [handleImageChange] Archivo guardado en form");
+      }
+      
+      // Generar preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
-        console.log("✅ [handleImageChange] Preview generado");
+       
       };
       reader.readAsDataURL(file);
     } else {
-      console.warn("⚠️ [handleImageChange] No se detectó archivo");
+      
     }
   };
 
   const removeImage = () => {
-    console.log("🗑️ [removeImage] Eliminando imagen");
+    
     setValue("image", undefined);
     setImagePreview(null);
   };
 
   const handleFormSubmit = async (data: ItemFormData) => {
-    console.log("📤 [handleFormSubmit] Iniciando submit");
-    console.log("  data:", data);
+    
 
     const formData = new FormData();
 
     // Datos básicos
     formData.append("title", data.title);
-    console.log("  ✓ title agregado");
 
     if (data.description) {
       formData.append("description", data.description);
-      console.log("  ✓ description agregado");
     }
 
     if (data.price !== undefined && data.price !== null && !isNaN(data.price)) {
       formData.append("price", String(data.price));
-      console.log("  ✓ price agregado:", data.price);
     }
 
     // ✅ CRÍTICO: Agregar imagen si existe
     if (data.image instanceof File) {
       formData.append("image", data.image, data.image.name);
-      console.log("  ✅ image agregado:", data.image.name);
-    } else {
-      console.log("  ℹ️ No hay imagen para agregar");
-    }
+    } 
+    
 
     // CategoryId (solo en modo creación)
     if (!isEditMode) {
       formData.append("categoryId", String(categoryId));
-      console.log("  ✓ categoryId agregado:", categoryId);
     }
 
-    // 🔍 Verificar contenido del FormData
-    console.log("📦 [handleFormSubmit] Contenido del FormData:");
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(`  ${key}: File(${value.name}, ${value.size} bytes)`);
-      } else {
-        console.log(`  ${key}:`, value);
-      }
-    }
+    // 🔍 Verificar contenido final del FormData
+    
 
     try {
-      await onSubmit(formData);
-      console.log("✅ [handleFormSubmit] Submit exitoso");
+      const result = await onSubmit(formData);
+      
+     
+
+      if (result.success) {
+        if (result.imageError) {
+          toast.warning(result.message || "Plato creado, pero falló la imagen");
+        } else {
+          toast.success(result.message || "Plato creado exitosamente");
+        }
+
+        // Ejecutar callback de éxito
+        if (onSuccess) {
+          await onSuccess();
+        }
+      } else {
+        toast.error(result.error || "Error al crear el plato");
+      }
     } catch (error) {
       console.error("❌ [handleFormSubmit] Error en submit:", error);
+      toast.error("Error inesperado al crear el plato");
       throw error;
     }
   };
