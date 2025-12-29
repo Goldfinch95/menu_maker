@@ -43,3 +43,20 @@ export function isDarkColor(color?: string): boolean {
   if (!color) return false;
   return getLuminance(color) < 140;
 }
+
+export function addOpacity(color: string, opacity: number): string {
+  if (!color) return color;
+  
+  // Si el color ya tiene transparencia, lo retorna tal cual
+  if (color.length === 9 || color.length === 5) {
+    return color;
+  }
+  
+  // Convierte el porcentaje de opacidad (0-100) a hex (00-FF)
+  const opacityHex = Math.round((opacity / 100) * 255)
+    .toString(16)
+    .padStart(2, "0")
+    .toUpperCase();
+  
+  return `${color}${opacityHex}`;
+}
