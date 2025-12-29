@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-// import { deleteItemService } from "../services/delete_item_service";
+ import { deleteItemService } from "../services/delete_item_service";
 
 interface DeleteItemParams {
   itemId: number;
@@ -18,7 +18,7 @@ export const deleteItemSubmit = async ({
     });
 
     // TODO: Descomentar cuando conectes con la API
-    // await deleteItemService(itemId);
+    await deleteItemService(itemId);
     
     // Simulación temporal para testing
     await new Promise(resolve => setTimeout(resolve, 1000));
