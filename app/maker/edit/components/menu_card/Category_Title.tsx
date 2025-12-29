@@ -36,11 +36,7 @@ export const CategoryTitle: React.FC<CategoryTitleProps> = ({
           {...register("title")}
           onFocus={onFocus}
           onBlur={onBlur}
-          className={`w-full min-w-0 p-1 font-semibold text-slate-700 bg-transparent border-b transition-colors truncate focus:outline-none ${
-            errors.title
-              ? "border-red-400 focus:border-red-500"
-              : "border-transparent focus:border-orange-300"
-          }`}
+          className={`w-full min-w-0 p-1 font-semibold text-slate-700 bg-transparent border-b transition-colors truncate focus:outline-none border-transparent focus:border-orange-300`}
           maxLength={50}
           placeholder="Nombre de categoría"
           disabled={isSubmitting}
@@ -79,22 +75,6 @@ export const CategoryTitle: React.FC<CategoryTitleProps> = ({
           )}
         </AnimatePresence>
       </div>
-
-      {/* ==================== MENSAJE DE ERROR ==================== */}
-      <AnimatePresence>
-        {errors.title && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center gap-1 mt-1 text-xs text-red-500"
-          >
-            <AlertCircle className="h-3 w-3" />
-            <span>{errors.title.message}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

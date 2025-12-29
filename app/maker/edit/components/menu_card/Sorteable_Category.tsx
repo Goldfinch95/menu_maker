@@ -133,7 +133,7 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
               onClick={() =>
                 setExpandedCategoryId(isExpanded ? null : category.id)
               }
-              className={`h-8 w-8 p-0 rounded-lg transition-all duration-200 ${
+              className={`h-8 w-8 p-0 rounded-lg transition-all duration-200 flex items-center justify-center ${
                 isExpanded
                   ? "bg-orange-50 text-orange-500 shadow-sm"
                   : "text-slate-500 hover:bg-slate-100"

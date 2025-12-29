@@ -20,11 +20,12 @@ export const useEditCategoryForm = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isDirty },
+    formState: { errors, isSubmitting, isDirty, isValid },
     watch,
     reset,
   } = useForm<CategoryFormData>({
     resolver: zodResolver(categoryValidations),
+    mode: "onChange", // ✅ CRÍTICO: Valida en cada cambio
     defaultValues: {
       title: initialTitle,
     },
@@ -32,11 +33,11 @@ export const useEditCategoryForm = ({
 
   const currentTitle = watch("title");
 
-  // El botón de guardar solo aparece si:
+  // ✅ SOLUCIÓN: El botón solo aparece si:
   // 1. Está enfocado
-  // 2. No hay errores de validación
+  // 2. El formulario es válido según Zod (isValid)
   // 3. El título ha cambiado (isDirty)
-  const showSaveButton = isFocused && !errors.title && isDirty;
+  const showSaveButton = isFocused && isValid && isDirty;
 
   const onSubmit = async (formData: CategoryFormData) => {
     await editCategorySubmit({
