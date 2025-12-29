@@ -8,11 +8,18 @@ import { toast } from "sonner";
 interface UseItemFormProps {
   item?: Items;
   categoryId: number;
-  onSubmit: (formData: FormData) => Promise<{ success: boolean; error?: string; imageError?: boolean; message?: string }>;
+  onSubmit: (
+    formData: FormData
+  ) => Promise<{
+    success: boolean;
+    error?: string;
+    imageError?: boolean;
+    message?: string;
+  }>;
   onSuccess?: () => void;
 }
 
-const IS_DEV = process.env.NODE_ENV === 'development';
+const IS_DEV = process.env.NODE_ENV === "development";
 
 export const useItemForm = ({
   item,
@@ -31,7 +38,7 @@ export const useItemForm = ({
     defaultValues: {
       title: item?.title || "",
       description: item?.description || "",
-      price: item?.price || undefined,
+      price: item?.price ?? 0,
       image: undefined,
     },
   });
@@ -50,38 +57,31 @@ export const useItemForm = ({
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    
-    
-    
+
     if (file) {
       // ✅ Guardar en react-hook-form
       setValue("image", file, { shouldValidate: true });
-      
+
       if (IS_DEV) {
         console.log("✅ [handleImageChange] Archivo guardado en form");
       }
-      
+
       // Generar preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
-       
       };
       reader.readAsDataURL(file);
     } else {
-      
     }
   };
 
   const removeImage = () => {
-    
     setValue("image", undefined);
     setImagePreview(null);
   };
 
   const handleFormSubmit = async (data: ItemFormData) => {
-    
-
     const formData = new FormData();
 
     // Datos básicos
@@ -91,15 +91,14 @@ export const useItemForm = ({
       formData.append("description", data.description);
     }
 
-    if (data.price !== undefined && data.price !== null && !isNaN(data.price)) {
-      formData.append("price", String(data.price));
-    }
+    // Aseguramos que se envíe un string numérico válido, incluso si es 0
+    const priceValue = data.price !== undefined ? String(data.price) : "0";
+    formData.append("price", priceValue);
 
     // ✅ CRÍTICO: Agregar imagen si existe
     if (data.image instanceof File) {
       formData.append("image", data.image, data.image.name);
-    } 
-    
+    }
 
     // CategoryId (solo en modo creación)
     if (!isEditMode) {
@@ -107,12 +106,9 @@ export const useItemForm = ({
     }
 
     // 🔍 Verificar contenido final del FormData
-    
 
     try {
       const result = await onSubmit(formData);
-      
-     
 
       if (result.success) {
         if (result.imageError) {

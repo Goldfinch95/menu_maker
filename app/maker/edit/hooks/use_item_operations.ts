@@ -16,7 +16,6 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
   // ========== ELIMINAR ITEM ==========
   const deleteItem = async (itemId: number) => {
     setDeletingItemId(itemId);
-    
     try {
       await deleteItemSubmit({
         itemId,
@@ -32,16 +31,21 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
   // ========== CREAR ITEM ==========
   const createItem = async (formData: FormData, categoryId: number) => {
     setCreatingItem(true);
-    
     try {
       await createItemSubmit({
         formData,
         categoryId,
         onSuccess: onItemChange,
       });
+      // ✅ Retornamos éxito para el ItemDialog
+      return { success: true, message: "Plato creado exitosamente" };
     } catch (error) {
       console.error("❌ [useItemOperations] Error al crear item:", error);
-      throw error;
+      // ✅ Retornamos el error formateado
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : "Error al crear el plato" 
+      };
     } finally {
       setCreatingItem(false);
     }
@@ -49,14 +53,9 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
 
   // ========== EDITAR ITEM ==========
   const editItem = async (item: Items, formData: FormData) => {
-    
-    
-    // Obtener el ID de la primera imagen si existe
     const existingImageId = item.images?.[0]?.id;
-   
-    
     setEditingItemId(item.id);
-    
+
     try {
       await editItemSubmit({
         itemId: item.id,
@@ -64,26 +63,26 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
         existingImageId,
         onSuccess: onItemChange,
       });
-      
+      // ✅ Retornamos éxito para el ItemDialog
+      return { success: true, message: "Plato actualizado exitosamente" };
     } catch (error) {
       console.error("❌ [useItemOperations] Error al editar item:", error);
-      throw error;
+      // ✅ Retornamos el error formateado
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : "Error al actualizar el plato" 
+      };
     } finally {
       setEditingItemId(null);
     }
   };
 
   return {
-    // Delete
     deleteItem,
     deletingItemId,
     isDeleting: deletingItemId !== null,
-    
-    // Create
     createItem,
     creatingItem,
-    
-    // Edit
     editItem,
     editingItemId,
     isEditing: editingItemId !== null,

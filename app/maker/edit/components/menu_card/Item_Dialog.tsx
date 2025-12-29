@@ -24,7 +24,12 @@ interface ItemDialogProps {
   categoryId: number;
   item?: Items;
   trigger: React.ReactNode;
-  onSubmit: (formData: FormData) => Promise<void>;
+  onSubmit: (formData: FormData) => Promise<{ 
+    success: boolean; 
+    error?: string; 
+    imageError?: boolean; 
+    message?: string 
+  }>; // ✅ Tipo correcto
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
@@ -48,28 +53,37 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
   
 
   const {
-    register,
-    handleSubmit,
-    errors,
-    isSubmitting,
-    imagePreview,
-    handleImageChange,
-    removeImage,
-    reset,
-  } = useItemForm({
-    item,
-    categoryId,
-    onSubmit: async (formData) => {
+  register,
+  handleSubmit,
+  errors,
+  isSubmitting,
+  imagePreview,
+  handleImageChange,
+  removeImage,
+  reset,
+} = useItemForm({
+  item,
+  categoryId,
+  onSubmit: async (formData) => {
+    try {
+      const result = await onSubmit(formData); // ✅ Ahora retorna el resultado
       
-      try {
-        await onSubmit(formData);
+      if (result.success) {
         setOpen(false);
         reset();
-      } catch (error) {
-        console.error("❌ [ItemDialog] Error en submit:", error);
       }
-    },
-  });
+      
+      return result; // ✅ Retornar el resultado
+    } catch (error) {
+      console.error("❌ [ItemDialog] Error en submit:", error);
+      // ✅ Retornar error formateado
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Error desconocido"
+      };
+    }
+  },
+});
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -140,14 +154,13 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
                   $
                 </span>
                 <Input
-                  id="item-price"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  {...register("price")}
-                  placeholder="0.00"
-                  className="w-full pl-7"
-                />
+  id="item-price"
+  type="number"
+  step="0.01"
+  {...register("price", { valueAsNumber: true })}
+  placeholder="0.00"
+  className="w-full pl-7"
+/>
               </div>
             </div>
 
