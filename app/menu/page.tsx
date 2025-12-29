@@ -1,58 +1,155 @@
-"use client"
-import { useEffect, useState } from 'react';
-import { getPublicMenu } from './services/public_menu_services';
-import { useSearchParams } from 'next/navigation';
-import { Menu } from './types/menu';
-import { Suspense } from 'react';
-import { MenuNavbar } from './components/Menu_Navbar';
+// src/features/menu/components/MenuPage.tsx
+
+"use client";
+
+import React, { useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Button } from "@/common/components/atoms/button";
+import { ArrowLeft } from "lucide-react";
+import { Items } from "./types/menu";
+import { isDarkColor } from "./utils/color_utils";
+
+// Feature imports
+import { useMenuData } from "./hooks/use_menu_data";
+import { useScrollSync } from "./hooks/use_scroll_sync";
+import { useCategoryScroll } from "./hooks/use_category_scroll";
+import { LoadingState } from "./components/Loading_State";
+import { MenuHeader } from "./components/Menu_Header";
+import { CategoryNavigation } from "./components/Category_Navegation";
+import { MenuContent } from "./components/Menu_Content";
+import { ItemDetailDialog } from "./components/Item_Dialog";
 
 function MenuPageContent() {
   const searchParams = useSearchParams();
-  const id = searchParams.get('id');
-  const [menu, setMenu] = useState<Menu | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const menuId = searchParams.get("id");
+  const router = useRouter();
 
-  useEffect(() => {
-    if (!id) {
-      setLoading(false);
-      return;
-    }
+  // Estado
+  const [activeCategory, setActiveCategory] = useState(1);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Items | null>(null);
 
-    const loadMenu = async () => {
-      try {
-        setLoading(true);
-        const data = await getPublicMenu(id);
-        console.log(data);
-        setMenu(data);
-      } catch (error) {
-        console.error("❌ Error al cargar el menú:", error);
-        setError("No se pudo cargar el menú");
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Hooks personalizados
+  const { menu, categories, isLoading, error } = useMenuData(menuId);
+  const { scrollToCategory } = useCategoryScroll();
 
-    loadMenu();
-  }, [id]);
+  useScrollSync({
+    categories,
+    isScrolling,
+    onCategoryChange: setActiveCategory,
+  });
 
-  if (loading) return <div>Cargando menú...</div>;
-  if (error) return <div>{error}</div>;
-  if (!id) return <div>No se proporcionó ID de menú</div>;
-  if (!menu) return <div>No se encontró el menú</div>;
+  // Handlers
+  const handleCategoryClick = (categoryId: number) => {
+    scrollToCategory(
+      categoryId,
+      () => {
+        setActiveCategory(categoryId);
+        setIsScrolling(true);
+      },
+      () => setIsScrolling(false)
+    );
+  };
+
+  // Estados de carga
+  if (isLoading) {
+    return <LoadingState />;
+  }
+
+  // Estado de error
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <div className="text-center space-y-4">
+          <h2 className="text-2xl font-semibold text-red-600">
+            Error al cargar el menú
+          </h2>
+          <p className="text-gray-600">{error}</p>
+          <Button onClick={() => router.push("/")}>
+            Volver al inicio
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const isNavbarDark = isDarkColor(menu.color?.primary);
 
   return (
-    <div className='min-h-screen w-full flex flex-col'>
-      <MenuNavbar primaryColor={menu.color?.primary} menuId={menu.id} />
-      <div>Título: {menu.title}</div>
-      <div>Pos: {menu.pos}</div>
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ backgroundColor: menu.color?.primary || "#ffffff" }}
+    >
+      {/* NAVBAR */}
+      <motion.div
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
+        style={{
+          backgroundColor: menu.color?.primary
+            ? `${menu.color.primary}B3`
+            : "rgba(255, 255, 255, 0.7)",
+        }}
+      >
+        <div className="max-w-xl mx-auto px-4 py-2 flex items-center justify-start">
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`rounded-xl transition-colors ${
+              isNavbarDark
+                ? "hover:bg-white/10 text-white"
+                : "hover:bg-black/10 text-black"
+            }`}
+            onClick={() => router.push(`/menuEditor?id=${menuId}`)}
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+        </div>
+      </motion.div>
+
+      {/* HEADER */}
+      <MenuHeader menu={menu} />
+
+      {/* CATEGORY NAVIGATION */}
+      <CategoryNavigation
+        categories={categories}
+        activeCategory={activeCategory}
+        primaryColor={menu.color?.primary}
+        secondaryColor={menu.color?.secondary}
+        onCategoryClick={handleCategoryClick}
+      />
+
+      {/* CONTENT */}
+      <MenuContent
+        categories={categories}
+        primaryColor={menu.color?.primary}
+        secondaryColor={menu.color?.secondary}
+        onItemClick={setSelectedItem}
+      />
+
+      {/* DETAIL DIALOG */}
+      {selectedItem && (
+        <ItemDetailDialog
+          item={selectedItem}
+          primaryColor={menu.color?.primary}
+          onClose={() => setSelectedItem(null)}
+        />
+      )}
     </div>
   );
 }
 
 export default function MenuPage() {
   return (
-    <Suspense fallback={<div>Cargando...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <p className="text-lg text-muted-foreground">Cargando menú...</p>
+        </div>
+      }
+    >
       <MenuPageContent />
     </Suspense>
   );

@@ -1,8 +1,3 @@
-/**
- * Calcula la luminancia de un color RGB
- * @param color - Color en formato hex (#fff) o rgb(r, g, b)
- * @returns Valor de luminancia (0-255)
- */
 export function getLuminance(color: string): number {
   if (!color) return 255;
 
@@ -31,29 +26,20 @@ export function getLuminance(color: string): number {
 }
 
 /**
- * Determina si un color es oscuro o claro
- * @param color - Color a evaluar
- * @returns true si el color es oscuro
- */
-export function isDarkColor(color: string): boolean {
-  return getLuminance(color) < 140;
-}
-
-/**
- * Retorna la clase de color de texto apropiada según el fondo
- * @param color - Color de fondo
+ * Determina el color de texto apropiado según el color de fondo
+ * @param backgroundColor - Color de fondo
  * @returns Clase de Tailwind para el color de texto
  */
-export function getTextColor(color: string): string {
-  return isDarkColor(color) ? "text-white" : "text-black";
+export function getTextColor(backgroundColor: string): string {
+  return getLuminance(backgroundColor) < 140 ? "text-white" : "text-black";
 }
 
 /**
- * Añade transparencia a un color hex
- * @param color - Color en formato hex
- * @param opacity - Opacidad en formato hex (ej: "B3" para 70%)
- * @returns Color con transparencia
+ * Verifica si un color es oscuro
+ * @param color - Color a verificar
+ * @returns true si el color es oscuro
  */
-export function addOpacity(color: string, opacity: string): string {
-  return `${color}${opacity}`;
+export function isDarkColor(color?: string): boolean {
+  if (!color) return false;
+  return getLuminance(color) < 140;
 }
