@@ -18,13 +18,6 @@ export const useItemForm = ({ item, categoryId, onSubmit }: UseItemFormProps) =>
 
   const isEditMode = !!item;
 
-  console.log("🎨 [useItemForm] Inicializando formulario:", {
-    mode: isEditMode ? "EDICIÓN" : "CREACIÓN",
-    itemId: item?.id,
-    categoryId,
-    hasExistingImage: !!imagePreview,
-  });
-
   const form = useForm<ItemFormData>({
     resolver: zodResolver(itemValidations),
     defaultValues: {
@@ -44,12 +37,15 @@ export const useItemForm = ({ item, categoryId, onSubmit }: UseItemFormProps) =>
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    console.log("🔍 [handleImageChange] Archivo seleccionado:", file);
+  console.log("🔍 [handleImageChange] FileList completo:", e.target.files);
     if (file) {
       console.log("🖼️ [useItemForm] Nueva imagen seleccionada:", {
         name: file.name,
         size: file.size,
         type: file.type,
       });
+      
       
       setImageFile(file);
       const reader = new FileReader();
@@ -59,6 +55,9 @@ export const useItemForm = ({ item, categoryId, onSubmit }: UseItemFormProps) =>
       };
       reader.readAsDataURL(file);
     }
+    else {
+    console.warn("⚠️ No se detectó archivo en el input");
+  }
   };
 
   const removeImage = () => {
@@ -68,11 +67,8 @@ export const useItemForm = ({ item, categoryId, onSubmit }: UseItemFormProps) =>
   };
 
   const handleFormSubmit = async (data: ItemFormData) => {
-    console.log("📤 [useItemForm] Preparando datos para envío:");
-    console.log("  Modo:", isEditMode ? "EDICIÓN" : "CREACIÓN");
-    console.log("  Datos del formulario:", data);
-    console.log("  Tiene nueva imagen:", !!imageFile);
-    console.log("  CategoryId:", categoryId);
+   console.log("📤 [useItemForm] Estado del imageFile:", imageFile);
+  console.log("📤 [useItemForm] ¿imageFile existe?", !!imageFile);
 
     const formData = new FormData();
     
@@ -92,6 +88,7 @@ export const useItemForm = ({ item, categoryId, onSubmit }: UseItemFormProps) =>
     
     // Imagen (solo si hay una nueva)
     if (imageFile) {
+        console.log("✅ Agregando imagen al FormData");
       formData.append("image", imageFile);
       console.log("  ✓ image:", imageFile.name);
     }
@@ -102,7 +99,7 @@ export const useItemForm = ({ item, categoryId, onSubmit }: UseItemFormProps) =>
       console.log("  ✓ categoryId:", categoryId);
     }
 
-    console.log("🚀 [useItemForm] Enviando FormData...");
+    console.log("🔍 FormData.get('image'):", formData.get("image"));
 
     try {
       await onSubmit(formData);

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { deleteItemSubmit } from "./delete_item_submit";
 import { createItemSubmit } from "./create_item_submit";
 import { editItemSubmit } from "./edit_item_submit";
+import { Items } from "@/app/home/types/menu";
 
 interface UseItemOperationsProps {
   onItemChange: () => Promise<void>;
@@ -34,10 +35,6 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
   const createItem = async (formData: FormData, categoryId: number) => {
     console.log("➕ [useItemOperations] Iniciando creación de item");
     console.log("📋 CategoryId:", categoryId);
-    console.log("📋 FormData entries:");
-    for (const [key, value] of formData.entries()) {
-      console.log(`  ${key}:`, value instanceof File ? `File(${value.name})` : value);
-    }
     
     setCreatingItem(true);
     
@@ -57,19 +54,20 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
   };
 
   // ========== EDITAR ITEM ==========
-  const editItem = async (itemId: number, formData: FormData) => {
-    console.log("✏️ [useItemOperations] Iniciando edición de item:", itemId);
-    console.log("📋 FormData entries:");
-    for (const [key, value] of formData.entries()) {
-      console.log(`  ${key}:`, value instanceof File ? `File(${value.name})` : value);
-    }
+  const editItem = async (item: Items, formData: FormData) => {
+    console.log("✏️ [useItemOperations] Iniciando edición de item:", item.id);
     
-    setEditingItemId(itemId);
+    // Obtener el ID de la primera imagen si existe
+    const existingImageId = item.images?.[0]?.id;
+    console.log("🖼️ [useItemOperations] ID de imagen existente:", existingImageId);
+    
+    setEditingItemId(item.id);
     
     try {
       await editItemSubmit({
-        itemId,
+        itemId: item.id,
         formData,
+        existingImageId,
         onSuccess: onItemChange,
       });
       console.log("✅ [useItemOperations] Item editado exitosamente");

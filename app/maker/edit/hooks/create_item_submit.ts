@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import { createItemService } from "../services/create_item_service";
+import { uploadItemImage } from "../services/image_service";
 import { NewItem } from "../types/items";
 
 interface CreateItemParams {
@@ -16,43 +17,59 @@ export const createItemSubmit = async ({
   try {
     console.log("➕ [createItemSubmit] Creando item para categoría:", categoryId);
     
-    // Convertir FormData a NewItem
+    // Extraer datos del FormData
     const title = formData.get("title") as string;
     const description = formData.get("description") as string | null;
     const priceStr = formData.get("price") as string | null;
-    const image = formData.get("image") as File | null;
+    const imageFile = formData.get("image") as File | null;
 
-    console.log("📋 [createItemSubmit] Datos extraídos del FormData:");
+    console.log("📋 [createItemSubmit] Datos extraídos:");
     console.log("  title:", title);
     console.log("  description:", description);
     console.log("  price:", priceStr);
-    console.log("  image:", image ? `File(${image.name})` : "No hay imagen");
-    console.log("  categoryId:", categoryId);
+    console.log("  image:", imageFile ? `File(${imageFile.name}, ${imageFile.size} bytes)` : "Sin imagen");
 
-    // Construir objeto NewItem
+    // PASO 1: Crear el item sin imagen
     const newItem: NewItem = {
       categoryId,
       title,
       description: description || undefined,
       price: priceStr ? parseFloat(priceStr) : undefined,
-      active: true, // Por defecto activo
+      active: true,
     };
 
-    console.log("📦 [createItemSubmit] Objeto NewItem a enviar:");
-    console.log(newItem);
-
-    // ⚠️ NOTA: La API actual NO soporta subida de imágenes
-    if (image) {
-      console.warn("⚠️ [createItemSubmit] Imagen detectada pero NO se puede subir con esta API");
-      console.warn("  La API solo acepta JSON, no FormData");
-      console.warn("  Necesitarás un endpoint separado para subir imágenes");
-    }
-
-    console.log("🌐 [createItemSubmit] Llamando al servicio API...");
-    const result = await createItemService(newItem);
+    console.log("🌐 [createItemSubmit] Creando item en la API...");
+    const createdItem = await createItemService(newItem);
     
-    console.log("✅ [createItemSubmit] Respuesta del servicio:", result);
-    console.log("✅ [createItemSubmit] Item creado exitosamente");
+    console.log("✅ [createItemSubmit] Item creado:", createdItem);
+    console.log("🔍 [createItemSubmit] ID del item creado:", createdItem?.id);
+    console.log("🔍 [createItemSubmit] Item completo:", JSON.stringify(createdItem, null, 2));
+
+    // PASO 2: Si hay imagen, subirla después
+    if (imageFile && imageFile.size > 0) {
+      console.log("🖼️ [createItemSubmit] Subiendo imagen del item...");
+      console.log("  imageFile.name:", imageFile.name);
+      console.log("  imageFile.size:", imageFile.size);
+      console.log("  createdItem.id:", createdItem?.id);
+      
+      if (!createdItem?.id) {
+        console.error("❌ [createItemSubmit] No se obtuvo el ID del item creado");
+        toast.warning("Plato creado, pero no se pudo subir la imagen (falta ID)");
+        return createdItem;
+      }
+      
+      try {
+        console.log("🚀 [createItemSubmit] Llamando a uploadItemImage...");
+        const uploadResult = await uploadItemImage(createdItem.id, imageFile);
+        console.log("✅ [createItemSubmit] Imagen subida exitosamente:", uploadResult);
+      } catch (imageError) {
+        console.error("⚠️ [createItemSubmit] Error al subir imagen:", imageError);
+        console.error("  Error completo:", JSON.stringify(imageError, null, 2));
+        toast.warning("Plato creado, pero hubo un error al subir la imagen");
+      }
+    } else {
+      console.log("ℹ️ [createItemSubmit] No hay imagen para subir");
+    }
 
     toast.success("Plato creado con éxito");
 
@@ -61,11 +78,9 @@ export const createItemSubmit = async ({
       await onSuccess();
     }
     
-    return result;
+    return createdItem;
   } catch (error) {
-    console.error("❌ [createItemSubmit] Error completo:", error);
-    console.error("❌ [createItemSubmit] Error mensaje:", error instanceof Error ? error.message : "Error desconocido");
-    
+    console.error("❌ [createItemSubmit] Error:", error);
     toast.error(error instanceof Error ? error.message : "No se pudo crear el plato");
     throw error;
   }

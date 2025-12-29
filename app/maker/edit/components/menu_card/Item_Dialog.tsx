@@ -45,14 +45,7 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
   const isEditMode = !!item;
 
   // Log cuando cambia el estado del dialog
-  useEffect(() => {
-    console.log(`🪟 [ItemDialog] Dialog ${open ? "ABIERTO" : "CERRADO"}:`, {
-      mode: isEditMode ? "EDICIÓN" : "CREACIÓN",
-      itemId: item?.id,
-      categoryId,
-      isControlled,
-    });
-  }, [open, isEditMode, item?.id, categoryId, isControlled]);
+  
 
   const {
     register,
@@ -67,10 +60,9 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
     item,
     categoryId,
     onSubmit: async (formData) => {
-      console.log("💾 [ItemDialog] Ejecutando onSubmit del dialog");
+      
       try {
         await onSubmit(formData);
-        console.log("✅ [ItemDialog] Submit exitoso, cerrando dialog");
         setOpen(false);
         reset();
       } catch (error) {
@@ -207,7 +199,6 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
               type="button"
               variant="outline"
               onClick={() => {
-                console.log("❌ [ItemDialog] Cancelando, cerrando dialog");
                 setOpen(false);
               }}
               disabled={isSubmitting}

@@ -84,7 +84,7 @@ export const ItemList: React.FC<ItemListProps> = ({
         <ItemDialog
           categoryId={categoryId}
           item={editingItem}
-          onSubmit={(formData) => editItem(editingItem.id, formData)}
+          onSubmit={(formData) => editItem(editingItem, formData)}
           trigger={<span />}
           open={!!editingItem}
           onOpenChange={(open) => {
