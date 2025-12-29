@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { editItemService } from "../services/edit_item_service";
-//import { uploadItemImage } from "../services/image_service";
+import { updateImage } from "../services/image_service";
 import { NewItem } from "../types/items";
 
 interface EditItemParams {
@@ -18,58 +18,68 @@ export const editItemSubmit = async ({
 }: EditItemParams) => {
   try {
     console.log("✏️ [editItemSubmit] Editando item:", itemId);
-    
-    // Extraer datos del FormData
+
+    // 1. Extraer datos del FormData original
     const title = formData.get("title") as string;
     const description = formData.get("description") as string | null;
     const priceStr = formData.get("price") as string | null;
     const imageFile = formData.get("image") as File | null;
 
-    console.log("📋 [editItemSubmit] Datos extraídos:");
-    console.log("  title:", title);
-    console.log("  description:", description);
-    console.log("  price:", priceStr);
-    console.log("  imageFile:", imageFile ? `File(${imageFile.name}, ${imageFile.size} bytes)` : "Sin imagen nueva");
-    console.log("  existingImageId:", existingImageId);
-
-    // PASO 1: Actualizar datos básicos del item
+    // 2. Actualizar datos básicos del item
     const updateData: Partial<NewItem> = {
       title,
       description: description || undefined,
       price: priceStr ? parseFloat(priceStr) : undefined,
+      active: true,
     };
 
-    console.log("🌐 [editItemSubmit] Actualizando datos del item...");
+    console.log("🌐 [editItemSubmit] Enviando actualización de datos...");
     const result = await editItemService(itemId, updateData);
-    console.log("✅ [editItemSubmit] Datos actualizados");
 
-    // PASO 2: Manejar imagen si hay una nueva
-    if (imageFile && imageFile.size > 0) {
-      console.log("🖼️ [editItemSubmit] Detectada nueva imagen");
-      
-      // Subir la nueva imagen con el ID de la imagen existente (si hay)
-      // El backend se encarga de actualizar o crear según el ID
-      console.log("⬆️ [editItemSubmit] Subiendo nueva imagen...");
+    // 3. Manejar actualización de imagen si existe un archivo nuevo
+    const hasValidImage =
+      imageFile && imageFile instanceof File && imageFile.size > 0;
+
+    if (hasValidImage) {
+      console.log("🚀 [Paso 2] Detectada nueva imagen, preparando subida...");
+
+      // Creamos el FormData específico para el servicio de imágenes
+      const imageFormData = new FormData();
+
+      /** * Formato requerido por el backend:
+       * - 'images': Un string JSON con el mapeo del campo.
+       * - [fileField]: El archivo real.
+       */
+      const metadata = JSON.stringify([
+        { id: existingImageId, fileField: "image" },
+      ]);
+      imageFormData.append("images", metadata);
+      imageFormData.append("image", imageFile, imageFile.name);
+      console.log(itemId);
       try {
-        //await uploadItemImage(itemId, imageFile, existingImageId);
+        // Corregido: Usamos itemId que viene por parámetros
+        await updateImage(itemId, imageFormData);
         console.log("✅ [editItemSubmit] Nueva imagen subida exitosamente");
-      } catch (imageError) {
-        console.error("⚠️ [editItemSubmit] Error al subir nueva imagen:", imageError);
-        toast.warning("Plato actualizado, pero hubo un error al actualizar la imagen");
+      } catch (imageError: any) {
+        console.error(
+          "⚠️ [editItemSubmit] Error al subir nueva imagen:",
+          imageError
+        );
+        toast.warning("Datos actualizados, pero la imagen no se pudo procesar");
+        // No lanzamos error aquí para permitir que el flujo continúe si el texto sí se guardó
       }
     }
 
     toast.success("Plato actualizado con éxito");
 
     if (onSuccess) {
-      console.log("🔄 [editItemSubmit] Ejecutando callback onSuccess");
       await onSuccess();
     }
-    
+
     return result;
-  } catch (error) {
-    console.error("❌ [editItemSubmit] Error:", error);
-    toast.error("No se pudo actualizar el plato");
+  } catch (error: any) {
+    console.error("❌ [editItemSubmit] Error crítico:", error);
+    toast.error(error.message || "No se pudo actualizar el plato");
     throw error;
   }
 };
