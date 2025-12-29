@@ -22,10 +22,13 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   const previewUrl = item.images?.[0]?.url || null;
 
   return (
-    <div className="flex justify-between items-center bg-white border border-slate-200 rounded-xl p-3 hover:shadow-sm transition-shadow">
-      <div className="flex items-center gap-3 overflow-hidden flex-1">
+    <div className="flex items-center gap-2 w-full">
+      {/* Contenedor izquierdo: Imagen + Título + Precio */}
+      <div className="flex items-center gap-3 flex-1 min-w-0 overflow-hidden">
         {/* Imagen */}
-        <ItemImage imageUrl={previewUrl} alt={item.title} />
+        <div className="shrink-0">
+          <ItemImage imageUrl={previewUrl} alt={item.title} />
+        </div>
 
         {/* Información del item */}
         <div className="flex-1 min-w-0 overflow-hidden">
@@ -36,8 +39,8 @@ export const ItemCard: React.FC<ItemCardProps> = ({
 
         {/* Precio */}
         {item.price && item.price > 0 && (
-          <div className="shrink-0 px-2">
-            <p className="text-slate-600 text-sm font-semibold">
+          <div className="shrink-0 ml-2">
+            <p className="text-slate-600 text-sm font-semibold whitespace-nowrap">
               ${Number.isInteger(Number(item.price))
                 ? Number(item.price)
                 : Number(item.price).toFixed(2)}
@@ -47,7 +50,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       </div>
 
       {/* Botones de acción */}
-      <div className="flex gap-1 ml-2">
+      <div className="flex gap-1 shrink-0">
         {/* Botón Editar */}
         <Button
           size="sm"
