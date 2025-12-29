@@ -18,6 +18,7 @@ import { Textarea } from "@/common/components/atoms/textarea";
 import { Upload, X } from "lucide-react";
 import { Items } from "@/app/home/types/menu";
 import { useItemForm } from "../../hooks/use_item_form";
+import { Errors } from "./errors_msg";
 
 interface ItemDialogProps {
   categoryId: number;
@@ -45,7 +46,7 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
 
   // Log cuando cambia el estado del dialog
   useEffect(() => {
-    console.log(`🪟 [ItemDialog] Dialog ${open ? 'ABIERTO' : 'CERRADO'}:`, {
+    console.log(`🪟 [ItemDialog] Dialog ${open ? "ABIERTO" : "CERRADO"}:`, {
       mode: isEditMode ? "EDICIÓN" : "CREACIÓN",
       itemId: item?.id,
       categoryId,
@@ -82,27 +83,28 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
 
-      <DialogContent className="max-w-md rounded-2xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
-        <DialogClose className="absolute right-6 top-6 rounded-sm opacity-70 transition-opacity hover:opacity-100">
-          <X className="h-5 w-5 text-slate-600" />
-        </DialogClose>
-
+      <DialogContent className="max-w-md rounded-2xl p-6 shadow-xl max-h-[90vh] overflow-y-auto [&>button]:hidden">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-slate-800">
-            {isEditMode ? "Editar Plato" : "Nuevo Plato"}
-          </DialogTitle>
-          <DialogDescription className="text-slate-600">
-            {isEditMode
-              ? "Modifica los detalles de tu plato"
-              : "Agrega un nuevo plato a tu menú"}
-          </DialogDescription>
+          <div className="relative w-full">
+            <DialogTitle className="text-xl font-semibold text-slate-800 text-center w-full">
+              {isEditMode ? "Editar Plato" : "Nuevo Plato"}
+            </DialogTitle>
+            <DialogClose className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-white/70">
+              <X className="h-5 w-5 text-orange-400" />
+            </DialogClose>
+          </div>
         </DialogHeader>
-
+        <div className="pt-4">
+          <Errors errors={errors} />
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 py-4">
             {/* Título */}
             <div className="space-y-2">
-              <Label htmlFor="item-title" className="text-sm font-medium text-slate-700">
+              <Label
+                htmlFor="item-title"
+                className="text-sm font-medium text-slate-700"
+              >
                 Nombre del plato *
               </Label>
               <Input
@@ -113,16 +115,14 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
                 autoFocus
                 className="w-full"
               />
-              {errors.title && (
-                <p className="text-xs text-red-500 flex items-center gap-1">
-                  <span>⚠️</span> {errors.title.message}
-                </p>
-              )}
             </div>
 
             {/* Descripción */}
             <div className="space-y-2">
-              <Label htmlFor="item-description" className="text-sm font-medium text-slate-700">
+              <Label
+                htmlFor="item-description"
+                className="text-sm font-medium text-slate-700"
+              >
                 Descripción
               </Label>
               <Textarea
@@ -133,16 +133,14 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
                 rows={3}
                 className="w-full resize-none"
               />
-              {errors.description && (
-                <p className="text-xs text-red-500 flex items-center gap-1">
-                  <span>⚠️</span> {errors.description.message}
-                </p>
-              )}
             </div>
 
             {/* Precio */}
             <div className="space-y-2">
-              <Label htmlFor="item-price" className="text-sm font-medium text-slate-700">
+              <Label
+                htmlFor="item-price"
+                className="text-sm font-medium text-slate-700"
+              >
                 Precio
               </Label>
               <div className="relative">
@@ -154,21 +152,18 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
                   type="number"
                   step="0.01"
                   min="0"
-                  {...register("price", { valueAsNumber: true })}
+                  {...register("price")}
                   placeholder="0.00"
                   className="w-full pl-7"
                 />
               </div>
-              {errors.price && (
-                <p className="text-xs text-red-500 flex items-center gap-1">
-                  <span>⚠️</span> {errors.price.message}
-                </p>
-              )}
             </div>
 
             {/* Imagen */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-slate-700">Imagen</Label>
+              <Label className="text-sm font-medium text-slate-700">
+                Imagen
+              </Label>
 
               {imagePreview ? (
                 <div className="relative w-full h-48 rounded-lg border-2 border-slate-200 overflow-hidden group">
@@ -192,9 +187,6 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
                     <p className="text-sm text-slate-600 font-medium mb-1">
                       Haz clic para subir una imagen
                     </p>
-                    <p className="text-xs text-slate-500">
-                      PNG, JPG o WEBP (MAX. 5MB)
-                    </p>
                   </div>
                   <input
                     type="file"
@@ -204,6 +196,9 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
                   />
                 </label>
               )}
+              <p className="text-xs text-center text-slate-500">
+                PNG, JPG o WEBP (MAX. 4MB)
+              </p>
             </div>
           </div>
 

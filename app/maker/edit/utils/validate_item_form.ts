@@ -56,17 +56,21 @@ export const fileValidation = z
   }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
 
 export const itemValidations = z.object({
+  // ✅ REQUERIDO: Nombre del plato (3-60 caracteres)
   title: z
     .string()
     .min(3, "El título debe tener al menos 3 caracteres")
     .max(60, "El título no puede exceder 60 caracteres")
     .trim(),
+  
+  // ✅ OPCIONAL: Descripción (máximo 200 caracteres si se proporciona)
   description: z
     .string()
     .max(200, "La descripción no puede exceder 200 caracteres")
     .optional()
     .or(z.literal("")),
-  // ✅ CORRECCIÓN: Usar z.preprocess para limpiar el valor antes de validar
+  
+  // ✅ OPCIONAL: Precio (debe ser mayor o igual a 0 si se proporciona)
   price: z.preprocess(
     (val) => {
       // Si es undefined, null o string vacío, devolver undefined
@@ -81,7 +85,8 @@ export const itemValidations = z.object({
     },
     z.number().min(0, "El precio no puede ser negativo").optional()
   ),
-  // Validación de imagen (opcional)
+  
+  // ✅ OPCIONAL: Imagen del plato
   image: fileValidation.optional(),
 });
 
