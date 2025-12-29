@@ -87,7 +87,7 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
   return (
     <div ref={setNodeRef} style={style}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-lg shadow-sm">
+        <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-lg shadow-sm overflow-hidden w-full">
           {/* Drag Handle */}
           <div
             {...attributes}
@@ -106,10 +106,11 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
             onFocus={handleFocus}
             onBlur={handleBlur}
             isSubmitting={isSubmitting}
+            
           />
 
           {/* Botones de acción */}
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 items-center min-w-max">
             {/* ========== BOTÓN ELIMINAR DIRECTO (SIN DIALOG) ========== */}
             <Button
               type="button"

@@ -15,6 +15,7 @@ interface CategoryTitleProps {
   onFocus: () => void;
   onBlur: () => void;
   isSubmitting: boolean;
+  
 }
 
 export const CategoryTitle: React.FC<CategoryTitleProps> = ({
@@ -27,15 +28,15 @@ export const CategoryTitle: React.FC<CategoryTitleProps> = ({
   isSubmitting,
 }) => {
   return (
-    <div className="flex flex-col flex-1">
-      <div className="flex items-center flex-1 gap-2">
+    <div className="flex flex-col w-full">
+      <div className="flex items-center gap-2 w-full">
         {/* ==================== INPUT EDITABLE CON VALIDACIÓN ==================== */}
         <input
           type="text"
           {...register("title")}
           onFocus={onFocus}
           onBlur={onBlur}
-          className={`flex-1 min-w-0 p-1 font-semibold text-slate-700 bg-transparent border-b transition-colors truncate focus:outline-none ${
+          className={`w-full min-w-0 p-1 font-semibold text-slate-700 bg-transparent border-b transition-colors truncate focus:outline-none ${
             errors.title
               ? "border-red-400 focus:border-red-500"
               : "border-transparent focus:border-orange-300"
