@@ -7,6 +7,7 @@ import {
 import { Input } from "@/common/components/atoms/input";
 import { Button } from "@/common/components/atoms/button";
 import { newCategoryForm } from "../../hooks/new_category_form";
+import { Errors } from "./errors_msg";
 
 interface NewCategoryFieldProps {
   menuId: number;
@@ -21,6 +22,7 @@ export const NewCategoryField = ({ menuId, onSuccess }: NewCategoryFieldProps) =
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldSet>
         <FieldGroup>
+          <Errors errors={errors} />
           <Field>
             <FieldLabel htmlFor="title">Titulo de la Categoria</FieldLabel>
             <Input
