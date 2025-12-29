@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { createItemService } from "../services/create_item_service";
-import { uploadItemImage } from "../services/image_service";
+import { updateImage } from "../services/image_service";
 import { NewItem } from "../types/items";
 
 interface CreateItemParams {
@@ -15,20 +15,12 @@ export const createItemSubmit = async ({
   onSuccess,
 }: CreateItemParams) => {
   try {
-    console.log("➕ [createItemSubmit] Creando item para categoría:", categoryId);
     
     // Extraer datos del FormData
     const title = formData.get("title") as string;
     const description = formData.get("description") as string | null;
     const priceStr = formData.get("price") as string | null;
     const imageFile = formData.get("image") as File | null;
-
-    console.log("📋 [createItemSubmit] Datos extraídos:");
-    console.log("  title:", title);
-    console.log("  description:", description);
-    console.log("  price:", priceStr);
-    console.log("  image:", imageFile ? `File(${imageFile.name}, ${imageFile.size} bytes)` : "Sin imagen");
-
     // PASO 1: Crear el item sin imagen
     const newItem: NewItem = {
       categoryId,
@@ -38,43 +30,47 @@ export const createItemSubmit = async ({
       active: true,
     };
 
-    console.log("🌐 [createItemSubmit] Creando item en la API...");
+   
     const createdItem = await createItemService(newItem);
-    
-    console.log("✅ [createItemSubmit] Item creado:", createdItem);
-    console.log("🔍 [createItemSubmit] ID del item creado:", createdItem?.id);
-    console.log("🔍 [createItemSubmit] Item completo:", JSON.stringify(createdItem, null, 2));
 
-    // PASO 2: Si hay imagen, subirla después
-    if (imageFile && imageFile.size > 0) {
-      console.log("🖼️ [createItemSubmit] Subiendo imagen del item...");
-      console.log("  imageFile.name:", imageFile.name);
-      console.log("  imageFile.size:", imageFile.size);
-      console.log("  createdItem.id:", createdItem?.id);
-      
-      if (!createdItem?.id) {
-        console.error("❌ [createItemSubmit] No se obtuvo el ID del item creado");
-        toast.warning("Plato creado, pero no se pudo subir la imagen (falta ID)");
-        return createdItem;
-      }
+    //paso 2: controlar el id del item
+    console.log(createdItem.categoryId)
+
+    // PASO 2: Si hay imagen, subirla
+    if (imageFile && imageFile instanceof File && imageFile.size > 0) {
+      console.log("🖼️ [createItemSubmit] Subiendo imagen...");
       
       try {
-        console.log("🚀 [createItemSubmit] Llamando a uploadItemImage...");
-        const uploadResult = await uploadItemImage(createdItem.id, imageFile);
-        console.log("✅ [createItemSubmit] Imagen subida exitosamente:", uploadResult);
+        const uploadedImage = await updateImage({
+          itemId: createdItem.id,
+          imageFile: imageFile,
+        });
+        
+        console.log("✅ [createItemSubmit] Imagen subida exitosamente:", uploadedImage);
+        
+        // Actualizar el item con la imagen
+        createdItem.images = [uploadedImage];
+        
       } catch (imageError) {
         console.error("⚠️ [createItemSubmit] Error al subir imagen:", imageError);
-        console.error("  Error completo:", JSON.stringify(imageError, null, 2));
-        toast.warning("Plato creado, pero hubo un error al subir la imagen");
+        
+        // El item ya fue creado, solo falló la imagen
+        toast.warning(
+          "Plato creado exitosamente, pero hubo un error al subir la imagen. Puedes editarlo para agregar la imagen más tarde."
+        );
+        
+        // No lanzamos el error para no bloquear el éxito parcial
       }
     } else {
       console.log("ℹ️ [createItemSubmit] No hay imagen para subir");
     }
 
+    // PASO 3: Notificar éxito
     toast.success("Plato creado con éxito");
 
+    // PASO 4: Ejecutar callback de éxito
     if (onSuccess) {
-      console.log("🔄 [createItemSubmit] Ejecutando callback onSuccess");
+      console.log("🔄 [createItemSubmit] Ejecutando onSuccess callback");
       await onSuccess();
     }
     

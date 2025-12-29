@@ -15,7 +15,6 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
 
   // ========== ELIMINAR ITEM ==========
   const deleteItem = async (itemId: number) => {
-    console.log("🗑️ [useItemOperations] Iniciando eliminación de item:", itemId);
     setDeletingItemId(itemId);
     
     try {
@@ -23,7 +22,6 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
         itemId,
         onSuccess: onItemChange,
       });
-      console.log("✅ [useItemOperations] Item eliminado exitosamente");
     } catch (error) {
       console.error("❌ [useItemOperations] Error al eliminar item:", error);
     } finally {
@@ -33,9 +31,6 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
 
   // ========== CREAR ITEM ==========
   const createItem = async (formData: FormData, categoryId: number) => {
-    console.log("➕ [useItemOperations] Iniciando creación de item");
-    console.log("📋 CategoryId:", categoryId);
-    
     setCreatingItem(true);
     
     try {
@@ -44,7 +39,6 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
         categoryId,
         onSuccess: onItemChange,
       });
-      console.log("✅ [useItemOperations] Item creado exitosamente");
     } catch (error) {
       console.error("❌ [useItemOperations] Error al crear item:", error);
       throw error;
@@ -55,11 +49,11 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
 
   // ========== EDITAR ITEM ==========
   const editItem = async (item: Items, formData: FormData) => {
-    console.log("✏️ [useItemOperations] Iniciando edición de item:", item.id);
+    
     
     // Obtener el ID de la primera imagen si existe
     const existingImageId = item.images?.[0]?.id;
-    console.log("🖼️ [useItemOperations] ID de imagen existente:", existingImageId);
+   
     
     setEditingItemId(item.id);
     
@@ -70,7 +64,7 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
         existingImageId,
         onSuccess: onItemChange,
       });
-      console.log("✅ [useItemOperations] Item editado exitosamente");
+      
     } catch (error) {
       console.error("❌ [useItemOperations] Error al editar item:", error);
       throw error;

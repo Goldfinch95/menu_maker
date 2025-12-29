@@ -45,7 +45,6 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
   const isEditMode = !!item;
 
   // Log cuando cambia el estado del dialog
-  
 
   const {
     register,
@@ -60,7 +59,6 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
     item,
     categoryId,
     onSubmit: async (formData) => {
-      
       try {
         await onSubmit(formData);
         setOpen(false);
@@ -183,7 +181,10 @@ export const ItemDialog: React.FC<ItemDialogProps> = ({
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleImageChange}
+                    onChange={(e) => {
+                      console.log("🔥 CAMBIO EN INPUT:", e.target.files?.[0]);
+                      handleImageChange(e);
+                    }} // ✅ Esto debe estar conectado
                     className="hidden"
                   />
                 </label>

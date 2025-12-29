@@ -1,12 +1,12 @@
 import { toast } from "sonner";
 import { editItemService } from "../services/edit_item_service";
-import { uploadItemImage } from "../services/image_service";
+//import { uploadItemImage } from "../services/image_service";
 import { NewItem } from "../types/items";
 
 interface EditItemParams {
   itemId: number;
   formData: FormData;
-  existingImageId?: number; // ID de la imagen existente (si hay)
+  existingImageId?: number;
   onSuccess?: () => void;
 }
 
@@ -47,14 +47,11 @@ export const editItemSubmit = async ({
     if (imageFile && imageFile.size > 0) {
       console.log("🖼️ [editItemSubmit] Detectada nueva imagen");
       
-      if (existingImageId) {
-        console.log("ℹ️ [editItemSubmit] Imagen anterior será reemplazada automáticamente por la API");
-      }
-
-      // Subir la nueva imagen (la API se encarga de reemplazar la anterior)
+      // Subir la nueva imagen con el ID de la imagen existente (si hay)
+      // El backend se encarga de actualizar o crear según el ID
       console.log("⬆️ [editItemSubmit] Subiendo nueva imagen...");
       try {
-        await uploadItemImage(itemId, imageFile);
+        //await uploadItemImage(itemId, imageFile, existingImageId);
         console.log("✅ [editItemSubmit] Nueva imagen subida exitosamente");
       } catch (imageError) {
         console.error("⚠️ [editItemSubmit] Error al subir nueva imagen:", imageError);

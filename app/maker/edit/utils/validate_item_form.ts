@@ -11,49 +11,20 @@ const ACCEPTED_IMAGE_TYPES = [
 
 /**
  * Validación para archivos de imagen
- * - Tamaño máximo: 5MB
+ * - Tamaño máximo: 4MB
  * - Tipos aceptados: jpg, jpeg, png, webp
  */
 export const fileValidation = z
-  .any()
-  .refine((files) => {
-    // Si es undefined, null o string (URL existente), es válido
-    if (!files || typeof files === 'string') return true;
-    
-    // Si es FileList vacío, es válido
-    if (files instanceof FileList && files.length === 0) return true;
-    
-    // Si es un File directamente
-    if (files instanceof File) {
-      return files.size <= MAX_FILE_SIZE;
-    }
-    
-    // Si es FileList con archivo, validar tamaño
-    if (files instanceof FileList && files[0]) {
-      return files[0].size <= MAX_FILE_SIZE;
-    }
-    
-    return true;
-  }, "El archivo debe ser menor a 5MB")
-  .refine((files) => {
-    // Si es undefined, null o string (URL existente), es válido
-    if (!files || typeof files === 'string') return true;
-    
-    // Si es FileList vacío, es válido
-    if (files instanceof FileList && files.length === 0) return true;
-    
-    // Si es un File directamente
-    if (files instanceof File) {
-      return ACCEPTED_IMAGE_TYPES.includes(files.type);
-    }
-    
-    // Si es FileList con archivo, validar tipo
-    if (files instanceof FileList && files[0]) {
-      return ACCEPTED_IMAGE_TYPES.includes(files[0].type);
-    }
-    
-    return true;
-  }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
+  .instanceof(File)
+  .refine(
+    (file) => file.size <= MAX_FILE_SIZE,
+    "El archivo debe ser menor a 4MB"
+  )
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+    "Solo se aceptan archivos .jpg, .jpeg, .png y .webp"
+  )
+  .optional();
 
 export const itemValidations = z.object({
   // ✅ REQUERIDO: Nombre del plato (3-60 caracteres)
@@ -86,8 +57,8 @@ export const itemValidations = z.object({
     z.number().min(0, "El precio no puede ser negativo").optional()
   ),
   
-  // ✅ OPCIONAL: Imagen del plato
-  image: fileValidation.optional(),
+  // ✅ OPCIONAL: Imagen del plato (File)
+  image: fileValidation,
 });
 
 export type ItemFormData = z.infer<typeof itemValidations>;

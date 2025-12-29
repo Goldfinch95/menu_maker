@@ -1,12 +1,16 @@
-"use server";
+'use server';
 
 import { cookies } from "next/headers";
-
 import { ImageItems } from "../types/items";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export async function updateItemImage(id: number, data: Partial<ImageItems>) {
+interface UploadImageParams {
+  itemId: number;
+  imageFile: File;
+}
+
+export async function updateImage({ itemId, imageFile }: UploadImageParams): Promise<ImageItems> {
   const cookiesStore = await cookies();
   const tokenCookie = cookiesStore.get("token");
   const subdomainCookie = cookiesStore.get("subdomain");
@@ -16,29 +20,34 @@ export async function updateItemImage(id: number, data: Partial<ImageItems>) {
   if (!authToken) {
     throw new Error("No autenticado");
   }
+  // Construir FormData con la imagen
+  const formData = new FormData();
+  formData.append("image", imageFile, imageFile.name);
 
-  const response = await fetch(`${BASE_URL}/images/${id}`, {
+  // La URL correcta según tu backend: /api/images/:id
+  const response = await fetch(`${BASE_URL}/api/images/${itemId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
       "x-tenant-subdomain": tenant || "",
     },
-    body: JSON.stringify(data),
+    body: formData, // Solo envías { url?: string, active?: boolean }
   });
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`Error al actualizar imagen: ${response.status} - ${errorText}`);
+    console.error("❌ [uploadImage] Error response:", errorText);
+    throw new Error(`Error al subir imagen: ${response.status} - ${errorText}`);
   }
 
-  // Manejar respuestas vacías (204 No Content o body vacío)
   const contentType = response.headers.get("content-type");
-
-  if (response.status !== 204 && contentType?.includes("application/json")) {
-    const text = await response.text();
-    return text ? JSON.parse(text) : null;
+  
+  if (contentType?.includes("application/json")) {
+    const data = await response.json();
+    console.log("✅ [uploadImage] Imagen subida exitosamente:", data);
+    return data.image || data; // Ajusta según la estructura de tu API
   }
 
-  return null;
+  throw new Error("Respuesta del servidor no es JSON");
 }
