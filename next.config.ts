@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     remotePatterns: [
       {
@@ -9,10 +8,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  
-  // @ts-expect-error - serverActions existe pero no está en los tipos
-  serverActions: {
-    bodySizeLimit: '5mb',
+
+  experimental: {
+    // ✅ La configuración CORRECTA va aquí adentro
+    serverActions: {
+      bodySizeLimit: '10mb', 
+    },
   },
   
   async rewrites() {

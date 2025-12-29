@@ -1,7 +1,7 @@
-import { toast } from "sonner";
 import { createItemService } from "../services/create_item_service";
 import { updateImage } from "../services/image_service";
 import { NewItem } from "../types/items";
+import { toast } from "sonner";
 
 interface CreateItemParams {
   formData: FormData;
@@ -9,19 +9,22 @@ interface CreateItemParams {
   onSuccess?: () => void;
 }
 
+/**
+ * Crea un item y luego sube su imagen usando la Server Action.
+ */
 export const createItemSubmit = async ({
   formData,
   categoryId,
   onSuccess,
 }: CreateItemParams) => {
   try {
-    // Extraer datos del FormData
+    // 1. Extraer datos básicos del formulario
     const title = formData.get("title") as string;
     const description = formData.get("description") as string | null;
     const priceStr = formData.get("price") as string | null;
     const imageFile = formData.get("image") as File | null;
 
-    // PASO 1: Crear el item sin imagen
+    // 2. Crear el objeto para el servicio de creación de texto
     const newItem: NewItem = {
       categoryId,
       title,
@@ -30,63 +33,47 @@ export const createItemSubmit = async ({
       active: true,
     };
 
+    console.log("🚀 [Paso 1] Creando item en el backend...");
     const createdItem = await createItemService(newItem);
 
+    // 3. Si hay una imagen válida, procedemos a subirla
+    const hasValidImage =
+      imageFile && imageFile instanceof File && imageFile.size > 0;
 
-    // PASO 2: Si hay imagen, subirla
-    // ✅ Verificar propiedades en lugar de instanceof
-    const isValidFile =
-      imageFile &&
-      typeof imageFile === "object" &&
-      "name" in imageFile &&
-      "size" in imageFile &&
-      imageFile.size > 0;
+    if (hasValidImage) {
+      console.log("🚀 [Paso 2] Preparando envío de imagen...");
 
-    if (isValidFile) {
+      // Creamos un FormData específico para la subida de imagen
+      const imageFormData = new FormData();
+
+      // Formato requerido: metadato en 'images' y archivo en el campo definido en 'fileField'
+      const metadata = JSON.stringify([{ fileField: "image" }]);
+      imageFormData.append("images", metadata);
+      imageFormData.append("image", imageFile, imageFile.name);
+
       try {
+        console.log("📤 Enviando imagen al servidor...");
+        // Llamamos a la Server Action pasándole el FormData con el binario
+        const uploadedImage = await updateImage(createdItem.id, imageFormData);
 
-        // ✅ NUEVO FORMATO: Array de imágenes con fileField
-        const uploadedImage = await updateImage({
-          itemId: createdItem.id,
-          images: [
-            {
-              fileField: "image", // Nombre del campo del FormData
-              file: imageFile as File,
-            },
-          ],
-        });
-
-        // Actualizar el item con la imagen
+        // Adjuntamos la respuesta de la imagen al objeto final (opcional)
         createdItem.images = [uploadedImage];
-      } catch (imageError) {
-        console.error(
-          "⚠️ [createItemSubmit] Error al subir imagen:",
-          imageError
-        );
-
+      } catch (imageError: any) {
+        console.error("⚠️ Error al subir imagen:", imageError);
         toast.warning(
-          "Plato creado exitosamente, pero hubo un error al subir la imagen. Puedes editarlo para agregar la imagen más tarde."
+          "Plato creado, pero la imagen falló: " + imageError.message
         );
       }
-    } else {
-      console.log("ℹ️ [createItemSubmit] No hay imagen válida para subir");
     }
 
-    // PASO 3: Notificar éxito
-    toast.success("Plato creado con éxito");
-
-    // PASO 4: Ejecutar callback de éxito
+    // 4. Ejecutar callback de éxito
     if (onSuccess) {
-      console.log("🔄 [createItemSubmit] Ejecutando onSuccess callback");
       await onSuccess();
     }
 
     return createdItem;
-  } catch (error) {
-    console.error("❌ [createItemSubmit] Error:", error);
-    toast.error(
-      error instanceof Error ? error.message : "No se pudo crear el plato"
-    );
-    throw error;
+  } catch (error: any) {
+    console.error("❌ Error en la creación del item:", error);
+    throw error; // Re-lanzamos para que useItemOperations lo capture
   }
 };
