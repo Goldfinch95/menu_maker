@@ -1,54 +1,54 @@
 "use server";
 
-import { newMenu } from "../types/new_menu";
+import { editMenu } from "../types/edit_menu"; // ✅ Usa el mismo tipo que el handler
 import { cookies } from "next/headers";
-
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-//llamado a la api de crear cuenta
-export const updateMenuService = async (data: newMenu, id: number | string) => {
-    const cookiesStore = await cookies();
-      const tokenCookie = cookiesStore.get("token");
-      const subdomainCookie = cookiesStore.get("subdomain");
-      const authToken = tokenCookie?.value;
-      const tenant = subdomainCookie?.value;
-    
-      if (!authToken) {
-        throw new Error("No se encontró el token de autenticación");
-      }
-      if (!tenant) {
-        throw new Error("No se encontró el tenant");
-      }
+export const updateMenuService = async (data: editMenu, id: number | string) => {
+  const cookiesStore = await cookies();
+  const tokenCookie = cookiesStore.get("token");
+  const subdomainCookie = cookiesStore.get("subdomain");
+  const authToken = tokenCookie?.value;
+  const tenant = subdomainCookie?.value;
+
+  if (!authToken) {
+    throw new Error("No se encontró el token de autenticación");
+  }
+  if (!tenant) {
+    throw new Error("No se encontró el tenant");
+  }
+
   try {
-    // Preparar FormData
     const formData = new FormData();
     
     // Campos de texto
     formData.append("title", data.title);
     formData.append("pos", data.pos);
     
-    // Colores (enviar como strings separados o como JSON según backend)
-    // Opción 1: Strings separados
+    // Colores
     formData.append("colorPrimary", data.color.primary);
     formData.append("colorSecondary", data.color.secondary);
     
-    // Opción 2: Si el backend espera un objeto JSON de color
-    // formData.append("color", JSON.stringify(data.color));
-    
-    // Archivos (solo si existen)
-    if (data.logo) {
+    // Logo: solo agregar si es un archivo nuevo (File)
+    if (data.logo instanceof File) {
       formData.append("logo", data.logo, data.logo.name);
+    } else if (typeof data.logo === 'string') {
+      // Si es string (URL existente), enviar la URL
+      formData.append("logoUrl", data.logo);
     }
     
-    if (data.backgroundImage) {
+    // Background: solo agregar si es un archivo nuevo (File)
+    if (data.backgroundImage instanceof File) {
       formData.append("backgroundImage", data.backgroundImage, data.backgroundImage.name);
+    } else if (typeof data.backgroundImage === 'string') {
+      // Si es string (URL existente), enviar la URL
+      formData.append("backgroundImageUrl", data.backgroundImage);
     }
 
-    // Realizar la petición
     const response = await fetch(`${BASE_URL}/menus/${id}`, {
       method: "PUT",
-      headers: {  // ⬅️ AQUÍ van los headers
+      headers: {
         "Authorization": `Bearer ${authToken}`,
         "x-tenant-subdomain": tenant,
         // NO incluir Content-Type, FormData lo añade automáticamente
@@ -56,7 +56,6 @@ export const updateMenuService = async (data: newMenu, id: number | string) => {
       body: formData,
     });
 
-    // Manejar errores HTTP
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
@@ -64,11 +63,10 @@ export const updateMenuService = async (data: newMenu, id: number | string) => {
       );
     }
 
-    // Retornar el menú creado
     const menu = await response.json();
     return menu;
   } catch (error) {
-    console.error("Error en createMenuService:", error);
+    console.error("❌ Error en updateMenuService:", error);
     throw error;
   }
 };

@@ -11,7 +11,7 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 /**
- * Validación para archivos de imagen
+ * Validación para archivos de imagen (opcional)
  * - Tamaño máximo: 4MB
  * - Tipos aceptados: jpg, jpeg, png, webp
  */
@@ -39,8 +39,41 @@ export const fileValidation = z
   }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
 
 /**
+ * Validación para logo en MODO EDICIÓN (requerido)
+ * - Siempre tiene un valor previo (string URL)
+ * - Puede mantener el actual O subir uno nuevo
+ * - Tamaño máximo: 4MB
+ * - Tipos aceptados: jpg, jpeg, png, webp
+ */
+export const logoValidation = z
+  .any()
+  .refine((files) => {
+    // Debe existir (no puede ser null/undefined)
+    if (!files) return false;
+    
+    // Si es string (URL existente), es válido
+    if (typeof files === 'string') return true;
+    
+    // Si es FileList vacío, es válido (mantiene el actual)
+    if (files.length === 0) return true;
+    
+    // Si sube archivo nuevo, validar tamaño
+    return files[0]?.size <= MAX_FILE_SIZE;
+  }, "El logo es requerido y debe ser menor a 4MB")
+  .refine((files) => {
+    // Si es string (URL existente), es válido
+    if (typeof files === 'string') return true;
+    
+    // Si es FileList vacío, es válido
+    if (files.length === 0) return true;
+    
+    // Si sube archivo nuevo, validar tipo
+    return ACCEPTED_IMAGE_TYPES.includes(files[0]?.type);
+  }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
+
+/**
  * Validación para colores hexadecimales
- * Formato: hex
+ * Formato: hex de 6 dígitos (#RRGGBB)
  * Permite vacío, pero si tiene valor DEBE ser hex válido
  */
 const hexColorValidation = z
@@ -60,16 +93,16 @@ const hexColorValidation = z
   );
 
 /**
- * Schema de validación del formulario de menú
+ * Schema de validación del formulario de menú (MODO EDICIÓN)
  * - title: REQUERIDO (3-100 caracteres)
  * - pos: OPCIONAL (si tiene contenido, mínimo 3 caracteres)
- * - logo: OPCIONAL
+ * - logo: REQUERIDO (puede ser URL existente o archivo nuevo)
  * - backgroundImage: OPCIONAL
- * - color.primary: OPCIONAL
- * - color.secondary: OPCIONAL
+ * - color.primary: OPCIONAL (hex de 6 dígitos)
+ * - color.secondary: OPCIONAL (hex de 6 dígitos)
  */
 export const validations = z.object({
-  // Título: único campo requerido
+  // Título: campo requerido
   title: z
     .string()
     .min(3, "El título debe tener al menos 3 caracteres")
@@ -84,8 +117,10 @@ export const validations = z.object({
     )
     .optional(),
   
-  // Archivos: opcionales
-  logo: fileValidation.optional(),
+  // Logo: requerido (siempre tiene valor previo en edición)
+  logo: logoValidation,
+  
+  // Imagen de fondo: opcional
   backgroundImage: fileValidation.optional(),
   
   // Colores: opcionales

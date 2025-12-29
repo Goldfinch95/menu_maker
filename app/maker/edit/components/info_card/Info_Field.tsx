@@ -9,7 +9,7 @@ import {
   FieldLabel,
 } from "@/common/components/molecules/field";
 import { Input } from "@/common/components/atoms/input";
-import { newMenuForm } from "../../hooks/new_menu_form";
+import { editMenuForm } from "../../hooks/edit_menu_form";
 import { ImageFields } from "./Image_Field";
 import { ColorPickerFields } from "./Color_Picker_fields";
 import { Menu } from "@/app/home/types/menu";
@@ -20,7 +20,7 @@ interface InfoFieldProps {
 
 export const InfoField = ({ menuData }: InfoFieldProps) => {
   const { register, handleSubmit, control, errors, onSubmit, isSubmitting } =
-    newMenuForm(menuData);
+    editMenuForm(menuData);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

@@ -23,7 +23,7 @@ export const PasswordChangeCard = () => {
         <CardTitle
           className={`${manrope.className} text-2xl sm:text-3xl font-extrabold text-slate-900 pt-2`}
         >
-          Cambiar Contraseña
+          Recuperar Contraseña
         </CardTitle>
         <CardDescription className="text-slate-600 text-sm sm:text-base mt-1">
           Estas actualizando tu contraseña
