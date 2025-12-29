@@ -20,7 +20,7 @@ export function MenuNavbar({ primaryColor = "#ffffff", menuId }: MenuNavbarProps
       transition={{ duration: 0.35 }}
       className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
       style={{
-        backgroundColor: addOpacity(primaryColor, "B3"), // 70% transparencia
+        backgroundColor: addOpacity(primaryColor, 70), // 70% transparencia
       }}
     >
       <div className="max-w-xl mx-auto px-4 py-2 flex items-center justify-start">
