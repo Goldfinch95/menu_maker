@@ -44,16 +44,16 @@ export const MenuCard = ({ menuData: initialMenuData }: MenuCardProps) => {
 
   return (
     <motion.div
-      className="w-full py-4"
+      className="w-full sm:max-w-xl px-6 pt-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-    <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-md p-6 w-full max-w-sm mx-auto">
+    <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-md p-6 w-full mx-auto">
       <div className="mb-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-0 ml-1">
+          <p className="text-base font-medium text-slate-500 uppercase tracking-wider mb-0 ml-1">
             Menú
           </p>
           <div className="shrink-0">
@@ -61,9 +61,9 @@ export const MenuCard = ({ menuData: initialMenuData }: MenuCardProps) => {
               <DialogTrigger asChild>
                 <Button
                   size="icon"
-                  className="bg-orange-500 text-white p-2 rounded-lg h-8 w-8 shadow-md hover:bg-orange-600 transition-colors"
+                  className="bg-orange-500 text-white p-2 rounded-lg h-9 w-9 shadow-md hover:bg-orange-600 transition-colors"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-5! h-5!" />
                 </Button>
               </DialogTrigger>
             </NewCategoryDialog>
