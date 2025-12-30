@@ -15,16 +15,9 @@ const page = () => {
       <Navbar />
       <div className="flex flex-col justify-center items-center py-8 grow">
         <div className="w-full max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.3 }}
-            className="mb-6 flex justify-center lg:justify-start"
-          >
+          
             <CreateMenuButton />
-          </motion.div>
+          
           <MenuList />
         </div>
         <div className="mt-auto pt-8">

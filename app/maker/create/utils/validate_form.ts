@@ -20,11 +20,11 @@ export const fileValidation = z
   .refine((files) => {
     if (!files || files.length === 0) return true;
     return files[0]?.size <= MAX_FILE_SIZE;
-  }, "El archivo debe ser menor a 4MB")
+  }, "El archivo es demasiado grande. Debe ser menor a 4MB")
   .refine((files) => {
     if (!files || files.length === 0) return true;
     return ACCEPTED_IMAGE_TYPES.includes(files[0]?.type);
-  }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
+  }, "Solo puedes subir imágenes en formatos .jpg, .jpeg, .png o .webp.");
 
 /**
  * Validación para colores hexadecimales
@@ -44,7 +44,7 @@ const hexColorValidation = z
       // Validar formato hexadecimal: SOLO 6 caracteres después del #
       return /^#[A-Fa-f0-9]{6}$/.test(val);
     },
-    { message: "Ingrese un color válido" }
+    { message: "Por favor, ingresa un código de color hexadecimal válido (ejemplo: #FF5733)." }
   );
 
 /**
@@ -60,15 +60,15 @@ export const validations = z.object({
   // Título: único campo requerido
   title: z
     .string()
-    .min(3, "El título debe tener al menos 3 caracteres")
-    .max(100, "El título no puede exceder 100 caracteres"),
+    .min(3, "El título debe tener al menos 3 caracteres.")
+    .max(100, "El título no puede tener más de 100 caracteres."),
   
   // Ubicación: opcional, pero si tiene contenido debe tener mínimo 3 caracteres
   pos: z
     .string()
     .refine(
       (val) => !val || val.length === 0 || val.length >= 3,
-      { message: "La ubicación debe tener al menos 3 caracteres" }
+      { message: "Si decides ingresar una ubicación, asegúrate de que tenga al menos 3 caracteres." }
     )
     .optional(),
   

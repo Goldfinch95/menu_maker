@@ -12,19 +12,16 @@ export const handleNewMenuSubmit = async (
   router: any
 ) => {
   try {
-    //console.log("📋 Datos del formulario:");
-    //console.log(formData)
     await createMenuService(formData);
-    // sucess: info
-    toast.success("Se ha creado un nuevo Menu")
+    // sucess
+    toast.success("¡Menú creado con éxito! Ahora puedes comenzar a agregar más detalles.")
     //redirigir a home
     router.push("/home");
   } catch (error) {
     console.error("Error al crear Menu:", error);
     if (error instanceof Error) {
-      //objetivo mas seguridad
       //error: info
-      toast.error("No se pudo crear el Menu");
+      toast.error("Lo sentimos, hubo un error al crear el menú. Por favor, intenta de nuevo.");
     } 
   }
 };

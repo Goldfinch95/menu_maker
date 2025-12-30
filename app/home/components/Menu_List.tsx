@@ -68,8 +68,8 @@ export const MenuList = () => {
                   <Image
                     src={menu.logo}
                     alt={menu.title}
-                    width={menu.logo.includes("default_menu") ? 60 : 100}
-                    height={menu.logo.includes("default_menu") ? 60 : 100}
+                    width={menu.logo.includes("default_menu") ? 50 : 100}
+                    height={menu.logo.includes("default_menu") ? 50 : 100}
                     className="object-contain"
                     priority
                   />
