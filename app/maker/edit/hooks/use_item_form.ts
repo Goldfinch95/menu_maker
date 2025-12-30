@@ -51,29 +51,22 @@ export const useItemForm = ({
     setValue,
     watch,
     reset,
+    setError,
   } = form;
 
-  // Observar el campo image del formulario
   const imageFile = watch("image");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file) {
-      // ✅ Guardar en react-hook-form
       setValue("image", file, { shouldValidate: true });
 
-      if (IS_DEV) {
-        console.log("✅ [handleImageChange] Archivo guardado en form");
-      }
-
-      // Generar preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-    } else {
     }
   };
 
@@ -83,30 +76,51 @@ export const useItemForm = ({
   };
 
   const handleFormSubmit = async (data: ItemFormData) => {
-    const formData = new FormData();
+    // ✅ VALIDACIÓN MANUAL DE PRICE (sin Zod)
+    let validPrice = data.price;
 
-    // Datos básicos
+    // Normalizar valores vacíos o inválidos
+    if (data.price === null || data.price === undefined || isNaN(data.price)) {
+      validPrice = 0;
+    }
+
+    // Validar rango
+    if (validPrice < 0) {
+      setError("price", {
+        type: "manual",
+        message: "El precio debe ser un número positivo o igual a 0.",
+      });
+      
+      return; // Detener el submit
+    }
+
+    if (validPrice > 999999) {
+      setError("price", {
+        type: "manual",
+        message: "El precio no puede exceder $999,999.",
+      });
+      
+      return; // Detener el submit
+    }
+
+    // ✅ Continuar con el FormData usando el precio validado
+    const formData = new FormData();
     formData.append("title", data.title);
 
     if (data.description) {
       formData.append("description", data.description);
     }
 
-    // Aseguramos que se envíe un string numérico válido, incluso si es 0
-    const priceValue = data.price !== undefined ? String(data.price) : "0";
-    formData.append("price", priceValue);
+    // Usar el precio validado
+    formData.append("price", String(validPrice));
 
-    // ✅ CRÍTICO: Agregar imagen si existe
     if (data.image instanceof File) {
       formData.append("image", data.image, data.image.name);
     }
 
-    // CategoryId (solo en modo creación)
     if (!isEditMode) {
       formData.append("categoryId", String(categoryId));
     }
-
-    // 🔍 Verificar contenido final del FormData
 
     try {
       const result = await onSubmit(formData);
@@ -118,7 +132,6 @@ export const useItemForm = ({
           toast.success(result.message || "Plato creado exitosamente");
         }
 
-        // Ejecutar callback de éxito
         if (onSuccess) {
           await onSuccess();
         }

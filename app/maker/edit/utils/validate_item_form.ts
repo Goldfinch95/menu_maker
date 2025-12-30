@@ -38,20 +38,8 @@ export const itemValidations = z.object({
     .optional(),
 
   price: z
-    .union([z.number(), z.nan(), z.literal("")])
-    .transform((val) => {
-      // Si es vacío, NaN o undefined, devolvemos 0
-      if (val === "" || Number.isNaN(val) || val === undefined) {
-        return 0;
-      }
-      return Number(val);
-    })
-    .pipe(
-      z
-        .number()
-        .min(0, "El precio debe ser un número positivo o igual a 0.")
-        .max(999999, "El precio no puede exceder $999,999.")
-    ),
+  .number().or(z.nan()).transform((val) => (isNaN(val) ? 0 : val)),  // Asegura que sea un número
+  
 
   image: fileValidation,
 });
