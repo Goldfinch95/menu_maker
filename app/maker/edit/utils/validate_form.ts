@@ -106,16 +106,15 @@ export const validations = z.object({
   title: z
     .string()
     .min(3, "El título debe tener al menos 3 caracteres.")
-    .max(100, "El título no puede tener más de 100 caracteres."),
+    .max(50, "El título no puede tener más de 60 caracteres."),
   
   // Ubicación: opcional, pero si tiene contenido debe tener mínimo 3 caracteres
   pos: z
-    .string()
-    .refine(
-      (val) => !val || val.length === 0 || val.length >= 3,
-      { message: "Si decides agregar una ubicación, debe tener al menos 3 caracteres." }
-    )
-    .optional(),
+  .string()
+  .refine((val) => val === "" || (val.length >= 3 && val.length <= 50), {
+    message: "Si decides agregar una ubicación, debe tener entre 3 y 50 caracteres.",
+  })
+  .optional(),
   
   // Logo: requerido (siempre tiene valor previo en edición)
   logo: logoValidation,

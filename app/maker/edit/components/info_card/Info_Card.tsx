@@ -39,12 +39,15 @@ export const InfoCard = ({ menuData }: MenuCardProps) => {
       <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-lg pt-0 w-full mx-auto">
         <CardHeader className="bg-linear-to-r from-orange-500 to-orange-600 text-white pt-8 pb-15 relative rounded-t-xl ">
           <div className="text-left space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-wider opacity-90 mb-1">
+            <p className="text-xl font-semibold uppercase tracking-wider opacity-90 mb-1">
               Información del menú
             </p>
-            <h2 className="text-3xl font-extrabold tracking-tight">
-              {menuData?.title}
-            </h2>
+             <h2 className="text-4xl font-extrabold tracking-tight 
+        overflow-hidden text-ellipsis whitespace-nowrap 
+        sm:overflow-visible sm:text-ellipsis sm:whitespace-normal
+        w-full max-w-75">
+        {menuData?.title}
+      </h2>
           </div>
           {/* Círculo blanco con icono centrado */}
           <div className="absolute -bottom-14 left-1/2 transform -translate-x-1/2">
@@ -81,23 +84,23 @@ export const InfoCard = ({ menuData }: MenuCardProps) => {
               {/* este boton debe abrir el dialogo de editar menu */}
               <InfoDialog menuData={menuData}>
                 <DialogTrigger asChild>
-                  <Button className="w-full h-25 bg-orange-500 text-white rounded-xl flex flex-col items-center justify-center shadow-lg hover:shadow-2xl transition duration-300">
+                  <Button className="w-full h-25 bg-linear-to-r from-orange-400 to-orange-600 text-white  rounded-xl flex flex-col items-center justify-center shadow-lg hover:shadow-2xl transition duration-300">
                     <Edit className="w-8! h-8!" />
-                    <span className="text-sm mt-2">Editar</span>
+                    <span className="text-base mt-2">Editar</span>
                   </Button>
                 </DialogTrigger>
               </InfoDialog>
               <Button
                 onClick={handleGenerateQr}
                 disabled={isGenerating}
-                className="w-full h-25 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl flex flex-col items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-25 bg-linear-to-r from-orange-600 to-orange-500 text-white  font-semibold rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl flex flex-col items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isGenerating ? (
                   <Loader2 className="w-8! h-8! animate-spin" />
                 ) : (
                   <QrCode className="w-8! h-8!" />
                 )}
-                <span className="text-sm mt-2">
+                <span className="text-base mt-2">
                   {isGenerating ? "Generando..." : "Generar QR"}
                 </span>
               </Button>
