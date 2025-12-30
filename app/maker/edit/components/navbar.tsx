@@ -23,7 +23,7 @@ export const Navbar = ({ menuData }: MenuCardProps) => {
   const menuId = menuData.id;
 
   return (
-    <Menubar className="w-full flex justify-between items-center">
+    <Menubar className="w-full justify-between ps-4 pe-6">
       <MenubarMenu>
         <MenubarTrigger>
           <Link href={"/home"}>
@@ -37,12 +37,12 @@ export const Navbar = ({ menuData }: MenuCardProps) => {
       </MenubarMenu>
 
       <MenubarMenu>
-        <MenubarTrigger>
-          <Button className="bg-orange-500 text-white p-2 rounded-lg h-10 w-10 shadow-md hover:bg-orange-600 transition-colors">
+        <MenubarTrigger className=" flex items-center bg-orange-500 text-white rounded-lg h-10 w-10 shadow-md hover:bg-orange-600 transition-colors">
+          
             <Link href={`/menu?id=${menuId}&preview=true`}>
-              <Eye className="w-5! h-5! text-white" />
+              <Eye className=" w-6! h-6! text-white" />
             </Link>
-          </Button>
+          
         </MenubarTrigger>
       </MenubarMenu>
     </Menubar>
