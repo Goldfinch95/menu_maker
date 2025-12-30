@@ -8,6 +8,7 @@ import {
   MenubarTrigger,
 } from "@/common/components/organism/menubar";
 import { Menu } from "@/app/home/types/menu";
+import { Button } from "@/common/components/atoms/button";
 
 interface MenuCardProps {
   menuData: Menu | null;
@@ -37,9 +38,11 @@ export const Navbar = ({ menuData }: MenuCardProps) => {
 
       <MenubarMenu>
         <MenubarTrigger>
-          <Link href={`/menu?id=${menuId}&preview=true`}>
-            <Eye className="w-6 h-6 text-slate-700" />
-          </Link>
+          <Button className="bg-orange-500 text-white p-2 rounded-lg h-10 w-10 shadow-md hover:bg-orange-600 transition-colors">
+            <Link href={`/menu?id=${menuId}&preview=true`}>
+              <Eye className="w-5! h-5! text-white" />
+            </Link>
+          </Button>
         </MenubarTrigger>
       </MenubarMenu>
     </Menubar>

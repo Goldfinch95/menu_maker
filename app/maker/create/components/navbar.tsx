@@ -10,7 +10,7 @@ import {
 
 export const Navbar = () => {
   return (
-    <Menubar className="w-full flex justify-between items-center">
+    <Menubar className="w-full justify-between ps-4">
       <MenubarMenu>
         <MenubarTrigger>
           <Link href={"/home"}>

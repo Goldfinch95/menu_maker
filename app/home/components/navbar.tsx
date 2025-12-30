@@ -17,7 +17,7 @@ export const Navbar = () => {
   const roleId = useCookie("roleId");
 
   return (
-    <Menubar className="w-full justify-between">
+    <Menubar className="w-full justify-between ps-4">
       <MenubarMenu>
         {roleId === "1" ? (
           <MenubarTrigger>

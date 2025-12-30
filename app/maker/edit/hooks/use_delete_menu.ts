@@ -10,10 +10,10 @@ export const useDeleteMenu = (router: any) => {
 
     try {
       await deleteMenuService(menuId);
-      toast.success("Se ha borrado el Menu");
+      toast.success("¡Listo! El menú se eliminó correctamente. Continúa gestionando tus menús.");
       router.push("/home");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "No se ha podido borrar el Menu");
+      toast.error("No pudimos eliminar el menú en este momento. Por favor, intenta nuevamente.");
     } finally {
       setIsDeleting(false);
     }

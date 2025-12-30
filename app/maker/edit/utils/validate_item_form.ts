@@ -25,14 +25,10 @@ export const fileValidation = z
 
 export const itemValidations = z.object({
   title: z
-  .string()
-  .min(3, "El título debe tener al menos 3 caracteres")
-  .max(10, "El título no puede exceder 10 caracteres")
-  .refine((value) => {
-    console.log(value); // Esto te ayudará a ver el valor real de `title`
-    return value.length <= 10; // Asegura que no pase de 10 caracteres
-  }, "El título no puede exceder 10 caracteres")
-  .trim(),
+    .string()
+    .min(3, "El título debe tener al menos 3 caracteres")
+    .max(60, "El título no puede exceder 60 caracteres")
+    .trim(),
   
   description: z
     .string()

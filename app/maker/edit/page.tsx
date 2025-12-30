@@ -16,8 +16,6 @@ const EditPageContent = () => {
 
   const { menuData } = useFetchMenu(menuId);
 
-  console.log(menuData);
-
   // Mostrar loading mientras se cargan los datos
   if (!menuData) {
     return (
