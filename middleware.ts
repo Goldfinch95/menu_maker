@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
   // Definir rutas de maker (requieren token)
   const makerRoutes = "/maker"; // Cualquier ruta que empiece con /maker
   // Definir rutas de menu (requieren token si no tiene el id)
-  const menuRoutes = "/menu"; // Ruta base de menu
+ 
 
   // Verificar si la ruta es pública
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
@@ -31,8 +31,7 @@ export function middleware(request: NextRequest) {
   const isPasswordRoute = passwordRoutes.some(route => pathname.startsWith(route));
   // Verificar si la ruta es /maker o cualquier subruta de /maker
   const isMakerRoute = pathname.startsWith(makerRoutes);
-  // Verificar si la ruta es /menu o cualquier subruta de /menu
-  const isMenuRoute = pathname.startsWith(menuRoutes);
+ 
 
   // Si el usuario tiene token y está intentando acceder a una ruta pública (auth, forgotpassword), redirigir a /home
   if (isPublicRoute && token) {
@@ -54,11 +53,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
-  // Si la ruta es /menu y no tiene el parámetro "id" y no hay token, redirigir a /auth
-  if (isMenuRoute && !idParam) {
-    return NextResponse.redirect(new URL("/auth", request.url));
-  }
-
+  
+  
   // Si es ruta privada y NO hay token, redirigir a /auth
   if (isPrivateRoute && !token) {
     return NextResponse.redirect(new URL("/auth", request.url));
@@ -80,7 +76,5 @@ export const config = {
     '/user/change/password', // Rutas de cambio de contraseña
     '/maker', // Ruta base de maker
     '/maker/:path*', // Asegura que también se capturen las subrutas de /maker
-    '/menu', // Ruta base de menu
-    '/menu/:path*', // Asegura que también se capturen las subrutas de /menu
   ],
 };
