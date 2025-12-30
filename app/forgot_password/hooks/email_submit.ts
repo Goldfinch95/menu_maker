@@ -14,7 +14,7 @@ export const handleEmailSubmit = async (
   try {
     await userService(formData);
     // sucess: info
-    toast.info("El enlace de recuperacion se ha enviado a su correo")
+    toast.success("Te hemos enviado un enlace para recuperar tu contraseña. Revisa tu correo.")
     //redirigir a login
     router.push("/auth");
   } catch (error) {
@@ -22,7 +22,7 @@ export const handleEmailSubmit = async (
     if (error instanceof Error) {
       //objetivo mas seguridad
       //error: info
-      toast.info("El enlace de recuperacion se ha enviado a su correo");
+      toast.success("Te hemos enviado un enlace para recuperar tu contraseña. Revisa tu correo.");
       //redirigir a login
       router.push("/auth");
     } 

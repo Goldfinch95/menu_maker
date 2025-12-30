@@ -4,7 +4,7 @@ import * as z from "zod";
 export const validations = z.object({
   email: z
     .string()
-    .min(1, "El email es obligatorio")
+    .min(1, "Por favor, ingresa tu dirección de correo electrónico")
     .trim() // Elimina espacios accidentales al inicio o final
-    .email("Escribe una dirección de correo válida (ej: nombre@correo.com)"),
+    .email("Parece que el correo ingresado no es válido. Asegúrate de escribir una dirección como ejemplo@correo.com"),
 });

@@ -1,5 +1,6 @@
 // campos del email de recuperacion
 "use client";
+import { useEffect } from "react";
 import { Button } from "@/common/components/atoms/button";
 import { emailForm } from "../hooks/email_form";
 import Errors from "./errors_msg";
@@ -11,10 +12,18 @@ import {
 } from "@/common/components/molecules/field";
 import { Input } from "@/common/components/atoms/input";
 
+interface EmailFieldProps {
+  onSubmittingChange?: (isSubmitting: boolean) => void;
+}
 
-export const EmailField = () => {
+export const EmailField = ({ onSubmittingChange }: EmailFieldProps) => {
   const { register, handleSubmit, errors, onSubmit, isSubmitting } =
     emailForm();
+
+  // Notificar al padre cuando cambia isSubmitting
+  useEffect(() => {
+    onSubmittingChange?.(isSubmitting);
+  }, [isSubmitting, onSubmittingChange]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -28,6 +37,7 @@ export const EmailField = () => {
               id="email"
               type="email"
               aria-invalid={!!errors.email}
+              disabled={isSubmitting}
             />
           </Field>
           <Field>
@@ -36,7 +46,7 @@ export const EmailField = () => {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Enviando Email..." : "Enviar Email"}
+              Enviar Email
             </Button>
           </Field>
         </FieldGroup>
