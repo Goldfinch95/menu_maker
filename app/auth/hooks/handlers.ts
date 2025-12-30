@@ -25,7 +25,7 @@ export const handleLoginSubmit = async (
     console.error("Error en la autenticación:", error);
     
     if (error instanceof Error) {
-      toast.error("El Email o Contraseña que ingresaste es incorrecto");
+      toast.error("Parece que el email o la contraseña no coinciden. Si olvidaste tu contraseña, puedes restablecerla.");
     } 
     
   }

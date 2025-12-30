@@ -13,12 +13,21 @@ import {
 import { handleTogglePassword } from "../hooks/handlers";
 import { Input } from "@/common/components/atoms/input";
 import { loginForm } from "../hooks/login_form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export const LoginField = () => {
+interface LoginFieldProps {
+  onSubmittingChange?: (isSubmitting: boolean) => void;
+}
+
+export const LoginField = ({ onSubmittingChange }: LoginFieldProps) => {
   const { register, handleSubmit, errors, onSubmit, isSubmitting } =
     loginForm();
   const [showPassword, setShowPassword] = useState(false);
+
+  // Notificar al padre cuando cambia isSubmitting
+      useEffect(() => {
+        onSubmittingChange?.(isSubmitting);
+      }, [isSubmitting, onSubmittingChange]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -68,7 +77,7 @@ export const LoginField = () => {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
+              Iniciar Sesión
             </Button>
           </Field>
         </FieldGroup>
