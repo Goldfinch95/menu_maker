@@ -49,21 +49,18 @@ export function ItemDetailDialog({
         className={`w-[95vw] pt-4 max-w-lg sm:max-w-xl p-0 overflow-hidden rounded-3xl border shadow-2xl ${dialogBg} [&>button]:hidden`}
       >
         {firstImage && (
-          <div className="relative w-full h-72 sm:h-80">
-            <div className="w-full h-full flex items-center justify-center">
-              <Image
-                src={imageSrc}
-                alt={imageAlt || item.title}
-                width={800}
-                height={600}
-                className="object-contain w-full h-full"
-              />
-            </div>
+          <div className="relative w-full h-72 sm:h-80 overflow-hidden">
+            <Image
+              src={imageSrc}
+              alt={imageAlt || item.title}
+              fill
+              className="object-cover"
+            />
 
             <DialogClose
               className={`absolute top-4 right-4 flex items-center justify-center ${
                 isDark ? "text-white" : "text-black"
-              } text-3xl`}
+              } text-3xl z-10`}
             >
               &times;
             </DialogClose>

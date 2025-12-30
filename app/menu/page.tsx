@@ -57,28 +57,13 @@ function MenuPageContent() {
     return <LoadingState />;
   }
 
-  // Estado de error
-  if (error) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <div className="text-center space-y-4">
-          <h2 className="text-2xl font-semibold text-red-600">
-            Error al cargar el menú
-          </h2>
-          <p className="text-gray-600">{error}</p>
-          <Button onClick={() => router.push("/")}>
-            Volver al inicio
-          </Button>
-        </div>
-      </div>
-    );
-  }
+
 
   const isNavbarDark = isDarkColor(menu.color?.primary);
 
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="w-full min-h-screen flex flex-col"
       style={{ backgroundColor: menu.color?.primary || "#ffffff" }}
     >
       {/* NAVBAR */}
@@ -93,7 +78,7 @@ function MenuPageContent() {
             : "rgba(255, 255, 255, 0.7)",
         }}
       >
-        <div className="max-w-xl mx-auto px-4 py-2 flex items-center justify-start">
+        <div className="mx-auto px-4 py-2 flex items-center justify-start">
           <Button
             variant="ghost"
             size="icon"

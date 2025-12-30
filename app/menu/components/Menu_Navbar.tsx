@@ -1,3 +1,5 @@
+// src/features/menu/components/MenuNavbar/MenuNavbar.tsx
+
 import { motion } from "framer-motion";
 import { Button } from "@/common/components/atoms/button";
 import { ArrowLeft } from "lucide-react";
@@ -6,10 +8,13 @@ import { addOpacity, isDarkColor } from "../utils/color_utils";
 
 interface MenuNavbarProps {
   primaryColor?: string;
-  menuId: number;
+  menuId: string | null;
 }
 
-export function MenuNavbar({ primaryColor = "#ffffff", menuId }: MenuNavbarProps) {
+export function MenuNavbar({
+  primaryColor = "#ffffff",
+  menuId,
+}: MenuNavbarProps) {
   const router = useRouter();
   const isNavbarDark = isDarkColor(primaryColor);
 
@@ -20,7 +25,7 @@ export function MenuNavbar({ primaryColor = "#ffffff", menuId }: MenuNavbarProps
       transition={{ duration: 0.35 }}
       className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
       style={{
-        backgroundColor: addOpacity(primaryColor, 70), // 70% transparencia
+        backgroundColor: addOpacity(primaryColor, 70),
       }}
     >
       <div className="max-w-xl mx-auto px-4 py-2 flex items-center justify-start">
@@ -40,4 +45,3 @@ export function MenuNavbar({ primaryColor = "#ffffff", menuId }: MenuNavbarProps
     </motion.div>
   );
 }
-
