@@ -10,6 +10,7 @@ export function middleware(request: NextRequest) {
   const token = tokenUrl || tokenCookie;
   
   const { pathname } = request.nextUrl;
+  const idParam = request.nextUrl.searchParams.get("id");
 
   // Definir rutas públicas (no requieren token)
   const publicRoutes = ["/auth", "/forgotpassword"];
@@ -19,8 +20,8 @@ export function middleware(request: NextRequest) {
   const passwordRoutes = ["/user/create/password", "/user/change/password"];
   // Definir rutas de maker (requieren token)
   const makerRoutes = "/maker"; // Cualquier ruta que empiece con /maker
-  // Definir rutas de menu (requieren token)
-  const menuRoutes = "/menu"; // Cualquier ruta que empiece con /menu
+  // Definir rutas de menu (requieren token si no tiene el id)
+  const menuRoutes = "/menu"; // Ruta base de menu
 
   // Verificar si la ruta es pública
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
@@ -53,8 +54,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
-  // Si la ruta es /menu o cualquier subruta de /menu y no hay token, redirigir a /auth
-  if (isMenuRoute && !token) {
+  // Si la ruta es /menu y no tiene el parámetro "id" y no hay token, redirigir a /auth
+  if (isMenuRoute && !idParam) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
