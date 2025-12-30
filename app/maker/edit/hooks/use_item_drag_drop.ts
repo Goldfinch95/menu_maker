@@ -4,6 +4,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 import { Item } from "../types/items";
 import { calculateNewPosition } from "../utils/positioning";
 import { editItemService } from "../services/edit_item_service";
+import { toast } from "sonner";
 
 export const useItemDragDrop = (
   initialItems: Item[],
@@ -32,8 +33,10 @@ export const useItemDragDrop = (
       try {
         await editItemService(movedItem.id, { newPosition });
         await onItemChange();
+        toast.success("El orden del item seleccionada se actualizó correctamente. ¡Todo listo!");
       } catch (error) {
         console.error("Error al actualizar posición del item:", error);
+        toast.error("Hubo un problema al actualizar el orden. Por favor, intenta nuevamente.");
         setLocalItems(localItems); // Revertir
       }
     }
