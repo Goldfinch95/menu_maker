@@ -5,9 +5,10 @@ import { getTextColor } from "../utils/color_utils";
 
 interface MenuHeaderProps {
   menu: Menu;
+  isPreview: boolean;
 }
 
-export function MenuHeader({ menu }: MenuHeaderProps) {
+export function MenuHeader({ menu, isPreview }: MenuHeaderProps) {
   const textColorClass = menu.backgroundImage
     ? "text-white"
     : getTextColor(menu.color?.primary || "#fff");
@@ -19,7 +20,7 @@ export function MenuHeader({ menu }: MenuHeaderProps) {
     : "text-black/90";
 
   return (
-    <header className="relative h-64 sm:h-80 md:h-96 w-full mt-14 sm:w-full">
+    <header className={`relative h-64 sm:h-80 md:h-96 w-full sm:w-full ${isPreview ? 'mt-14' : 'mt-0'}`}>
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={

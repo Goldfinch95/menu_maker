@@ -23,6 +23,7 @@ import { ItemDetailDialog } from "./components/Item_Dialog";
 function MenuPageContent() {
   const searchParams = useSearchParams();
   const menuId = searchParams.get("id");
+  const isPreview = searchParams.get("preview") === "true"; // 👈 NUEVO: Capturamos el parámetro
   const router = useRouter();
 
   // Estado
@@ -31,7 +32,7 @@ function MenuPageContent() {
   const [selectedItem, setSelectedItem] = useState<Items | null>(null);
 
   // Hooks personalizados
-  const { menu, categories, isLoading, error } = useMenuData(menuId);
+  const { menu, categories, isLoading, error } = useMenuData(menuId, isPreview); // 👈 MODIFICADO: Pasamos isPreview
   const { scrollToCategory } = useCategoryScroll();
 
   useScrollSync({
@@ -57,8 +58,6 @@ function MenuPageContent() {
     return <LoadingState />;
   }
 
-
-
   const isNavbarDark = isDarkColor(menu.color?.primary);
 
   return (
@@ -67,35 +66,38 @@ function MenuPageContent() {
       style={{ backgroundColor: menu.color?.primary || "#ffffff" }}
     >
       {/* NAVBAR */}
-      <motion.div
-        initial={{ opacity: 0, y: -15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35 }}
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
-        style={{
-          backgroundColor: menu.color?.primary
-            ? `${menu.color.primary}B3`
-            : "rgba(255, 255, 255, 0.7)",
-        }}
-      >
-        <div className="mx-auto px-4 py-2 flex items-center justify-start">
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`rounded-xl transition-colors ${
-              isNavbarDark
-                ? "hover:bg-white/10 text-white"
-                : "hover:bg-black/10 text-black"
-            }`}
-            onClick={() => router.push(`/menuEditor?id=${menuId}`)}
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </div>
-      </motion.div>
+      {isPreview && (
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+          className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
+          style={{
+            backgroundColor: menu.color?.primary
+              ? `${menu.color.primary}B3`
+              : "rgba(255, 255, 255, 0.7)",
+          }}
+        >
+          <div className="mx-auto px-4 py-2 flex items-center justify-start">
+            {/* 👇 MODIFICADO: Solo mostrar el botón de volver si es preview */}
 
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`rounded-xl transition-colors ${
+                isNavbarDark
+                  ? "hover:bg-white/10 text-white"
+                  : "hover:bg-black/10 text-black"
+              }`}
+              onClick={() => router.push(`/home`)}
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </div>
+        </motion.div>
+      )}
       {/* HEADER */}
-      <MenuHeader menu={menu} />
+      <MenuHeader menu={menu} isPreview={isPreview} />
 
       {/* CATEGORY NAVIGATION */}
       <CategoryNavigation
@@ -103,6 +105,7 @@ function MenuPageContent() {
         activeCategory={activeCategory}
         primaryColor={menu.color?.primary}
         secondaryColor={menu.color?.secondary}
+        isPreview={isPreview}
         onCategoryClick={handleCategoryClick}
       />
 

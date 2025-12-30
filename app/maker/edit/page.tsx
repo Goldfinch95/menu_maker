@@ -15,7 +15,7 @@ const EditPageContent = () => {
 
   const { menuData } = useFetchMenu(menuId);
 
-  console.log(menuData?.categories)
+  console.log(menuData?.categories);
 
   // Mostrar loading mientras se cargan los datos
   if (!menuData) {
@@ -33,10 +33,13 @@ const EditPageContent = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center py-8 grow">
-      <InfoCard menuData={menuData} />
-      <MenuCard menuData={menuData} />
-      <DeleteButton />
+    <div>
+      <Navbar menuData={menuData} />
+      <div className="flex flex-col justify-center items-center py-8 grow">
+        <InfoCard menuData={menuData} />
+        <MenuCard menuData={menuData} />
+        <DeleteButton />
+      </div>
     </div>
   );
 };
@@ -45,7 +48,6 @@ const EditPageContent = () => {
 const EditPage = () => {
   return (
     <div className="min-h-screen w-full flex flex-col">
-      <Navbar />
       <Suspense
         fallback={
           <div className="flex flex-col justify-center items-center py-8 grow">

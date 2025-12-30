@@ -8,6 +8,7 @@ interface CategoryNavigationProps {
   primaryColor?: string;
   secondaryColor?: string;
   onCategoryClick: (categoryId: number) => void;
+  isPreview: boolean;
 }
 
 export function CategoryNavigation({
@@ -15,6 +16,7 @@ export function CategoryNavigation({
   activeCategory,
   primaryColor,
   secondaryColor,
+  isPreview,
   onCategoryClick,
 }: CategoryNavigationProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -54,7 +56,7 @@ export function CategoryNavigation({
 
   return (
     <div
-      className="sticky top-12 z-40 backdrop-blur-xl"
+      className={`sticky z-40 backdrop-blur-xl ${isPreview ? 'top-12' : 'top-0'}`}
       style={{
         backgroundColor: primaryColor
           ? `${primaryColor}CC`
