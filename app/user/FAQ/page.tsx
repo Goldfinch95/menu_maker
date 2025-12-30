@@ -1,13 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/common/components/molecules/accordion";
-import { ArrowLeft } from "lucide-react";  
-import { useRouter } from "next/navigation";  
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/common/components/molecules/accordion";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function FaqPage() {
   const [open, setOpen] = useState<string | undefined>(undefined);
-  const router = useRouter();  // Usamos useRouter para la redirección
+  const router = useRouter(); // Usamos useRouter para la redirección
 
   const faqs = [
     {
@@ -32,8 +37,7 @@ export default function FaqPage() {
     },
     {
       question: "Tengo un poblema ¿Como me puedo Contactar?",
-      answer:
-        "Nuestro sitio web es x y el numero de telefono es x",
+      answer: "Nuestro sitio web es x y el numero de telefono es x",
     },
   ];
 
@@ -42,10 +46,10 @@ export default function FaqPage() {
       <div className="w-full max-w-3xl mx-auto bg-white/85 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-white/40 space-y-6">
         {/* Botón de retroceso */}
         <button
-          onClick={() => router.back()}  // Redirige a la página anterior
+          onClick={() => router.back()} // Redirige a la página anterior
           className="absolute left-5 top-5 p-2 rounded-full bg-orange-500 text-white shadow-md hover:bg-orange-600 active:scale-95 transition-all"
         >
-          <ArrowLeft className="w-5 h-5"  />
+          <ArrowLeft className="w-5 h-5" />
         </button>
 
         {/* Título */}
