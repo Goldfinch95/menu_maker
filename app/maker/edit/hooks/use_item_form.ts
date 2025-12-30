@@ -92,14 +92,14 @@ export const useItemForm = ({
       return; // Detener el submit
     }
 
-    if (validPrice > 999999) {
-      setError("price", {
-        type: "manual",
-        message: "El precio no puede exceder $999,999.",
-      });
-      
-      return; // Detener el submit
-    }
+    if (validPrice > 99999999) {
+    setError("price", {
+      type: "manual",
+      message: "El precio no puede exceder $99,999,999.",
+    });
+    
+    return; // Detener el submit
+  }
 
     // ✅ Continuar con el FormData usando el precio validado
     const formData = new FormData();
