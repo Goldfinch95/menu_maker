@@ -27,11 +27,11 @@ export const useCategoryDragDrop = (
       try {
         await editCategory({ newPosition }, movedCategory.id);
         await onCategoryChange();
-        toast.success("Orden actualizado correctamente");
+        toast.success("El orden de la categoría seleccionada se actualizó correctamente. ¡Todo listo!");
       } catch (error) {
         console.error("Error al actualizar el orden de categoría", error);
         setCategories(categories); // Revertir
-        toast.error("Error al actualizar el orden");
+        toast.error("Hubo un problema al actualizar el orden. Por favor, intenta nuevamente.");
       }
     }
   };

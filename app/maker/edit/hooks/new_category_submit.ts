@@ -8,19 +8,15 @@ export const newCategorySubmit = async (
   onSuccess?: () => void
 ) => {
   try {
-    console.log("📋 Datos del formulario:");
-    console.log(formData, menuId);
-    
     await createCategory(formData, menuId);
     
-    toast.success("Se ha creado una nueva Categoria del Menu");
+    toast.success("¡Categoría creada con éxito! Ahora puedes agregar platos o editarla.");
     
     // Cerrar el dialog si la función está disponible
     if (onSuccess) {
       onSuccess();
     }
   } catch (error) {
-    console.error("Error al crear Categoria del Menu:", error);
-    toast.error("No se pudo crear la Categoria del Menu");
+    toast.error("Hubo un problema al crear la categoría. Por favor, intenta de nuevo.");
   }
 };

@@ -13,14 +13,8 @@ export const editCategorySubmit = async ({
   onSuccess,
 }: EditCategoryParams) => {
   try {
-    console.log("📝 Editando categoría:", {
-      categoryId,
-      title,
-    });
-
     await editCategory({ title }, categoryId);
-    
-    toast.success("Categoría editada exitosamente");
+    toast.success("¡Categoría editada con éxito! Ahora puedes seguir ajustando los detalles.");
     
     // Llamar al callback para refrescar solo el componente
     if (onSuccess) {
@@ -28,7 +22,7 @@ export const editCategorySubmit = async ({
     }
     
   } catch (error) {
-    console.error("Error al editar categoría:", error);
-    toast.error("No se pudo editar la categoría");
+   
+    toast.error("No pudimos editar la categoría en este momento. Intenta nuevamente.");
   }
 };

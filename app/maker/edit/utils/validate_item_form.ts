@@ -27,7 +27,7 @@ export const itemValidations = z.object({
   title: z
     .string()
     .min(3, "El título debe tener al menos 3 caracteres")
-    .max(60, "El título no puede exceder 60 caracteres")
+    .max(50, "El título no puede exceder 50 caracteres")
     .trim(),
   
   description: z

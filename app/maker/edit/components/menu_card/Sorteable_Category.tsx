@@ -10,6 +10,8 @@ import { Button } from "@/common/components/atoms/button";
 import { useEditCategoryForm } from "../../hooks/use_edit_category_form";
 import { useDeleteCategory } from "../../hooks/use_delete_category";
 import { ItemList } from "./Item_List";
+import { DialogCategoryDelete } from "./Dialog_Category_Delete";
+import { Dialog, DialogTrigger } from "@/common/components/organism/dialog";
 
 interface SortableCategoryProps {
   category: Categories;
@@ -56,21 +58,8 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
     onSuccess: onCategoryChange,
   });
 
-  // ========== FUNCIÓN DE ELIMINACIÓN DIRECTA ==========
+  // ========== FUNCIÓN DE ELIMINACIÓN ==========
   const handleDeleteClick = async () => {
-    console.log("🗑️ ELIMINANDO CATEGORÍA:", {
-      id: category.id,
-      title: category.title,
-      position: category.position,
-      menuId: category.menuId,
-      active: category.active,
-      itemsCount: category.items?.length || 0,
-      items: category.items,
-      createdAt: category.createdAt,
-      updatedAt: category.updatedAt,
-      CATEGORIA_COMPLETA: category,
-    });
-
     // Ejecutar eliminación
     await deleteCategory(category.id);
   };
@@ -106,26 +95,33 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
             onFocus={handleFocus}
             onBlur={handleBlur}
             isSubmitting={isSubmitting}
-            
           />
 
           {/* Botones de acción */}
           <div className="flex space-x-2 items-center min-w-max">
-            {/* ========== BOTÓN ELIMINAR DIRECTO (SIN DIALOG) ========== */}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors"
-              onClick={handleDeleteClick}
-              disabled={isDeleting}
-            >
-              {isDeleting ? (
-                <div className="h-4 w-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <Trash2 className="h-4 w-4" />
-              )}
-            </Button>
+            {/* ========== BOTÓN ELIMINAR CON DIALOG ========== */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <div className="h-4 w-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Trash2 className="h-4 w-4" />
+                  )}
+                </Button>
+              </DialogTrigger>
+
+              <DialogCategoryDelete
+                handleDeleteMenu={handleDeleteClick}
+                isDeleting={isDeleting}
+              />
+            </Dialog>
 
             {/* Botón expandir/colapsar */}
             <button
