@@ -67,18 +67,20 @@ export function ItemDetailDialog({
           </div>
         )}
 
-        <div className={`flex flex-col gap-4 p-6 sm:p-8 ${inter.className}`}>
+        <div className={`flex flex-col gap-4 p-6 sm:p-8 overflow-hidden ${inter.className}`}>
           <DialogTitle
-            className={`text-2xl sm:text-3xl font-semibold tracking-tight ${titleColor}`}
+            className={`text-2xl sm:text-3xl font-semibold tracking-tight wrap-break-word ${titleColor}`}
           >
             {item.title}
           </DialogTitle>
 
-          <DialogDescription
-            className={`text-base sm:text-lg leading-relaxed ${textColor}`}
-          >
-            {item.description}
-          </DialogDescription>
+          {item.description && (
+            <DialogDescription
+              className={`text-base sm:text-lg leading-relaxed wrap-break-word overflow-wrap-anywhere ${textColor} py-4`}
+            >
+              {item.description}
+            </DialogDescription>
+          )}
 
           {isAvailable ? (
             <p className={`text-2xl font-semibold tracking-tight ${priceColor}`}>

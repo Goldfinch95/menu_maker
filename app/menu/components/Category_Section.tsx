@@ -27,7 +27,7 @@ export function CategorySection({
     <section id={category.id.toString()}>
       <div className="mb-6">
         <h2
-          className="text-xl font-semibold tracking-wide"
+          className="text-2xl font-semibold tracking-wide"
           style={{ color: secondaryColor }}
         >
           {category.title}
@@ -41,38 +41,32 @@ export function CategorySection({
         />
       </div>
 
-      {sortedItems.length === 0 ? (
-        <p className="text-gray-500">
-          No has agregado platos a esta categoria
-        </p>
-      ) : (
-        <div className="space-y-4">
-          <AnimatePresence>
-            {sortedItems.map((item) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25 }}
+      <div className="space-y-4">
+        <AnimatePresence>
+          {sortedItems.map((item) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+            >
+              <Card
+                className={`rounded-2xl border shadow-sm shadow-black/5 transition-all cursor-pointer ${
+                  isDark
+                    ? "bg-neutral-900 border-neutral-700 active:scale-[0.97]"
+                    : "bg-white border-neutral-200 active:scale-[0.97]"
+                }`}
+                onClick={() => onItemClick(item)}
               >
-                <Card
-                  className={`rounded-2xl border shadow-sm shadow-black/5 transition-all cursor-pointer ${
-                    isDark
-                      ? "bg-neutral-900 border-neutral-700 active:scale-[0.97]"
-                      : "bg-white border-neutral-200 active:scale-[0.97]"
-                  }`}
-                  onClick={() => onItemClick(item)}
-                >
-                  <CardContent className="p-4">
-                    <FoodMenuItem {...item} primaryColor={primaryColor} />
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
+                <CardContent className="p-4">
+                  <FoodMenuItem {...item} primaryColor={primaryColor} />
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </section>
   );
 }

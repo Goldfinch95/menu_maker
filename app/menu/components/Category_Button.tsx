@@ -25,8 +25,8 @@ export function CategoryButton({
     <motion.button
       whileTap={{ scale: 0.92 }}
       onClick={() => onClick(categoryId)}
-      className={`
-        px-5 py-2 rounded-full font-medium transition-all text-sm whitespace-nowrap
+      className={` text-base
+        px-5 py-2 rounded-full font-medium transition-all  whitespace-nowrap
         backdrop-blur-lg
         ${isActive ? activeTextColor : `${inactiveTextColor} text-opacity-80 hover:text-opacity-100`}
       `}

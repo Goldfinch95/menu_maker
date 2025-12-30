@@ -49,16 +49,18 @@ export function FoodMenuItem({
       className={`flex items-center gap-4 ${inter.className}`}
     >
       <div className="flex-1 min-w-0">
-        <h3 className={`font-semibold text-2xl leading-tight tracking-tight ${titleColorClass}`}>
+        <h3 className={`font-semibold text-2xl leading-tight tracking-tight wrap-break-word ${titleColorClass} pb-2`}>
           {title}
         </h3>
 
-        <p className={`text-base line-clamp-2 mt-1 ${textColorClass}`}>
-          {description}
-        </p>
+        {description && (
+          <p className={`text-base line-clamp-3 mt-1 wrap-break-word ${textColorClass} pt-2 pb-2`}>
+            {description}
+          </p>
+        )}
 
         {isAvailable ? (
-          <p className={`text-xl font-bold mt-2 tracking-tight ${priceColorClass}`}>
+          <p className={`text-xl font-bold mt-2 tracking-tight ${priceColorClass} pt-4`}>
             ${priceNumber.toFixed(2)}
           </p>
         ) : (
@@ -76,15 +78,17 @@ export function FoodMenuItem({
         )}
       </div>
 
-      <div className={`w-24 h-24 shrink-0 rounded-2xl overflow-hidden flex items-center justify-center bg-transparent ring-1 ${ringClass}`}>
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          width={96}
-          height={96}
-          className="object-contain w-full h-full"
-        />
-      </div>
+      {imageSrc && (
+        <div className={`w-24 h-24 shrink-0 rounded-2xl overflow-hidden flex items-center justify-center bg-transparent ring-1 ${ringClass}`}>
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            width={96}
+            height={96}
+            className="object-contain w-full h-full"
+          />
+        </div>
+      )}
     </motion.div>
   );
 }
