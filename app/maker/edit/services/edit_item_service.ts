@@ -8,7 +8,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 interface UpdateItemData {
   title?: string;
   description?: string;
-  price?: number;
+  price?: number | null;  // ← AGREGAR | null AQUÍ
   active?: boolean;
   newPosition?: number;
 }

@@ -37,7 +37,7 @@ export default function FaqPage() {
     },
     {
       question: "Tengo un poblema ¿Como me puedo Contactar?",
-      answer: "Nuestro sitio web es x y el numero de telefono es x",
+      answer: "Nuestro sitio web es contacto@toppingfly.com y el numero de telefono es (+54)1170605577 y (+54)1140437418",
     },
   ];
 

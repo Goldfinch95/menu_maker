@@ -25,7 +25,7 @@ export interface ImageItems {
 export interface NewItem {
   title: string;
   description?: string;
-  price?: number;
+  price?: number | null;
   images?: ImageItems[];
   categoryId: number;
   active: boolean;

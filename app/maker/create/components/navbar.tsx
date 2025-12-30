@@ -7,6 +7,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/common/components/organism/menubar";
+import Image from "next/image";
 
 export const Navbar = () => {
   return (
@@ -20,7 +21,9 @@ export const Navbar = () => {
       </MenubarMenu>
       <div className="flex-1 flex justify-center">
         <MenubarMenu>
-          <div className="font-medium me-10">Crear Menu</div>
+          <div className="me-12">
+            <Image src="/toppingfly.webp" alt="Logo" width={200} height={200} />
+          </div>
         </MenubarMenu>
       </div>
     </Menubar>

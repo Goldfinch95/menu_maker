@@ -20,8 +20,6 @@ interface UseItemFormProps {
   onSuccess?: () => void;
 }
 
-const IS_DEV = process.env.NODE_ENV === "development";
-
 export const useItemForm = ({
   item,
   categoryId,
@@ -108,7 +106,7 @@ export const useItemForm = ({
     formData.append("title", data.title);
 
     if (data.description) {
-      formData.append("description", data.description);
+      formData.append("description", data.description ?? "");
     }
 
     // Usar el precio validado

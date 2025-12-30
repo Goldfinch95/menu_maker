@@ -12,6 +12,7 @@ import { UtensilsCrossed, LogOut } from "lucide-react";
 import Link from "next/link";
 import { handleLogout } from "../services/log_out_service";
 import { useCookie } from "../hooks/use_cookies";
+import Image from "next/image";
 
 export const Navbar = () => {
   const roleId = useCookie("roleId");
@@ -42,7 +43,7 @@ export const Navbar = () => {
       </MenubarMenu>
 
       <MenubarMenu>
-        <div className="font-medium">Titulo</div>
+        <Image src="/toppingfly.webp" alt="Logo" width={200} height={200} />
       </MenubarMenu>
       <MenubarMenu>
         <MenubarTrigger onClick={handleLogout}>

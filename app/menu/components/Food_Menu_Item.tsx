@@ -60,9 +60,11 @@ export function FoodMenuItem({
         )}
 
         {isAvailable ? (
-          <p className={`text-xl font-bold mt-2 tracking-tight ${priceColorClass} pt-4`}>
-            ${priceNumber.toFixed(2)}
-          </p>
+          priceNumber !== null && priceNumber > 0 && (
+            <p className={`text-xl font-bold mt-2 tracking-tight ${priceColorClass} pt-4`}>
+              ${priceNumber.toFixed(2)}
+            </p>
+          )
         ) : (
           <div className="mt-3">
             <span

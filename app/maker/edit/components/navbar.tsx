@@ -9,6 +9,7 @@ import {
 } from "@/common/components/organism/menubar";
 import { Menu } from "@/app/home/types/menu";
 import { Button } from "@/common/components/atoms/button";
+import Image from "next/image";
 
 interface MenuCardProps {
   menuData: Menu | null;
@@ -33,7 +34,9 @@ export const Navbar = ({ menuData }: MenuCardProps) => {
       </MenubarMenu>
 
       <MenubarMenu>
-        <div className="font-medium">Editar Menu</div>
+        <div className="ms-0">
+          <Image src="/toppingfly.webp" alt="Logo" width={200} height={200} />
+        </div>
       </MenubarMenu>
 
       <MenubarMenu>

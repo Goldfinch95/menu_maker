@@ -19,15 +19,22 @@ export const editItemSubmit = async ({
   try {
     // 1. Extraer datos del FormData original
     const title = formData.get("title") as string;
-    const description = formData.get("description") as string | null;
+    const description = formData.get("description") as string;
     const priceStr = formData.get("price") as string | null;
     const imageFile = formData.get("image") as File | null;
+
+    // ✅ Convertir precio: si es 0 o vacío → null, sino → número
+    let price: number | null = null;
+    if (priceStr) {
+      const parsedPrice = parseFloat(priceStr);
+      price = parsedPrice > 0 ? parsedPrice : null; // ✅ Si es 0 → null
+    }
 
     // 2. Actualizar datos básicos del item
     const updateData: Partial<NewItem> = {
       title,
-      description: description || undefined,
-      price: priceStr ? parseFloat(priceStr) : undefined,
+      description,
+      price,
       active: true,
     };
     const result = await editItemService(itemId, updateData);

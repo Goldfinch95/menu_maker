@@ -20,16 +20,23 @@ export const createItemSubmit = async ({
   try {
     // 1. Extraer datos básicos del formulario
     const title = formData.get("title") as string;
-    const description = formData.get("description") as string | null;
+    const description = formData.get("description") as string;
     const priceStr = formData.get("price") as string | null;
     const imageFile = formData.get("image") as File | null;
+
+    
+    let price: number | null = null;
+    if (priceStr) {
+      const parsedPrice = parseFloat(priceStr);
+      price = parsedPrice > 0 ? parsedPrice : null; // ✅ Si es 0 → null
+    }
 
     // 2. Crear el objeto para el servicio de creación de texto
     const newItem: NewItem = {
       categoryId,
       title,
-      description: description || undefined,
-      price: priceStr ? parseFloat(priceStr) : undefined,
+      description,
+      price,
       active: true,
     };
 
