@@ -19,6 +19,8 @@ export function middleware(request: NextRequest) {
   const passwordRoutes = ["/user/create/password", "/user/change/password"];
   // Definir rutas de maker (requieren token)
   const makerRoutes = "/maker"; // Cualquier ruta que empiece con /maker
+  // Definir rutas de menu (requieren token)
+  const menuRoutes = "/menu"; // Cualquier ruta que empiece con /menu
 
   // Verificar si la ruta es pública
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
@@ -28,6 +30,13 @@ export function middleware(request: NextRequest) {
   const isPasswordRoute = passwordRoutes.some(route => pathname.startsWith(route));
   // Verificar si la ruta es /maker o cualquier subruta de /maker
   const isMakerRoute = pathname.startsWith(makerRoutes);
+  // Verificar si la ruta es /menu o cualquier subruta de /menu
+  const isMenuRoute = pathname.startsWith(menuRoutes);
+
+  // Si el usuario tiene token y está intentando acceder a una ruta pública (auth, forgotpassword), redirigir a /home
+  if (isPublicRoute && token) {
+    return NextResponse.redirect(new URL("/home", request.url));
+  }
 
   // Si la ruta no es pública (ni /auth ni /forgotpassword) y no hay token, redirigir a /auth
   if (!isPublicRoute && !token) {
@@ -44,14 +53,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
-  // Si es ruta privada y NO hay token, redirigir a /auth
-  if (isPrivateRoute && !token) {
+  // Si la ruta es /menu o cualquier subruta de /menu y no hay token, redirigir a /auth
+  if (isMenuRoute && !token) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
-  // Si es ruta pública y SÍ hay token, redirigir a /home
-  if (isPublicRoute && token) {
-    return NextResponse.redirect(new URL("/home", request.url));
+  // Si es ruta privada y NO hay token, redirigir a /auth
+  if (isPrivateRoute && !token) {
+    return NextResponse.redirect(new URL("/auth", request.url));
   }
 
   // Permitir continuar
@@ -70,5 +79,7 @@ export const config = {
     '/user/change/password', // Rutas de cambio de contraseña
     '/maker', // Ruta base de maker
     '/maker/:path*', // Asegura que también se capturen las subrutas de /maker
+    '/menu', // Ruta base de menu
+    '/menu/:path*', // Asegura que también se capturen las subrutas de /menu
   ],
 };
