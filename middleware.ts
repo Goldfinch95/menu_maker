@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"; 
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
@@ -28,6 +28,11 @@ export function middleware(request: NextRequest) {
   const isPasswordRoute = passwordRoutes.some(route => pathname.startsWith(route));
   // Verificar si la ruta es /maker o cualquier subruta de /maker
   const isMakerRoute = pathname.startsWith(makerRoutes);
+
+  // Si la ruta no es pública (ni /auth ni /forgotpassword) y no hay token, redirigir a /auth
+  if (!isPublicRoute && !token) {
+    return NextResponse.redirect(new URL("/auth", request.url));
+  }
 
   // Si la ruta es de cambio de contraseña y no hay token, redirigir a /auth
   if (isPasswordRoute && !token) {
