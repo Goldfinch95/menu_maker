@@ -17,6 +17,8 @@ export function middleware(request: NextRequest) {
   const privateRoutes = ["/home", "/user/create/account"];
   // Definir rutas específicas de cambio de contraseña (requieren token)
   const passwordRoutes = ["/user/create/password", "/user/change/password"];
+  // Definir rutas de maker (requieren token)
+  const makerRoutes = "/maker"; // Cualquier ruta que empiece con /maker
 
   // Verificar si la ruta es pública
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
@@ -24,9 +26,16 @@ export function middleware(request: NextRequest) {
   const isPrivateRoute = privateRoutes.some(route => pathname.startsWith(route));
   // Verificar si la ruta es de cambio de contraseña
   const isPasswordRoute = passwordRoutes.some(route => pathname.startsWith(route));
+  // Verificar si la ruta es /maker o cualquier subruta de /maker
+  const isMakerRoute = pathname.startsWith(makerRoutes);
 
   // Si la ruta es de cambio de contraseña y no hay token, redirigir a /auth
   if (isPasswordRoute && !token) {
+    return NextResponse.redirect(new URL("/auth", request.url));
+  }
+
+  // Si la ruta es /maker o cualquier subruta de /maker y no hay token, redirigir a /auth
+  if (isMakerRoute && !token) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
@@ -54,5 +63,7 @@ export const config = {
     '/user/:path*', // Captura /user/create/account y cualquier subruta de /user
     '/user/create/password',
     '/user/change/password', // Rutas de cambio de contraseña
+    '/maker', // Ruta base de maker
+    '/maker/:path*', // Asegura que también se capturen las subrutas de /maker
   ],
 };
