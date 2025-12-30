@@ -50,9 +50,11 @@ export function CategoryNavigation({
     if (!isDragging || !scrollRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Multiplicar por 2 para scroll más rápido
+    const walk = (x - startX) * 2;
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
+
+  const shouldCenter = categories.length < 4;
 
   return (
     <div
@@ -82,7 +84,7 @@ export function CategoryNavigation({
             display: none;
           }
         `}</style>
-        <div className="flex gap-2 min-w-max">
+        <div className={`flex gap-2 ${shouldCenter ? 'justify-center' : 'min-w-max'}`}>
           {categories.map((cat) => (
             <CategoryButton
               key={cat.id}

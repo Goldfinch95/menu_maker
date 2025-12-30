@@ -61,15 +61,14 @@ export const validations = z.object({
   title: z
     .string()
     .min(3, "El título debe tener al menos 3 caracteres.")
-    .max(100, "El título no puede tener más de 100 caracteres."),
+    .max(15, "El título no puede tener más de 15 caracteres."),
   
   // Ubicación: opcional, pero si tiene contenido debe tener mínimo 3 caracteres
   pos: z
     .string()
-    .refine(
-      (val) => !val || val.length === 0 || val.length >= 3,
-      { message: "Si decides ingresar una ubicación, asegúrate de que tenga al menos 3 caracteres." }
-    )
+    .refine((val) => val === "" || (val.length >= 3 && val.length <= 40), {
+    message: "Si decides agregar una ubicación, debe tener entre 3 y 40 caracteres.",
+  })
     .optional(),
   
   // Archivos: opcionales
