@@ -3,26 +3,16 @@ import { editMenu } from "../types/edit_menu";
 import { toast } from "sonner";
 import { updateMenuService } from "../services/update_menu_service";
 
-export const handleEditMenuSubmit = async (
-  formData: editMenu,
-  router: any
-) => {
+export const handleEditMenuSubmit = async (formData: editMenu, router: any) => {
   try {
-    console.log("📋 Datos enviados al servidor:");
-    console.log(formData);
-    
-    const editForm = await updateMenuService(formData, formData.id);
-    
-    console.log("✅ Respuesta del servidor:");
-    console.log(editForm);
-    
-    toast.success("Menú actualizado correctamente");
-    
+    await updateMenuService(formData, formData.id);
+    toast.success("Tu menú se actualizó correctamente. ¡Ya puedes continuar con tus cambios!");
+
     router.push("/home");
   } catch (error) {
     console.error("❌ Error al actualizar menú:", error);
     if (error instanceof Error) {
-      toast.error("No se pudo actualizar el menú");
-    } 
+      toast.error("No pudimos actualizar el menú en este momento. Intenta nuevamente más tarde.");
+    }
   }
 };

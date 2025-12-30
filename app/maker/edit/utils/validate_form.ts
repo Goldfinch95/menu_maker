@@ -26,7 +26,7 @@ export const fileValidation = z
     
     // Si es FileList con archivo, validar tamaño
     return files[0]?.size <= MAX_FILE_SIZE;
-  }, "El archivo debe ser menor a 4MB")
+  }, "El archivo que subas no puede ser mayor a 4MB.")
   .refine((files) => {
     // Si es undefined, null o string (URL existente), es válido
     if (!files || typeof files === 'string') return true;
@@ -36,7 +36,7 @@ export const fileValidation = z
     
     // Si es FileList con archivo, validar tipo
     return ACCEPTED_IMAGE_TYPES.includes(files[0]?.type);
-  }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
+  }, "Solo puedes subir imágenes en formato .jpg, .jpeg, .png o .webp.");
 
 /**
  * Validación para logo en MODO EDICIÓN (requerido)
@@ -59,7 +59,7 @@ export const logoValidation = z
     
     // Si sube archivo nuevo, validar tamaño
     return files[0]?.size <= MAX_FILE_SIZE;
-  }, "El logo es requerido y debe ser menor a 4MB")
+  }, "El logo es obligatorio y no debe exceder los 4MB.")
   .refine((files) => {
     // Si es string (URL existente), es válido
     if (typeof files === 'string') return true;
@@ -69,7 +69,7 @@ export const logoValidation = z
     
     // Si sube archivo nuevo, validar tipo
     return ACCEPTED_IMAGE_TYPES.includes(files[0]?.type);
-  }, "Solo se aceptan archivos .jpg, .jpeg, .png y .webp");
+  }, "Solo puedes subir un logo en formato .jpg, .jpeg, .png o .webp.");
 
 /**
  * Validación para colores hexadecimales
@@ -89,7 +89,7 @@ const hexColorValidation = z
       // Validar formato hexadecimal: SOLO 6 caracteres después del #
       return /^#[A-Fa-f0-9]{6}$/.test(val);
     },
-    { message: "Ingrese un color válido" }
+    { message: "Por favor, ingresa un código de color válido en formato hexadecimal (#RRGGBB)." }
   );
 
 /**
@@ -105,15 +105,15 @@ export const validations = z.object({
   // Título: campo requerido
   title: z
     .string()
-    .min(3, "El título debe tener al menos 3 caracteres")
-    .max(100, "El título no puede exceder 100 caracteres"),
+    .min(3, "El título debe tener al menos 3 caracteres.")
+    .max(100, "El título no puede tener más de 100 caracteres."),
   
   // Ubicación: opcional, pero si tiene contenido debe tener mínimo 3 caracteres
   pos: z
     .string()
     .refine(
       (val) => !val || val.length === 0 || val.length >= 3,
-      { message: "La ubicación debe tener al menos 3 caracteres" }
+      { message: "Si decides agregar una ubicación, debe tener al menos 3 caracteres." }
     )
     .optional(),
   

@@ -9,7 +9,7 @@ import { Menu } from "@/app/home/types/menu";
 import CategoryList from "./Category_List";
 import { useState, useEffect, useCallback } from "react";
 import { getMenuId } from "../../services/menu";
-
+import { motion } from "framer-motion";
 interface MenuCardProps {
   menuData: Menu;
 }
@@ -43,6 +43,13 @@ export const MenuCard = ({ menuData: initialMenuData }: MenuCardProps) => {
   }
 
   return (
+    <motion.div
+      className="w-full py-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
     <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-md p-6 w-full max-w-sm mx-auto">
       <div className="mb-4">
         <div className="flex items-center justify-between">
@@ -77,5 +84,6 @@ export const MenuCard = ({ menuData: initialMenuData }: MenuCardProps) => {
         </div>
       </div>
     </Card>
+    </motion.div>
   );
 };

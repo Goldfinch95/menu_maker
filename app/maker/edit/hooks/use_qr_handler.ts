@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { getMenuQr } from "../services/qr_service";
-import { generateQrPdf } from '../utils/generate_qr_pdf';
-
+import { generateQrPdf } from "../utils/generate_qr_pdf";
+import { toast } from "sonner";
 
 interface UseQrHandlerProps {
   menuId: number;
@@ -31,11 +31,16 @@ export const useQrHandler = ({ menuId, menuName }: UseQrHandlerProps) => {
         menuName: menuName || `Menu ${menuId}`,
         menuId,
       });
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Error al generar el QR";
-      setError(errorMessage);
-      console.error("Error generando QR:", err);
+      toast.success(
+        "¡El código QR se generó correctamente! Ahora puedes compartir tu menú fácilmente."
+      );
+    } catch (error) {
+      console.error("❌ Error al actualizar menú:", error);
+      if (error instanceof Error) {
+        toast.error(
+          "Hubo un problema al generar el código QR. Por favor, intenta de nuevo."
+        );
+      }
     } finally {
       setIsGenerating(false);
     }

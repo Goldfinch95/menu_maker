@@ -46,7 +46,12 @@ export const ImageFields = ({ register, menuData }: ImageFieldsProps) => {
               <img
                 src={logoPreview}
                 alt="Preview del logo"
-                className="w-full h-full object-cover"
+                className={`object-cover ${
+                  logoPreview ===
+                  "https://undevcode-menus.s3.sa-east-1.amazonaws.com/defaults/menu/default_menu.png"
+                    ? "w-20 h-20"
+                    : "w-full h-full"
+                }`}
               />
             ) : (
               <div className="flex flex-col items-center gap-2 text-slate-400">

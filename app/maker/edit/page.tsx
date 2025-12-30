@@ -7,6 +7,7 @@ import { DeleteButton } from "./components/Delete_Button";
 import { MenuCard } from "./components/menu_card/Menu_Card";
 import { useSearchParams } from "next/navigation";
 import { useFetchMenu } from "./hooks/use_fetch_menu";
+import { Loader } from "./components/Loader";
 
 // Componente interno que usa useSearchParams
 const EditPageContent = () => {
@@ -15,19 +16,13 @@ const EditPageContent = () => {
 
   const { menuData } = useFetchMenu(menuId);
 
-  console.log(menuData?.categories);
+  console.log(menuData);
 
   // Mostrar loading mientras se cargan los datos
   if (!menuData) {
     return (
-      <div className="flex flex-col justify-center items-center py-8 grow">
-        <div className="w-full max-w-sm mx-auto p-8 text-center">
-          <div className="animate-pulse space-y-4">
-            <div className="h-48 bg-gray-200 rounded-2xl"></div>
-            <div className="h-48 bg-gray-200 rounded-2xl"></div>
-            <div className="h-16 bg-gray-200 rounded-xl"></div>
-          </div>
-        </div>
+      <div className="min-h-screen w-full flex flex-col">
+        <Loader />
       </div>
     );
   }
@@ -48,19 +43,7 @@ const EditPageContent = () => {
 const EditPage = () => {
   return (
     <div className="min-h-screen w-full flex flex-col">
-      <Suspense
-        fallback={
-          <div className="flex flex-col justify-center items-center py-8 grow">
-            <div className="w-full max-w-sm mx-auto p-8 text-center">
-              <div className="animate-pulse space-y-4">
-                <div className="h-48 bg-gray-200 rounded-2xl"></div>
-                <div className="h-48 bg-gray-200 rounded-2xl"></div>
-                <div className="h-16 bg-gray-200 rounded-xl"></div>
-              </div>
-            </div>
-          </div>
-        }
-      >
+      <Suspense fallback={<Loader />}>
         <EditPageContent />
       </Suspense>
     </div>
