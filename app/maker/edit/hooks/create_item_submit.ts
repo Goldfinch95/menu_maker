@@ -33,7 +33,7 @@ export const createItemSubmit = async ({
       active: true,
     };
 
-    console.log("🚀 [Paso 1] Creando item en el backend...");
+    
     const createdItem = await createItemService(newItem);
 
     // 3. Si hay una imagen válida, procedemos a subirla
@@ -41,7 +41,6 @@ export const createItemSubmit = async ({
       imageFile && imageFile instanceof File && imageFile.size > 0;
 
     if (hasValidImage) {
-      console.log("🚀 [Paso 2] Preparando envío de imagen...");
 
       // Creamos un FormData específico para la subida de imagen
       const imageFormData = new FormData();
@@ -52,7 +51,6 @@ export const createItemSubmit = async ({
       imageFormData.append("image", imageFile, imageFile.name);
 
       try {
-        console.log("📤 Enviando imagen al servidor...");
         // Llamamos a la Server Action pasándole el FormData con el binario
         const uploadedImage = await updateImage(createdItem.id, imageFormData);
 
@@ -60,9 +58,7 @@ export const createItemSubmit = async ({
         createdItem.images = [uploadedImage];
       } catch (imageError: any) {
         console.error("⚠️ Error al subir imagen:", imageError);
-        toast.warning(
-          "Plato creado, pero la imagen falló: " + imageError.message
-        );
+        
       }
     }
 

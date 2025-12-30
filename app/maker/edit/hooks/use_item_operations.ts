@@ -38,13 +38,13 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
         onSuccess: onItemChange,
       });
       // ✅ Retornamos éxito para el ItemDialog
-      return { success: true, message: "Plato creado exitosamente" };
+      return { success: true, message: "¡Todo listo! El plato fue creado exitosamente. Puedes seguir editando tu menú." };
     } catch (error) {
       console.error("❌ [useItemOperations] Error al crear item:", error);
       // ✅ Retornamos el error formateado
       return { 
         success: false, 
-        error: error instanceof Error ? error.message : "Error al crear el plato" 
+        error: error instanceof Error ? error.message : "Lo sentimos, no se pudo crear el plato. Intenta de nuevo más tarde." 
       };
     } finally {
       setCreatingItem(false);
@@ -64,13 +64,13 @@ export const useItemOperations = ({ onItemChange }: UseItemOperationsProps) => {
         onSuccess: onItemChange,
       });
       // ✅ Retornamos éxito para el ItemDialog
-      return { success: true, message: "Plato actualizado exitosamente" };
+      return { success: true, message: "¡Plato editado exitosamente! Ya puedes continuar ajustando tu menú." };
     } catch (error) {
       console.error("❌ [useItemOperations] Error al editar item:", error);
       // ✅ Retornamos el error formateado
       return { 
         success: false, 
-        error: error instanceof Error ? error.message : "Error al actualizar el plato" 
+        error: error instanceof Error ? error.message : "No pudimos actualizar el plato en este momento. Por favor, intenta nuevamente." 
       };
     } finally {
       setEditingItemId(null);

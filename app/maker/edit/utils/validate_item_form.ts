@@ -12,33 +12,47 @@ export const fileValidation = z
   .instanceof(File)
   .refine(
     (file) => file.size <= MAX_FILE_SIZE,
-    "El archivo debe ser menor a 4MB"
+    "El archivo debe ser de 4MB o menos. Intenta con otro archivo si es más grande."
   )
   .refine(
     (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-    "Solo se aceptan archivos .jpg, .jpeg, .png y .webp"
+    "Por favor, sube una imagen en formato .jpg, .jpeg, .png o .webp."
   )
   .optional();
 
 // ✅ Schema personalizado para price que garantiza el tipo correcto
 
-
 export const itemValidations = z.object({
   title: z
     .string()
-    .min(3, "El título debe tener al menos 3 caracteres")
-    .max(50, "El título no puede exceder 50 caracteres")
+    .min(3, "El título debe tener al menos 3 caracteres.")
+    .max(50, "El título no puede tener más de 50 caracteres.")
     .trim(),
-  
+
   description: z
     .string()
-    .max(200, "La descripción no puede exceder 200 caracteres")
-    .trim()
-    .optional()
-    .or(z.literal("")),
-  
-  price: z.any(),
-  
+    .refine((val) => val === "" || (val.length >= 3 && val.length <= 200), {
+      message:
+        "Si decides agregar una descripción, debe tener entre 3 y 200 caracteres.",
+    })
+    .optional(),
+
+  price: z
+    .union([z.number(), z.nan(), z.literal("")])
+    .transform((val) => {
+      // Si es vacío, NaN o undefined, devolvemos 0
+      if (val === "" || Number.isNaN(val) || val === undefined) {
+        return 0;
+      }
+      return Number(val);
+    })
+    .pipe(
+      z
+        .number()
+        .min(0, "El precio debe ser un número positivo o igual a 0.")
+        .max(999999, "El precio no puede exceder $999,999.")
+    ),
+
   image: fileValidation,
 });
 

@@ -70,10 +70,10 @@ export const ItemList: React.FC<ItemListProps> = ({
             <Button
               size="sm"
               variant="outline"
-              className="w-full border-dashed border-slate-300 text-slate-500 hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50/50 rounded-xl py-5 transition-all"
+              className="w-full text-base border-dashed border-slate-300 text-slate-500 hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50/50 rounded-xl py-5 transition-all"
               type="button"
             >
-              <Plus className="w-4 h-4 mr-2" /> Agregar plato
+              <Plus className="w-6! h-6! mr-2" /> Agregar plato
             </Button>
           }
         />

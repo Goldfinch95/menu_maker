@@ -37,7 +37,7 @@ const CategoryList = ({ categories: initialCategories, onMenuUpdate }: CategoryL
   if (!categories || categories.length === 0) {
     return (
       <p className="text-sm text-slate-400 italic mt-6 text-center">
-        No hay categorías creadas aún.
+        No tienes categorías por el momento. ¡Crea una categoría para empezar a organizar tu menú!
       </p>
     );
   }

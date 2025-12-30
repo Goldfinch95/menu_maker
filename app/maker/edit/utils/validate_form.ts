@@ -106,7 +106,7 @@ export const validations = z.object({
   title: z
     .string()
     .min(3, "El título debe tener al menos 3 caracteres.")
-    .max(50, "El título no puede tener más de 60 caracteres."),
+    .max(50, "El título no puede tener más de 50 caracteres."),
   
   // Ubicación: opcional, pero si tiene contenido debe tener mínimo 3 caracteres
   pos: z

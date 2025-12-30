@@ -1,5 +1,5 @@
 import { toast } from "sonner";
- import { deleteItemService } from "../services/delete_item_service";
+import { deleteItemService } from "../services/delete_item_service";
 
 interface DeleteItemParams {
   itemId: number;
@@ -11,16 +11,19 @@ export const deleteItemSubmit = async ({
   onSuccess,
 }: DeleteItemParams) => {
   try {
-    // TODO: Descomentar cuando conectes con la API
     await deleteItemService(itemId);
-    toast.success("Plato eliminado con éxito");
+
+    toast.success(
+      "El plato fue eliminado correctamente. Puedes continuar gestionando tu menú."
+    );
 
     if (onSuccess) {
       await onSuccess();
     }
   } catch (error) {
-    console.error("❌ [deleteItemSubmit] Error al eliminar item:", error);
-    toast.error("No se pudo eliminar el plato");
+    toast.error(
+      "Hubo un problema al eliminar el plato. Por favor, intenta de nuevo."
+    );
     throw error;
   }
 };

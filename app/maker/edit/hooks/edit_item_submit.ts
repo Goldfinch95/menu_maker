@@ -17,8 +17,6 @@ export const editItemSubmit = async ({
   onSuccess,
 }: EditItemParams) => {
   try {
-    console.log("✏️ [editItemSubmit] Editando item:", itemId);
-
     // 1. Extraer datos del FormData original
     const title = formData.get("title") as string;
     const description = formData.get("description") as string | null;
@@ -32,8 +30,6 @@ export const editItemSubmit = async ({
       price: priceStr ? parseFloat(priceStr) : undefined,
       active: true,
     };
-
-    console.log("🌐 [editItemSubmit] Enviando actualización de datos...");
     const result = await editItemService(itemId, updateData);
 
     // 3. Manejar actualización de imagen si existe un archivo nuevo
@@ -41,8 +37,6 @@ export const editItemSubmit = async ({
       imageFile && imageFile instanceof File && imageFile.size > 0;
 
     if (hasValidImage) {
-      console.log("🚀 [Paso 2] Detectada nueva imagen, preparando subida...");
-
       // Creamos el FormData específico para el servicio de imágenes
       const imageFormData = new FormData();
 
@@ -55,22 +49,14 @@ export const editItemSubmit = async ({
       ]);
       imageFormData.append("images", metadata);
       imageFormData.append("image", imageFile, imageFile.name);
-      console.log(itemId);
+
       try {
         // Corregido: Usamos itemId que viene por parámetros
         await updateImage(itemId, imageFormData);
-        console.log("✅ [editItemSubmit] Nueva imagen subida exitosamente");
       } catch (imageError: any) {
-        console.error(
-          "⚠️ [editItemSubmit] Error al subir nueva imagen:",
-          imageError
-        );
-        toast.warning("Datos actualizados, pero la imagen no se pudo procesar");
         // No lanzamos error aquí para permitir que el flujo continúe si el texto sí se guardó
       }
     }
-
-    toast.success("Plato actualizado con éxito");
 
     if (onSuccess) {
       await onSuccess();
@@ -79,7 +65,7 @@ export const editItemSubmit = async ({
     return result;
   } catch (error: any) {
     console.error("❌ [editItemSubmit] Error crítico:", error);
-    toast.error(error.message || "No se pudo actualizar el plato");
+
     throw error;
   }
 };

@@ -5,6 +5,8 @@ import { Button } from "@/common/components/atoms/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { Items } from "@/app/home/types/menu";
 import { ItemImage } from "./Item_Image";
+import { Dialog, DialogTrigger } from "@/common/components/organism/dialog";
+import { DialogItemDelete } from "./Dialog_Item_Delete";
 
 interface ItemCardProps {
   item: Items;
@@ -41,7 +43,8 @@ export const ItemCard: React.FC<ItemCardProps> = ({
         {item.price && item.price > 0 && (
           <div className="shrink-0 ml-2">
             <p className="text-slate-600 text-sm font-semibold whitespace-nowrap">
-              ${Number.isInteger(Number(item.price))
+              $
+              {Number.isInteger(Number(item.price))
                 ? Number(item.price)
                 : Number(item.price).toFixed(2)}
             </p>
@@ -63,20 +66,28 @@ export const ItemCard: React.FC<ItemCardProps> = ({
         </Button>
 
         {/* Botón Eliminar */}
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
-          onClick={onDelete}
-          disabled={isDeleting}
-          type="button"
-        >
-          {isDeleting ? (
-            <div className="h-4 w-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <Trash2 className="w-4 h-4" />
-          )}
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+              disabled={isDeleting}
+              type="button"
+            >
+              {isDeleting ? (
+                <div className="h-4 w-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Trash2 className="w-4 h-4" />
+              )}
+            </Button>
+          </DialogTrigger>
+
+          <DialogItemDelete
+            handleDeleteMenu={onDelete}
+            isDeleting={isDeleting}
+          />
+        </Dialog>
       </div>
     </div>
   );
