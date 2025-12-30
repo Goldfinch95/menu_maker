@@ -23,7 +23,7 @@ export const handlePasswordSubmit = async (
     await userChangePasswordService(formData, token);
 
     // sucess: info
-    toast.info("Se Actualizo su Contraseña")
+    toast.success("¡Listo! Tu contraseña se actualizó correctamente.")
     //redirigir a login
     router.push("/auth");
   } catch (error) {
@@ -31,7 +31,7 @@ export const handlePasswordSubmit = async (
     if (error instanceof Error) {
       //objetivo mas seguridad
       //error: info
-      toast.error("No se pudo actualizar su contraseña, vuelva a intentarlo");
+      toast.error("Hubo un problema al actualizar tu contraseña. Intenta nuevamente.");
       //redirigir a login
       //router.push("/auth");
     } 

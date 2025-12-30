@@ -13,21 +13,34 @@ import {
 import { handleTogglePassword } from "../hooks/handlers";
 import { Input } from "@/common/components/atoms/input";
 import { passwordForm } from "../hooks/password_form";
-import { useState } from "react";
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export const PasswordField = () => {
+interface PasswordFieldProps {
+  onSubmittingChange?: (isSubmitting: boolean) => void;
+}
+
+export const PasswordField = ({ onSubmittingChange }: PasswordFieldProps) => {
   const searchParams = useSearchParams();
-  const token = searchParams.get('token') as string;
+  const token = searchParams.get("token") as string;
   const { register, handleSubmit, errors, onSubmit, isSubmitting } =
     passwordForm(token);
   const [showPassword, setShowPassword] = useState(false);
   const [showControlPassword, setControlShowPassword] = useState(false);
+
+   // Notificar al padre cuando cambia isSubmitting
+    useEffect(() => {
+      onSubmittingChange?.(isSubmitting);
+    }, [isSubmitting, onSubmittingChange]);
+  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldSet>
         <FieldGroup>
-          <Errors errors={errors} />
+          <div className="pt-4">
+             <Errors errors={errors} />
+          </div>
           <Field>
             <FieldLabel htmlFor="email">Contraseña</FieldLabel>
             <div className="relative">
@@ -35,6 +48,9 @@ export const PasswordField = () => {
                 {...register("password")}
                 id="password"
                 type={showPassword ? "text" : "password"}
+                onPaste={(e) => e.preventDefault()}
+                onCopy={(e) => e.preventDefault()}
+                onCut={(e) => e.preventDefault()}
                 aria-invalid={!!errors.password}
               />
               <Button
@@ -58,6 +74,9 @@ export const PasswordField = () => {
                   {...register("control_password")}
                   id="control_password"
                   type={showControlPassword ? "text" : "password"}
+                  onPaste={(e) => e.preventDefault()}
+                  onCopy={(e) => e.preventDefault()}
+                  onCut={(e) => e.preventDefault()}
                   aria-invalid={!!errors.password}
                 />
                 <Button
@@ -79,7 +98,7 @@ export const PasswordField = () => {
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Actualizando..." : "Actualizar"}
+                Enviar
               </Button>
             </div>
           </Field>

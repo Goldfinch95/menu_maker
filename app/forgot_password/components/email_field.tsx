@@ -46,7 +46,7 @@ export const EmailField = ({ onSubmittingChange }: EmailFieldProps) => {
               type="submit"
               disabled={isSubmitting}
             >
-              Enviar Email
+              Enviar
             </Button>
           </Field>
         </FieldGroup>
